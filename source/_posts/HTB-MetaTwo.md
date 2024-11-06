@@ -56,7 +56,7 @@ After running the poc we get:
 |manager|manager@metapress.htb|$P$B4aNM28N0E.tMy/JIcnVMZbGcU16Q70|
 ```
 
-### Cracking the hash
+# Cracking the hash
 I run `hash-identifier` and i found that the hash is MD5(Wordpress)
 ![Hash-id](/images/MetaTwo/MT(Hash-id).png)
 With a quick search we find that the hashcat mode is 400 (from this website https://hashcat.net/wiki/doku.php?id=example_hashes)
@@ -70,7 +70,7 @@ $P$B4aNM28N0E.tMy/JIcnVMZbGcU16Q70:partylikearockstar
 `Manager:partylikearockstar
 `
 
-### Manager Dashboard
+# Manager Dashboard
 ![ManagerDash](/images/MetaTwo/MT(Manager_Dash).png)
 As we can see we don't have alot of privilages to change the website but we can upload media. From the initial recon I had found the CVE-2021-29447
 https://github.com/0xRar/CVE-2021-29447-PoC
