@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://panosoikogr.github.io/2025/05/13/Cloudgoat-Beanstalk/</loc>
+    
+    <lastmod>2025-05-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://panosoikogr.github.io/2025/04/22/VL-Mythical/</loc>
     
     <lastmod>2025-04-21</lastmod>
@@ -220,7 +229,7 @@
 
   <url>
     <loc>https://panosoikogr.github.io/</loc>
-    <lastmod>2025-04-21</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -228,21 +237,35 @@
   
   <url>
     <loc>https://panosoikogr.github.io/tags/HTB/</loc>
-    <lastmod>2025-04-21</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/VL/</loc>
-    <lastmod>2025-04-21</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Chain/</loc>
-    <lastmod>2025-04-21</lastmod>
+    <lastmod>2025-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/tags/AWS/</loc>
+    <lastmod>2025-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/tags/CloudGoat/</loc>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
