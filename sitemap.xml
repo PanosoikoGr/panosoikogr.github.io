@@ -2,6 +2,60 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://panosoikogr.github.io/2025/04/11/VL-Sweep/</loc>
+    
+    <lastmod>2025-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/2025/03/28/VL-Hybrid/</loc>
+    
+    <lastmod>2025-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/2025/04/13/VL-Trusted/</loc>
+    
+    <lastmod>2025-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/2025/04/15/VL-Heron/</loc>
+    
+    <lastmod>2025-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/2025/04/19/VL-Lustrous/</loc>
+    
+    <lastmod>2025-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://panosoikogr.github.io/2025/04/22/VL-Mythical/</loc>
+    
+    <lastmod>2025-05-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://panosoikogr.github.io/2025/05/14/Cloudgoat-SNS-Secrets/</loc>
     
     <lastmod>2025-05-14</lastmod>
@@ -14,51 +68,6 @@
     <loc>https://panosoikogr.github.io/2025/05/13/Cloudgoat-Beanstalk/</loc>
     
     <lastmod>2025-05-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://panosoikogr.github.io/2025/04/22/VL-Mythical/</loc>
-    
-    <lastmod>2025-04-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://panosoikogr.github.io/2025/04/19/VL-Lustrous/</loc>
-    
-    <lastmod>2025-04-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://panosoikogr.github.io/2025/04/15/VL-Heron/</loc>
-    
-    <lastmod>2025-04-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://panosoikogr.github.io/2025/04/13/VL-Trusted/</loc>
-    
-    <lastmod>2025-04-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://panosoikogr.github.io/2025/04/11/VL-Sweep/</loc>
-    
-    <lastmod>2025-04-11</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -122,15 +131,6 @@
     <loc>https://panosoikogr.github.io/2025/03/30/VL-Cicada/</loc>
     
     <lastmod>2025-03-30</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://panosoikogr.github.io/2025/03/28/VL-Hybrid/</loc>
-    
-    <lastmod>2025-03-27</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -238,7 +238,7 @@
 
   <url>
     <loc>https://panosoikogr.github.io/</loc>
-    <lastmod>2025-05-14</lastmod>
+    <lastmod>2025-05-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -246,35 +246,35 @@
   
   <url>
     <loc>https://panosoikogr.github.io/tags/HTB/</loc>
-    <lastmod>2025-05-14</lastmod>
+    <lastmod>2025-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/VL/</loc>
-    <lastmod>2025-05-14</lastmod>
+    <lastmod>2025-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Chain/</loc>
-    <lastmod>2025-05-14</lastmod>
+    <lastmod>2025-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/AWS/</loc>
-    <lastmod>2025-05-14</lastmod>
+    <lastmod>2025-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/CloudGoat/</loc>
-    <lastmod>2025-05-14</lastmod>
+    <lastmod>2025-05-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

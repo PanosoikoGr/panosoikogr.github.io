@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Mythical CHAIN - Penetration Testing WalkthroughInitial ReconnaissanceStarting with our first machine discovery: 1234567891011PORT     STATE SERVICE       REASON          VERSION3389&#x2F;tcp open  ms-wbt-">
+    <meta name="description" content="Mythical CHAIN - Penetration Testing WalkthroughIn this comprehensive VulnLab walkthrough, I’ll guide you through exploiting the “Mythical CHAIN” network infrastructure, showcasing a realistic enterpr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Mythical">
 <meta property="og:url" content="https://panosoikogr.github.io/2025/04/22/VL-Mythical/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
-<meta property="og:description" content="Mythical CHAIN - Penetration Testing WalkthroughInitial ReconnaissanceStarting with our first machine discovery: 1234567891011PORT     STATE SERVICE       REASON          VERSION3389&#x2F;tcp open  ms-wbt-">
+<meta property="og:description" content="Mythical CHAIN - Penetration Testing WalkthroughIn this comprehensive VulnLab walkthrough, I’ll guide you through exploiting the “Mythical CHAIN” network infrastructure, showcasing a realistic enterpr">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Mythical/mythic.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Mythical/sending_commands.png">
@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://panosoikogr.github.io/images/Mythical/wegot_dc02.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Mythical/we_got_system_dc02.png">
 <meta property="article:published_time" content="2025-04-21T23:50:52.000Z">
-<meta property="article:modified_time" content="2025-04-21T20:57:35.433Z">
+<meta property="article:modified_time" content="2025-05-20T09:27:08.948Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="VL">
 <meta property="article:tag" content="Chain">
@@ -199,7 +199,8 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Mythical-CHAIN-Penetration-Testing-Walkthrough"><a href="#Mythical-CHAIN-Penetration-Testing-Walkthrough" class="headerlink" title="Mythical CHAIN - Penetration Testing Walkthrough"></a>Mythical CHAIN - Penetration Testing Walkthrough</h1><h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>Starting with our first machine discovery:</p>
+    <h1 id="Mythical-CHAIN-Penetration-Testing-Walkthrough"><a href="#Mythical-CHAIN-Penetration-Testing-Walkthrough" class="headerlink" title="Mythical CHAIN - Penetration Testing Walkthrough"></a>Mythical CHAIN - Penetration Testing Walkthrough</h1><p>In this comprehensive VulnLab walkthrough, I’ll guide you through exploiting the “Mythical CHAIN” network infrastructure, showcasing a realistic enterprise penetration testing scenario across multiple Windows domains. Starting with an assumed breach position, we’ll leverage a Mythic C2 agent to discover and exploit a chain of vulnerabilities including vulnerable certificate templates (ESC4&#x2F;ESC1), Active Directory domain trusts, and SQL Server privilege escalation techniques. This penetration test demonstrates advanced lateral movement, credential harvesting, and domain privilege escalation tactics while highlighting the importance of proper certificate template security and trust relationship configurations in Active Directory environments.</p>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>Starting with our first machine discovery:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">| ssl-cert: Subject: commonName=dc01.mythical-us.vl</span><br><span class="line">| Issuer: commonName=dc01.mythical-us.vl</span><br><span class="line">| Public Key type: rsa</span><br><span class="line">| Public Key bits: 2048</span><br><span class="line">| Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">| Not valid before: 2024-11-28T15:12:13</span><br><span class="line">| Not valid after:  2025-05-30T15:12:13</span><br><span class="line">| MD5:   ba60:dfbc:1933:a166:8d8b:c162:b60f:7716</span><br><span class="line">| SHA-1: 666e:a128:ab04:d46a:5610:1836:8eb8:e4f8:bf5d:76bf</span><br></pre></td></tr></table></figure>
 
 <p>Second machine port scan results:</p>
