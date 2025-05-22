@@ -1,3 +1,4 @@
+https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/
 https://panosoikogr.github.io/2025/04/22/VL-Mythical/
 https://panosoikogr.github.io/2025/04/19/VL-Lustrous/
 https://panosoikogr.github.io/2025/04/15/VL-Heron/
@@ -30,3 +31,4 @@ https://panosoikogr.github.io/tags/VL/
 https://panosoikogr.github.io/tags/Chain/
 https://panosoikogr.github.io/tags/AWS/
 https://panosoikogr.github.io/tags/CloudGoat/
+https://panosoikogr.github.io/tags/Shells/
