@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://panosoikogr.github.io/2025/05/25/Cloudgoat-Iam-Privesc-by-Rollback/</loc>
+    
+    <lastmod>2025-05-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://panosoikogr.github.io/2025/05/24/Cloudgoat-Iam-Privesc-by-Key-Rotation/</loc>
     
     <lastmod>2025-05-23</lastmod>
@@ -265,7 +274,7 @@
 
   <url>
     <loc>https://panosoikogr.github.io/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -273,49 +282,49 @@
   
   <url>
     <loc>https://panosoikogr.github.io/tags/HTB/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/VL/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Chain/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/AWS/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/CloudGoat/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Shells/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Lab/</loc>
-    <lastmod>2025-05-23</lastmod>
+    <lastmod>2025-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
