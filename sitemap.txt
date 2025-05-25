@@ -1,3 +1,4 @@
+https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/
 https://panosoikogr.github.io/2025/05/25/Cloudgoat-Iam-Privesc-by-Rollback/
 https://panosoikogr.github.io/2025/05/24/Cloudgoat-Iam-Privesc-by-Key-Rotation/
 https://panosoikogr.github.io/2025/03/30/VL-Cicada/
