@@ -14,7 +14,7 @@
 <meta property="og:description" content="Remote LSASS Snapshot Dump with AES Encryption and HTTP ExfiltrationOverviewIn this post, we’ll walk through a project that captures a snapshot of LSASS (Local Security Authority Subsystem Service) us">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-01T11:53:43.000Z">
-<meta property="article:modified_time" content="2025-06-01T09:01:28.108Z">
+<meta property="article:modified_time" content="2025-06-01T09:05:31.767Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="RedTeam">
 <meta property="article:tag" content="Lsass">
@@ -173,6 +173,9 @@
   <div class="content e-content" itemprop="articleBody">
     <h1 id="Remote-LSASS-Snapshot-Dump-with-AES-Encryption-and-HTTP-Exfiltration"><a href="#Remote-LSASS-Snapshot-Dump-with-AES-Encryption-and-HTTP-Exfiltration" class="headerlink" title="Remote LSASS Snapshot Dump with AES Encryption and HTTP Exfiltration"></a>Remote LSASS Snapshot Dump with AES Encryption and HTTP Exfiltration</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>In this post, we’ll walk through a project that captures a snapshot of LSASS (Local Security Authority Subsystem Service) using Windows APIs, encrypts the dump using AES-256 in CBC mode, and securely uploads it via HTTP to a Flask-based server. The server then decrypts and parses the data using pypykatz.</p>
 <p>This approach avoids directly dumping LSASS to disk, leveraging modern snapshotting features (PssCaptureSnapshot) and encryption for stealth and safety.</p>
+<blockquote>
+<p><strong>⚠️ DISCLAIMER:</strong><br>This post is intended <strong>strictly for educational purposes</strong>. The techniques and code discussed are meant to demonstrate how malware obfuscation and evasion tactics evolve, particularly in the context of defensive research, red teaming, and antivirus testing.<br>I do <strong>not condone</strong> the use of this information for illegal or malicious purposes and am <strong>not responsible</strong> for how others choose to use it. The code shared is <strong>not production-safe</strong> and must not be used in real-world environments without proper authorization.</p>
+</blockquote>
 <h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><h3 id="Client-Side-Windows-C"><a href="#Client-Side-Windows-C" class="headerlink" title="Client-Side (Windows C++)"></a>Client-Side (Windows C++)</h3><ul>
 <li><p>Captures LSASS process snapshot with PssCaptureSnapshot.</p>
 </li>
