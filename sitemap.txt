@@ -1,3 +1,4 @@
+https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/
 https://panosoikogr.github.io/2025/05/30/Cloudgoat-Vulnerable-Cognito/
 https://panosoikogr.github.io/2025/05/27/Cloudgoat-SQS-Flag-Shop/
 https://panosoikogr.github.io/2025/05/26/Cloudgoat-Lambda_Privesc/
@@ -39,3 +40,5 @@ https://panosoikogr.github.io/tags/AWS/
 https://panosoikogr.github.io/tags/CloudGoat/
 https://panosoikogr.github.io/tags/Shells/
 https://panosoikogr.github.io/tags/Lab/
+https://panosoikogr.github.io/tags/RedTeam/
+https://panosoikogr.github.io/tags/Lsass/

