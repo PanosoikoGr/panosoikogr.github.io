@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/</loc>
+    
+    <lastmod>2025-06-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://panosoikogr.github.io/2025/06/02/CloudGoat-Vulnerable-Lambda/</loc>
     
     <lastmod>2025-06-01</lastmod>
@@ -319,7 +328,7 @@
 
   <url>
     <loc>https://panosoikogr.github.io/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -327,63 +336,63 @@
   
   <url>
     <loc>https://panosoikogr.github.io/tags/HTB/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/VL/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Chain/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/AWS/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/CloudGoat/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Shells/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Lab/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/RedTeam/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Lsass/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2025-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

