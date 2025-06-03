@@ -1,3 +1,4 @@
+https://panosoikogr.github.io/2025/06/03/CloudGoat-ECS-Takeover/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-EC2-SSRF/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/
 https://panosoikogr.github.io/2025/06/02/CloudGoat-Cloud-Breach-S3/
