@@ -1,3 +1,4 @@
+https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-ECS-Takeover/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-EC2-SSRF/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/
@@ -47,3 +48,5 @@ https://panosoikogr.github.io/tags/Shells/
 https://panosoikogr.github.io/tags/Lab/
 https://panosoikogr.github.io/tags/RedTeam/
 https://panosoikogr.github.io/tags/Lsass/
+https://panosoikogr.github.io/tags/C2/
+https://panosoikogr.github.io/tags/Sliver/
