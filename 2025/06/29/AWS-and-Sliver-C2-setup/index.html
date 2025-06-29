@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Specifications EC2 instance –&gt; t2.micro OS –&gt; Ubuntu 20.04LTS (Focal Fossa) Go Version –&gt; go1.24.4 linux&#x2F;amd64 Sliver Version –&gt; v1.5.43 Mingw Version –&gt; 12.2.0-14+ Metasploit Vers">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS and Sliver C2 setup">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Specifications EC2 instance –&gt; t2.micro OS –&gt; Ubuntu 20.04LTS (Focal Fossa) Go Version –&gt; go1.24.4 linux&#x2F;amd64 Sliver Version –&gt; v1.5.43 Mingw Version –&gt; 12.2.0-14+ Metasploit Vers">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/sliveraws/budgets.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/sliveraws/msfConsole.png">
+<meta property="article:published_time" content="2025-06-29T15:47:10.000Z">
+<meta property="article:modified_time" content="2025-06-29T12:50:10.624Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Sliver">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/sliveraws/budgets.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+        
+      
+    
+    <!-- title -->
+    <title>AWS and Sliver C2 setup</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&text=AWS and Sliver C2 setup"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&is_video=false&description=AWS and Sliver C2 setup"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=AWS and Sliver C2 setup&body=Check out this article: https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&name=AWS and Sliver C2 setup&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&t=AWS and Sliver C2 setup"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Specifications"><span class="toc-number">1.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Create-a-budget"><span class="toc-number">1.1.</span> <span class="toc-text">1) Create a budget</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-EC2"><span class="toc-number">1.2.</span> <span class="toc-text">2) EC2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-Installation"><span class="toc-number">1.2.1.</span> <span class="toc-text">Go Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mingw-Installation"><span class="toc-number">1.2.2.</span> <span class="toc-text">Mingw Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metasploit-Installation"><span class="toc-number">1.2.3.</span> <span class="toc-text">Metasploit Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sliver"><span class="toc-number">1.2.4.</span> <span class="toc-text">Sliver</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Create-an-Application-Load-Balancer-ALB"><span class="toc-number">1.3.</span> <span class="toc-text">1. Create an Application Load Balancer (ALB)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Define-a-Target-Group"><span class="toc-number">1.4.</span> <span class="toc-text">2. Define a Target Group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Hook-the-Target-Group-into-the-ALB"><span class="toc-number">1.5.</span> <span class="toc-text">3. Hook the Target Group into the ALB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Update-the-Sliver-Instance%E2%80%99s-Security-Group"><span class="toc-number">1.6.</span> <span class="toc-text">4. Update the Sliver Instance’s Security Group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Create-a-CloudFront-Distribution"><span class="toc-number">1.7.</span> <span class="toc-text">5. Create a CloudFront Distribution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Debugging-Tips"><span class="toc-number">1.7.1.</span> <span class="toc-text">Debugging Tips</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        AWS and Sliver C2 setup
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-29T15:47:10.000Z" class="dt-published" itemprop="datePublished">2025-06-29</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Sliver/" rel="tag">Sliver</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Specifications"><a href="#Specifications" class="headerlink" title="Specifications"></a>Specifications</h1><ol>
+<li>EC2 instance –&gt; t2.micro</li>
+<li>OS –&gt; Ubuntu 20.04LTS (Focal Fossa)</li>
+<li>Go Version –&gt; go1.24.4 linux&#x2F;amd64</li>
+<li>Sliver Version –&gt; v1.5.43</li>
+<li>Mingw Version –&gt; 12.2.0-14+</li>
+<li>Metasploit Version –&gt; 6.4.71-dev-</li>
+</ol>
+<p>Firts we need an AWS free if you dont have one search on google “AWS Free account”<br>and the firts resault will give you the link to create one.</p>
+<h2 id="1-Create-a-budget"><a href="#1-Create-a-budget" class="headerlink" title="1) Create a budget"></a>1) Create a budget</h2><p>We will be crating a daily budget for our account so IF we ever leave our sliver c2 (EC2) running we will get a alert on our mail to go and close it if we dont use it, so we avoid unwanted costs. As we are using t2.micro the free EC2 aws provides us we wont get any big costs so we will set our budget very low just to catch the instance from over running.</p>
+<p>There are 2 ways, the “Zero Budget Cost” OR the “Custom budget”  option I will be covering the “Custom budget” as the other is just two clicks.</p>
+<p>First on the search-bar search for <code>Budgets</code><br><img src="/images/sliveraws/budgets.png" alt="Budget"></p>
+<p>Then click on create a new budget, now the followoing, select “Customize (advanced)” then “Cost budget - Recommended”  and click NEXT. Now we input a name like <code>Sliver Budget</code> set our Period to daily and set our budget to <code>0.10</code> this depends on your choise of budgeting for me <code>0.10</code> is a good number please adjust accordingly to your needs and how save you want to be. OR if you dont want to do the setup just select <code>My Zero-Spend Budget</code> that AWS offers.</p>
+<h2 id="2-EC2"><a href="#2-EC2" class="headerlink" title="2) EC2"></a>2) EC2</h2><p>Find a region that maches your needs and start and EC2 instance, give it a name, select Debian as the OS, double check it will use t2.micro.Create a Key pair and downlod the file. Now when selecting the security group if you want better OpSec create a security group with yout IP so you can only ssh and access that machine(for now) also allow https and http traffic into it(If you dont want to create a new custom security group just select MY IP)</p>
+<p>Now on your machine do <code>sudo chmod 400 &lt;name of key&gt;.pem</code><br>Wait for the instance to start and ssh into it using the key you have</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i &quot;&lt;NAME&gt;.pem&quot; admin@&lt;Public IP&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Go-Installation"><a href="#Go-Installation" class="headerlink" title="Go Installation"></a>Go Installation</h3><p>We need to to be able to install Sliver C2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://golang.org/dl/go1.24.4.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xf go1.24.4.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>Move the Go binary directory to <code>/usr/local/go</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mv go /usr/local/go</span><br></pre></td></tr></table></figure>
+<p>Add the Go bin directory to your PATH environment variable:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo echo &#x27;export PATH=$PATH:/usr/local/go/bin&#x27; &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>Reload your <code>.bashrc</code> file to apply changes:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>Test if the install was succesfull</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go version</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mingw-Installation"><a href="#Mingw-Installation" class="headerlink" title="Mingw Installation"></a>Mingw Installation</h3><p>We need Mingw as it enable shellcode&#x2F;staged&#x2F;DLL payloads</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install mingw-w64</span><br></pre></td></tr></table></figure>
+
+<h3 id="Metasploit-Installation"><a href="#Metasploit-Installation" class="headerlink" title="Metasploit Installation"></a>Metasploit Installation</h3><p>Metasploit is needed for some integrations for Sliver</p>
+<p>Firts some dependencies to run the one liner rabbit7 gives us</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y gnupg2 dirmngr apt-transport-https ca-certificates curl</span><br></pre></td></tr></table></figure>
+<p>then</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb &gt; msfinstall &amp;&amp; chmod 755 msfinstall &amp;&amp; ./msfinstall</span><br></pre></td></tr></table></figure>
+<p>After the installation completes, open a terminal window and type the following to start msfconsole:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br></pre></td></tr></table></figure>
+<p>Source: <a target="_blank" rel="noopener" href="https://docs.rapid7.com/metasploit/installing-the-metasploit-framework/">https://docs.rapid7.com/metasploit/installing-the-metasploit-framework/</a><br><img src="/images/sliveraws/msfConsole.png" alt="Console"></p>
+<h3 id="Sliver"><a href="#Sliver" class="headerlink" title="Sliver"></a>Sliver</h3><p>Now that all that dependencies are installed it was time to download the <code>sliver</code> binaries.<br>Server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/BishopFox/sliver/releases/download/v1.5.43/sliver-server_linux</span><br><span class="line">wget https://github.com/BishopFox/sliver/releases/download/v1.5.43/sliver-server_linux.sig</span><br></pre></td></tr></table></figure>
+
+<p>Client(for now local)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/BishopFox/sliver/releases/download/v1.5.43/sliver-client_linux</span><br><span class="line">wget https://github.com/BishopFox/sliver/releases/download/v1.5.43/sliver-client_linux.sig</span><br></pre></td></tr></table></figure>
+
+<p>And made the binaries executables.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 755 sliver-server_linux</span><br><span class="line">sudo chmod 755 sliver-client_linux</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chown admin:admin sliver-server_linux</span><br><span class="line">sudo chown admin:admin sliver-client_linux</span><br></pre></td></tr></table></figure>
+<p>also wourd recommend not to use admin user for this and create another use that runs sliver but for now this does the job.</p>
+<p>Next up the verification of these binaries was also necessary. Ideally, it should be done right after downloading binaries.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/BishopFox/sliver/master/server/assets/fs/sliver.asc</span><br><span class="line">gpg --import sliver.asc</span><br><span class="line"></span><br><span class="line">gpg --verify sliver-server_linux.sig ../sliver/sliver-server_linux</span><br><span class="line">gpg --verify sliver-server_linux.sig ../sliver/sliver-client_linux</span><br></pre></td></tr></table></figure>
+<p>You should see</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Good signature from &quot;Sliver &lt;sliver@bishopfox.com&gt;&quot; [unknown]</span><br></pre></td></tr></table></figure>
+
+<p>Start the sliver server <code>sliver-server_linux</code> and type the following</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new-operator --name HelloWorld -l 127.0.0.1</span><br></pre></td></tr></table></figure>
+<p>Exit the server and now load the .cfg file into the sliver-agent</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sliver-client_linux import HelloWorld_127.0.0.1.cfg</span><br></pre></td></tr></table></figure>
+
+<p>Now its a good time to setup a service that will run the sliver-server so we can connect to it</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sudo tee /etc/systemd/system/sliver-server.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=Sliver</span><br><span class="line">After=network.target</span><br><span class="line">StartLimitIntervalSec=0</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=3</span><br><span class="line">User=admin</span><br><span class="line">ExecStart=/home/admin/sliver/sliver-server_linux daemon</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>Reload the <code>daemon</code> and check the status</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status sliver-server</span><br></pre></td></tr></table></figure>
+
+<p>Now we can run the sliver agent and we are in</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sliver-client_linux</span><br></pre></td></tr></table></figure>
+
+<p>You can stop here id you dont want a Load Balancer and CloudFront if your security group is setup well you can start http&#x2F;https listeners and send your payloads to your target.<br>(tip ligolo-ng is a great tool to have for pivoting you can install it also on the EC2 and just expose the port that you will be running it from to the internet). If you want security BUT not the hustle of using a Load Balancer and CloudFront in your security groups allow http&#x2F;https ports and the ligolo port to be exposed only to the machine IP you are pentesting.</p>
+<p>Ligolo setup tutorial:</p>
+<h2 id="1-Create-an-Application-Load-Balancer-ALB"><a href="#1-Create-an-Application-Load-Balancer-ALB" class="headerlink" title="1. Create an Application Load Balancer (ALB)"></a>1. Create an Application Load Balancer (ALB)</h2><ol>
+<li>In the EC2 Console, navigate to <strong>Load Balancers</strong> → <strong>Create Load Balancer</strong>.</li>
+<li>Choose <strong>Application Load Balancer</strong>, give it a name, and select your VPC and subnets.</li>
+<li>Under <strong>Security Groups</strong>, attach (or create) one that allows HTTP&#x2F;HTTPS from wherever your operators will connect.</li>
+</ol>
+<h2 id="2-Define-a-Target-Group"><a href="#2-Define-a-Target-Group" class="headerlink" title="2. Define a Target Group"></a>2. Define a Target Group</h2><ol>
+<li>Still in the Load Balancer wizard, create a new <strong>Target Group</strong> of type “Instances.”</li>
+<li>Choose the same VPC, set the protocol (HTTP or HTTPS), and click <strong>Next</strong>.</li>
+<li>Select your Sliver server instance, click <strong>Include as pending</strong>, then <strong>Create target group</strong>.</li>
+</ol>
+<h2 id="3-Hook-the-Target-Group-into-the-ALB"><a href="#3-Hook-the-Target-Group-into-the-ALB" class="headerlink" title="3. Hook the Target Group into the ALB"></a>3. Hook the Target Group into the ALB</h2><ol>
+<li>Back on the ALB page, under <strong>Listeners &amp; routing</strong>, add (or edit) a listener on port 80 or 443.</li>
+<li>Point that listener to your newly created Target Group.</li>
+<li>Finish creating the Load Balancer.</li>
+</ol>
+<h2 id="4-Update-the-Sliver-Instance’s-Security-Group"><a href="#4-Update-the-Sliver-Instance’s-Security-Group" class="headerlink" title="4. Update the Sliver Instance’s Security Group"></a>4. Update the Sliver Instance’s Security Group</h2><ol>
+<li>In <strong>Security Groups</strong>, find the SG attached to your Sliver instance.</li>
+<li>Edit its inbound rules: add a <strong>Custom TCP</strong> rule on port 80 (or 443) with the source set to your ALB’s security group.</li>
+</ol>
+<h2 id="5-Create-a-CloudFront-Distribution"><a href="#5-Create-a-CloudFront-Distribution" class="headerlink" title="5. Create a CloudFront Distribution"></a>5. Create a CloudFront Distribution</h2><ol>
+<li>In the CloudFront Console, <strong>Create Distribution</strong> → <strong>Web</strong>.</li>
+<li>Set <strong>Origin Domain</strong> to your ALB’s DNS name.</li>
+<li>Restrict viewer protocol to <strong>HTTPS Only</strong>, and allow all HTTP methods.</li>
+<li>Choose an appropriate cache policy (e.g. “Caching Optimized”), then <strong>Create Distribution</strong>.</li>
+<li>Copy your new CloudFront domain name—this becomes your public C2 endpoint.</li>
+</ol>
+<p><strong>Disclaimer:</strong> When fronting Sliver C2 with an AWS Application Load Balancer or CloudFront, <strong>only HTTP and HTTPS listeners</strong> (ports 80&#x2F;443) are supported end-to-end. Any other protocol (e.g. raw TCP for mTLS) or non-HTTP(S) port will be rejected or dropped by the proxy layer.</p>
+<h3 id="Debugging-Tips"><a href="#Debugging-Tips" class="headerlink" title="Debugging Tips"></a>Debugging Tips</h3><ol>
+<li><p><strong>Verify Listener Configuration</strong></p>
+<ul>
+<li>In the ALB&#x2F;CloudFront console, ensure you have an HTTP (80) or HTTPS (443) listener pointing to your Sliver target group.</li>
+<li>If using HTTPS, confirm the certificate is correctly attached and not expired.</li>
+</ul>
+</li>
+<li><p><strong>Check Security Groups</strong></p>
+<ul>
+<li>ALB SG must allow inbound on 80&#x2F;443 from your operator IPs.</li>
+<li>Backend instance SG must allow inbound from the ALB’s SG on the same port.</li>
+</ul>
+</li>
+<li><p><strong>Target Group Health</strong></p>
+<ul>
+<li>In EC2 → Target Groups, confirm your Sliver instance shows as <strong>healthy</strong>.</li>
+<li>If it’s <strong>unhealthy</strong>, examine the health-check path&#x2F;protocol—Sliver C2 typically responds on <code>/favicon.ico</code> or a custom HTTP path you’ve defined.</li>
+</ul>
+</li>
+<li><p><strong>Test Connectivity</strong></p>
+<ul>
+<li>From your workstation:</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v http://&lt;ALB-DNS&gt;:80/ # HTTPS curl -v https://&lt;ALB-DNS&gt;:443/ --cacert /path/to/ca.pem</span><br></pre></td></tr></table></figure>
+<p> A valid Sliver HTTP(S) listener will return a 200 OK or a small redirection payload.</p>
+<ol start="5">
+<li><strong>Inspect Logs</strong><ul>
+<li>Enable ALB access logs in S3 to see if requests are reaching the load balancer.</li>
+<li>On the Ubuntu host, check <code>journalctl -u sliver-server</code> for any incoming connection or TLS errors.</li>
+</ul>
+</li>
+<li><strong>Fallback to Direct Connect</strong><ul>
+<li>Temporarily open the instance’s security group to 0.0.0.0&#x2F;0 on your chosen port and test <code>sliver-client --server https://&lt;EC2-IP&gt;:&lt;port&gt;</code>.</li>
+<li>If this works, the issue lies in ALB&#x2F;CloudFront configuration rather than Sliver itself.</li>
+</ul>
+</li>
+</ol>
+<p>A blog that helped a lot on crating this blog: <a target="_blank" rel="noopener" href="https://securityin.cloud/fun-in-the-aws-with-sliver-c2-part-1?source=more_series_bottom_blogs">https://securityin.cloud/fun-in-the-aws-with-sliver-c2-part-1?source=more_series_bottom_blogs</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">Tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Specifications"><span class="toc-number">1.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Create-a-budget"><span class="toc-number">1.1.</span> <span class="toc-text">1) Create a budget</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-EC2"><span class="toc-number">1.2.</span> <span class="toc-text">2) EC2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-Installation"><span class="toc-number">1.2.1.</span> <span class="toc-text">Go Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mingw-Installation"><span class="toc-number">1.2.2.</span> <span class="toc-text">Mingw Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metasploit-Installation"><span class="toc-number">1.2.3.</span> <span class="toc-text">Metasploit Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sliver"><span class="toc-number">1.2.4.</span> <span class="toc-text">Sliver</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Create-an-Application-Load-Balancer-ALB"><span class="toc-number">1.3.</span> <span class="toc-text">1. Create an Application Load Balancer (ALB)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Define-a-Target-Group"><span class="toc-number">1.4.</span> <span class="toc-text">2. Define a Target Group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Hook-the-Target-Group-into-the-ALB"><span class="toc-number">1.5.</span> <span class="toc-text">3. Hook the Target Group into the ALB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Update-the-Sliver-Instance%E2%80%99s-Security-Group"><span class="toc-number">1.6.</span> <span class="toc-text">4. Update the Sliver Instance’s Security Group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Create-a-CloudFront-Distribution"><span class="toc-number">1.7.</span> <span class="toc-text">5. Create a CloudFront Distribution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Debugging-Tips"><span class="toc-number">1.7.1.</span> <span class="toc-text">Debugging Tips</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&text=AWS and Sliver C2 setup"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&is_video=false&description=AWS and Sliver C2 setup"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=AWS and Sliver C2 setup&body=Check out this article: https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&title=AWS and Sliver C2 setup"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&name=AWS and Sliver C2 setup&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/&t=AWS and Sliver C2 setup"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

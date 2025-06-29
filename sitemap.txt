@@ -1,3 +1,4 @@
+https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/
 https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-ECS-Takeover/
 https://panosoikogr.github.io/2025/06/03/CloudGoat-EC2-SSRF/

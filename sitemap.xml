@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://panosoikogr.github.io/2025/06/29/AWS-and-Sliver-C2-setup/</loc>
+    
+    <lastmod>2025-06-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/</loc>
     
     <lastmod>2025-06-09</lastmod>
@@ -364,7 +373,7 @@
 
   <url>
     <loc>https://panosoikogr.github.io/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -372,77 +381,77 @@
   
   <url>
     <loc>https://panosoikogr.github.io/tags/HTB/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/VL/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Chain/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/AWS/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/CloudGoat/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Shells/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Lab/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/RedTeam/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Lsass/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/C2/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://panosoikogr.github.io/tags/Sliver/</loc>
-    <lastmod>2025-06-09</lastmod>
+    <lastmod>2025-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
