@@ -13,14 +13,15 @@
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
 <meta property="og:description" content="Specifications EC2 instance –&gt; t2.micro OS –&gt; Ubuntu 20.04LTS (Focal Fossa) Go Version –&gt; go1.24.4 linux&#x2F;amd64 Sliver Version –&gt; v1.5.43 Mingw Version –&gt; 12.2.0-14+ Metasploit Vers">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/sliveraws/sliverimage.jpeg">
 <meta property="og:image" content="https://panosoikogr.github.io/images/sliveraws/budgets.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/sliveraws/msfConsole.png">
 <meta property="article:published_time" content="2025-06-29T15:47:10.000Z">
-<meta property="article:modified_time" content="2025-06-29T12:50:10.624Z">
+<meta property="article:modified_time" content="2025-06-29T13:01:15.509Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="Sliver">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/sliveraws/budgets.png">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/sliveraws/sliverimage.jpeg">
     
     
       
@@ -182,6 +183,7 @@
 <li>Metasploit Version –&gt; 6.4.71-dev-</li>
 </ol>
 <p>Firts we need an AWS free if you dont have one search on google “AWS Free account”<br>and the firts resault will give you the link to create one.</p>
+<p><img src="/images/sliveraws/sliverimage.jpeg" alt="Budget"></p>
 <h2 id="1-Create-a-budget"><a href="#1-Create-a-budget" class="headerlink" title="1) Create a budget"></a>1) Create a budget</h2><p>We will be crating a daily budget for our account so IF we ever leave our sliver c2 (EC2) running we will get a alert on our mail to go and close it if we dont use it, so we avoid unwanted costs. As we are using t2.micro the free EC2 aws provides us we wont get any big costs so we will set our budget very low just to catch the instance from over running.</p>
 <p>There are 2 ways, the “Zero Budget Cost” OR the “Custom budget”  option I will be covering the “Custom budget” as the other is just two clicks.</p>
 <p>First on the search-bar search for <code>Budgets</code><br><img src="/images/sliveraws/budgets.png" alt="Budget"></p>
