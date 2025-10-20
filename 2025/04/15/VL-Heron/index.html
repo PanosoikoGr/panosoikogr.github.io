@@ -9,26 +9,26 @@
     <meta name="description" content="Heron: Advanced Network Pivoting and Active Directory Delegation AttacksIn this detailed VulnLab - Hack The Box walkthrough, I’ll demonstrate how to compromise the “Heron” domain environment through n">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Heron">
-<meta property="og:url" content="http://example.com/2025/04/15/VL-Heron/index.html">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/04/15/VL-Heron/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
 <meta property="og:description" content="Heron: Advanced Network Pivoting and Active Directory Delegation AttacksIn this detailed VulnLab - Hack The Box walkthrough, I’ll demonstrate how to compromise the “Heron” domain environment through n">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/Heron/psooibe_users.png">
-<meta property="og:image" content="http://example.com/images/Heron/kerberute.png">
-<meta property="og:image" content="http://example.com/images/Heron/23hash_formta.png">
-<meta property="og:image" content="http://example.com/images/Heron/crackee_pass.png">
-<meta property="og:image" content="http://example.com/images/Heron/shares_sam.png">
-<meta property="og:image" content="http://example.com/images/Heron/gpp_password.png">
-<meta property="og:image" content="http://example.com/images/Heron/new_account.png">
-<meta property="og:image" content="http://example.com/images/Heron/shell.png">
-<meta property="og:image" content="http://example.com/images/Heron/bloodhoudnpath.png">
-<meta property="og:image" content="http://example.com/images/Heron/sshscript.png">
-<meta property="og:image" content="http://example.com/images/Heron/ssh_root_pass.png">
-<meta property="og:image" content="http://example.com/images/Heron/full_sudo.png">
-<meta property="og:image" content="http://example.com/images/Heron/linux_machine_hash.png">
-<meta property="og:image" content="http://example.com/images/Heron/pass_spray.png">
-<meta property="og:image" content="http://example.com/images/Heron/jul_homedir.png">
-<meta property="og:image" content="http://example.com/images/Heron/rbcd.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/psooibe_users.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/kerberute.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/23hash_formta.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/crackee_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/shares_sam.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/gpp_password.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/new_account.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/shell.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/bloodhoudnpath.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/sshscript.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/ssh_root_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/full_sudo.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/linux_machine_hash.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/pass_spray.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/jul_homedir.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Heron/rbcd.png">
 <meta property="article:published_time" content="2025-04-14T21:00:00.000Z">
 <meta property="article:modified_time" content="2025-10-17T18:35:43.382Z">
 <meta property="article:author" content="Panosoiko">
@@ -36,7 +36,7 @@
 <meta property="article:tag" content="HTB">
 <meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/Heron/psooibe_users.png">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Heron/psooibe_users.png">
     
     
       
@@ -129,17 +129,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/15/VL-Heron/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/15/VL-Heron/&text=VL-Heron"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/15/VL-Heron/&is_video=false&description=VL-Heron"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Heron&body=Check out this article: http://example.com/2025/04/15/VL-Heron/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/15/VL-Heron/&name=VL-Heron&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/15/VL-Heron/&t=VL-Heron"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&text=VL-Heron"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&is_video=false&description=VL-Heron"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Heron&body=Check out this article: https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&name=VL-Heron&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/&t=VL-Heron"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -305,17 +305,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/04/15/VL-Heron/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/04/15/VL-Heron/&text=VL-Heron"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/04/15/VL-Heron/&is_video=false&description=VL-Heron"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Heron&body=Check out this article: http://example.com/2025/04/15/VL-Heron/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/04/15/VL-Heron/&name=VL-Heron&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/04/15/VL-Heron/&t=VL-Heron"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&text=VL-Heron"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&is_video=false&description=VL-Heron"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Heron&body=Check out this article: https://panosoikogr.github.io/2025/04/15/VL-Heron/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&title=VL-Heron"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/04/15/VL-Heron/&name=VL-Heron&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/04/15/VL-Heron/&t=VL-Heron"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

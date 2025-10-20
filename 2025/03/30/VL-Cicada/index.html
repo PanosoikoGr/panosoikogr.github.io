@@ -9,30 +9,30 @@
     <meta name="description" content="Cicada: Advanced ADCS Exploitation and Kerberos Relay AttacksIn this detailed VulnLab - Hack The Box walkthrough of the “Cicada” machine, we explore advanced Active Directory Certificate Services (ADC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VL-Cicada">
-<meta property="og:url" content="http://example.com/2025/03/30/VL-Cicada/index.html">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/03/30/VL-Cicada/index.html">
 <meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
 <meta property="og:description" content="Cicada: Advanced ADCS Exploitation and Kerberos Relay AttacksIn this detailed VulnLab - Hack The Box walkthrough of the “Cicada” machine, we explore advanced Active Directory Certificate Services (ADC">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/Cicada/png_pass.png">
-<meta property="og:image" content="http://example.com/images/Cicada/smb_enum.png">
-<meta property="og:image" content="http://example.com/images/Cicada/smb_ldap_access.png">
-<meta property="og:image" content="http://example.com/images/Cicada/vulnerable.png">
-<meta property="og:image" content="http://example.com/images/Cicada/machineaccountquota.png">
-<meta property="og:image" content="http://example.com/images/Cicada/install_openvpn.png">
-<meta property="og:image" content="http://example.com/images/Cicada/dns_ip.png">
-<meta property="og:image" content="http://example.com/images/Cicada/dc_ip.png">
-<meta property="og:image" content="http://example.com/images/Cicada/pc_rename.png">
-<meta property="og:image" content="http://example.com/images/Cicada/changing_domain.png">
-<meta property="og:image" content="http://example.com/images/Cicada/cicada_share.png">
-<meta property="og:image" content="http://example.com/images/Cicada/compile.png">
-<meta property="og:image" content="http://example.com/images/Cicada/getting-pfx.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/png_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/smb_enum.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/smb_ldap_access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/vulnerable.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/machineaccountquota.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/install_openvpn.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/dns_ip.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/dc_ip.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/pc_rename.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/changing_domain.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/cicada_share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/compile.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cicada/getting-pfx.png">
 <meta property="article:published_time" content="2025-03-30T04:00:00.000Z">
 <meta property="article:modified_time" content="2025-10-13T10:35:29.919Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="Hack The Box">
 <meta property="article:tag" content="VulnLab">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/Cicada/png_pass.png">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Cicada/png_pass.png">
     
     
       
@@ -125,17 +125,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/30/VL-Cicada/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/30/VL-Cicada/&text=VL-Cicada"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/30/VL-Cicada/&is_video=false&description=VL-Cicada"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Cicada&body=Check out this article: http://example.com/2025/03/30/VL-Cicada/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/30/VL-Cicada/&name=VL-Cicada&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/30/VL-Cicada/&t=VL-Cicada"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&text=VL-Cicada"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&is_video=false&description=VL-Cicada"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Cicada&body=Check out this article: https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&name=VL-Cicada&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&t=VL-Cicada"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -346,17 +346,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/30/VL-Cicada/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/30/VL-Cicada/&text=VL-Cicada"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/30/VL-Cicada/&is_video=false&description=VL-Cicada"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=VL-Cicada&body=Check out this article: http://example.com/2025/03/30/VL-Cicada/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/30/VL-Cicada/&name=VL-Cicada&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/30/VL-Cicada/&t=VL-Cicada"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&text=VL-Cicada"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&is_video=false&description=VL-Cicada"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Cicada&body=Check out this article: https://panosoikogr.github.io/2025/03/30/VL-Cicada/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&title=VL-Cicada"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&name=VL-Cicada&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/03/30/VL-Cicada/&t=VL-Cicada"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
