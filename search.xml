@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>HS-Slayer</title>
+      <link href="/2025/11/02/HS-Slayer/"/>
+      <url>/2025/11/02/HS-Slayer/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Slayer-HackSmarter-Walkthrough"><a href="#Slayer-HackSmarter-Walkthrough" class="headerlink" title="Slayer - HackSmarter Walkthrough"></a>Slayer - HackSmarter Walkthrough</h1><p>Welcome to my comprehensive walkthrough of the <strong>Slayer</strong> machine from HackSmarter! This penetration testing writeup demonstrates how to enumerate services, leverage RDP access, and escalate privileges through PowerShell history exploitation. Throughout this guide, I’ll be using tools like <strong>Nmap</strong> and <strong>NetExec</strong> to compromise this Windows target. Whether you’re preparing for the OSCP or just sharpening your pentesting skills, this walkthrough will provide valuable insights into real-world attack scenarios.</p><hr><h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><p>Starting with an <strong>Nmap</strong> scan to identify open ports and running services:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE        REASON          VERSION</span><br><span class="line">135/tcp   open  tcpwrapped     syn-ack ttl 126</span><br><span class="line">445/tcp   open  tcpwrapped     syn-ack ttl 126</span><br><span class="line">3389/tcp  open  ms-wbt-server? syn-ack ttl 126</span><br><span class="line">49670/tcp open  unknown        syn-ack ttl 126</span><br></pre></td></tr></table></figure><p>From the scan results, we can see several interesting ports:</p><ul><li><strong>Port 135</strong> (RPC)</li><li><strong>Port 445</strong> (SMB)</li><li><strong>Port 3389</strong> (RDP)</li><li><strong>Port 49670</strong> (Unknown service)</li></ul><p>The presence of port 3389 indicates that Remote Desktop Protocol is enabled, which presents an excellent opportunity for lateral movement if we have valid credentials.</p><hr><h2 id="RDP-Access-as-tyler-ramsey"><a href="#RDP-Access-as-tyler-ramsey" class="headerlink" title="RDP Access as tyler.ramsey"></a>RDP Access as tyler.ramsey</h2><h3 id="Verifying-RDP-Credentials"><a href="#Verifying-RDP-Credentials" class="headerlink" title="Verifying RDP Credentials"></a>Verifying RDP Credentials</h3><p>Before attempting to connect via RDP, let’s verify whether the credentials work using <strong>NetExec</strong> (formerly CrackMapExec). Note that this command may take some time to respond:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc rdp 10.1.215.177 -u tyler.ramsey -p &#x27;P@ssw0rd!&#x27;</span><br></pre></td></tr></table></figure><p><img src="/images/Slayer/RDP_ACCESS.png" alt="Successful RDP access verification with NetExec"></p><p>The verification confirms that we have valid RDP credentials for the user <code>tyler.ramsey</code>.</p><h3 id="Establishing-RDP-Connection"><a href="#Establishing-RDP-Connection" class="headerlink" title="Establishing RDP Connection"></a>Establishing RDP Connection</h3><p>Now let’s establish an RDP session using <strong>xfreerdp</strong>:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xfreerdp /u:tyler.ramsey  /p:&#x27;P@ssw0rd!&#x27; /v:10.1.215.177 /cert-ignore</span><br></pre></td></tr></table></figure><p>Once connected, we successfully gain access to the Windows desktop as tyler.ramsey.</p><hr><h2 id="Privilege-Escalation-via-PowerShell-History"><a href="#Privilege-Escalation-via-PowerShell-History" class="headerlink" title="Privilege Escalation via PowerShell History"></a>Privilege Escalation via PowerShell History</h2><h3 id="Discovering-Credentials-in-PowerShell-History"><a href="#Discovering-Credentials-in-PowerShell-History" class="headerlink" title="Discovering Credentials in PowerShell History"></a>Discovering Credentials in PowerShell History</h3><p>After establishing the RDP session, open a <strong>PowerShell</strong> terminal. Here’s where things get interesting: simply press the <strong>UP arrow key</strong> to cycle through PowerShell command history. This technique reveals previously executed commands, and in this case, one of them contains the administrator password.</p><p><img src="/images/Slayer/powershell-admin.png" alt="Cycling through PowerShell history"></p><p><img src="/images/Slayer/pass_admin.png" alt="Administrator password revealed in command history"></p><p>This appears to be an unintended privilege escalation path, as sensitive credentials should never be stored in PowerShell history. However, it’s a common real-world misconfiguration that pentesters frequently encounter during engagements.</p><hr>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Windows </tag>
+            
+            <tag> HackSmarter </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HS-BuildingMagic</title>
       <link href="/2025/11/01/HS-BuildingMagic/"/>
       <url>/2025/11/01/HS-BuildingMagic/</url>
