@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/backyps-on-ftp.png">
 <meta property="og:image" content="https://panosoikogr.github.io/images/Unintended/secrets-extract.png">
 <meta property="article:published_time" content="2025-11-06T10:59:42.000Z">
-<meta property="article:modified_time" content="2025-11-06T11:07:36.964Z">
+<meta property="article:modified_time" content="2025-11-06T17:05:50.164Z">
 <meta property="article:author" content="Panosoiko">
 <meta property="article:tag" content="Chain">
 <meta property="article:tag" content="Linux">
@@ -321,7 +321,7 @@
 <li><strong>Administrator password successfully cracked</strong></li>
 <li><strong>Juan’s password:</strong> Failed to crack</li>
 </ul>
-<h3 id="Credentials-Found"><a href="#Credentials-Found" class="headerlink" title="Credentials Found:"></a>Credentials Found:</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">administrator:loveandhate (Gitea Admin)</span><br></pre></td></tr></table></figure>
+<h3 id="Credentials-Found"><a href="#Credentials-Found" class="headerlink" title="Credentials Found:"></a>Credentials Found:</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">administrator:&lt;PASS&gt; (Gitea Admin)</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="Gitea-Administrator-Access"><a href="#Gitea-Administrator-Access" class="headerlink" title="Gitea Administrator Access"></a>Gitea Administrator Access</h2><h3 id="Home-Backup-Repository"><a href="#Home-Backup-Repository" class="headerlink" title="Home Backup Repository"></a>Home Backup Repository</h3><p>Logging into Gitea as administrator reveals a new repository: <code>home-backup</code></p>
@@ -376,7 +376,7 @@
 <p><strong>Container Network:</strong> PostgreSQL runs on <code>172.21.0.3:5432</code> (not <code>172.21.0.2</code>)</p>
 <p>Verification:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 nc -vz 172.21.0.3 5432</span><br></pre></td></tr></table></figure>
-
+<p>(remmember to setup proxychains4 use -D <code>port</code> on the ssh command)</p>
 <p>Output:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[proxychains] Strict chain  ...  127.0.0.1:1080  ...  172.21.0.3:5432  ...  OK</span><br><span class="line">Connection to 172.21.0.3 5432 port [tcp/postgresql] succeeded!</span><br></pre></td></tr></table></figure>
 
